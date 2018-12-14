@@ -1,0 +1,12 @@
+{% block form_row %}
+    {% spaceless %}
+        <div class="form_row">
+            {{ form_label(form) }} :
+            {% if not form.vars.valid %}
+                <div class="alert alert-danger">{{ form_errors(form) }}</div>
+            {% endif %}
+            {{ form_widget(form, {'attr': {'class': 'form-control'}}) }}
+            {{ form_help(form) }}
+        </div>
+    {% endspaceless %}
+{% endblock form_row %}

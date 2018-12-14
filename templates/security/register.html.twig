@@ -1,5 +1,4 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}Log in{% endblock %}
 
 {% block body %}
@@ -7,19 +6,18 @@
         <div class="masthead-content">
             <div class="container">
                 {{ form_start(form) }}
-                    {{ form_row(form.firstName) }}
-                    {{ form_row(form.lastName) }}
-                    {{ form_row(form.email) }}
-                    {{ form_row(form.plainPassword.first) }}
-                    {{ form_row(form.plainPassword.second) }}
-
-                    <button type="submit">Register!</button>
+                    <div class="form-label-group col-md-5 mx-auto">
+                        {{ form_row(form.firstName) }}
+                        {{ form_row(form.lastName) }}
+                        {{ form_row(form.email) }}
+                        {{ form_row(form.plainPassword.first) }}
+                        {{ form_row(form.plainPassword.second) }}
+                        <br/>
+                        <button class="btn btn-lg btn-primary" type="submit">Register</button>
+                    </div>
                 {{ form_end(form) }}
             </div>
         </div>
-        <div class="bg-circle-1 bg-circle"></div>
-        <div class="bg-circle-2 bg-circle"></div>
-        <div class="bg-circle-3 bg-circle"></div>
-        <div class="bg-circle-4 bg-circle"></div>
     </header>
 {% endblock %}
+{% form_theme form 'form/fields.html.twig' %}

@@ -50,6 +50,33 @@ h6 {
   color: rgba(255,255,255,.5);
 }
 
+.navbar-nav .nav-item.dropdown .dropdown-toggle::after {
+  width: 1rem;
+  text-align: center;
+  float: right;
+  vertical-align: 0;
+  border: 0;
+  font-weight: 900;
+  content: '\f105';
+  font-family: 'Font Awesome 5 Free';
+}
+
+.navbar-nav .nav-item.dropdown.no-arrow .dropdown-toggle::after {
+  display: none;
+}
+
+.navbar-nav .nav-item .nav-link:focus {
+  outline: none;
+}
+
+.navbar-nav .nav-item .nav-link .badge {
+  position: absolute;
+  margin-left: 0.75rem;
+  top: 0.3rem;
+  font-weight: 400;
+  font-size: 0.5rem;
+}
+
 header.masthead {
   position: relative;
   overflow: hidden;
@@ -139,7 +166,7 @@ header.masthead .bg-circle-4 {
 }
 
 .btn-primary:active, .btn-primary:focus, .btn-primary:hover {
-  background-color: #b45a37 !important;
+  background-color: #bd4719 !important;
   border-color: #b45a37 !important;
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19) !important;
 }
@@ -166,4 +193,10 @@ header.masthead .bg-circle-4 {
 
 .rounded-circle {
   border-radius: 10% !important;
+}
+
+form {
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
 }

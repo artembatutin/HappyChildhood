@@ -1,5 +1,4 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}Log in{% endblock %}
 
 {% block body %}
@@ -7,11 +6,10 @@
         <div class="masthead-content">
             <div class="container">
                 <form method="post">
+                    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
                     {% if error %}
                         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                     {% endif %}
-
-                    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
                     <div class="form-label-group col-md-4 mx-auto">
                         <label for="inputEmail" class="sr-only">Email</label><br/>
                         <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus>
@@ -39,9 +37,5 @@
                 </form>
             </div>
         </div>
-        <div class="bg-circle-1 bg-circle"></div>
-        <div class="bg-circle-2 bg-circle"></div>
-        <div class="bg-circle-3 bg-circle"></div>
-        <div class="bg-circle-4 bg-circle"></div>
     </header>
 {% endblock %}
