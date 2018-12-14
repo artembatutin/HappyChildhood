@@ -1,6 +1,8 @@
 ###> phpStorm runConfigurations ###
-.idea/*
-!idea/runConfigurations/
+.idea
+!/idea
+/idea/*
+!/idea/runConfigurations
 ###> phpStorm runConfigurations ###
 
 ###> symfony/framework-bundle ###
