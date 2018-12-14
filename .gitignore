@@ -1,7 +1,4 @@
-.idea/**
-
 ###> phpStorm runConfigurations ###
-!.idea/
 .idea/*
 !idea/runConfigurations/
 ###> phpStorm runConfigurations ###
