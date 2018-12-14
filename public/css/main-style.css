@@ -35,17 +35,19 @@ h6 {
 }
 
 .navbar-custom .navbar-brand {
-  text-transform: uppercase;
   font-size: 1rem;
   letter-spacing: 0.1rem;
   font-weight: 700;
 }
 
 .navbar-custom .navbar-nav .nav-item .nav-link {
-  text-transform: uppercase;
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.1rem;
+}
+
+.nav-link-off:hover {
+  color: rgba(255,255,255,.5);
 }
 
 header.masthead {
@@ -53,8 +55,8 @@ header.masthead {
   overflow: hidden;
   padding-top: calc(7rem + 72px);
   padding-bottom: 7rem;
-  background: -webkit-gradient(linear, left bottom, left top, from(#ff6a00), to(#ee0979));
-  background: linear-gradient(0deg, #ff6a00 0%, #ee0979 100%);
+  background: -webkit-gradient(linear, left bottom, left top, from(#e0760f), to(#e3a130));
+  background: linear-gradient(0deg, #e0760f 0%, #e3a130 100%);
   background-repeat: no-repeat;
   background-position: center center;
   background-attachment: scroll;
@@ -127,14 +129,19 @@ header.masthead .bg-circle-4 {
   background-color: #ee0979 !important;
 }
 
+.btn {
+  transition: color .3s ease-in-out,background-color .3s ease-in-out,border-color .3s ease-in-out,box-shadow .3s ease-in-out;
+}
+
 .btn-primary {
-  background-color: #ee0979;
-  border-color: #ee0979;
+  background-color: #ee4a09;
+  border-color: #ee4a09;
 }
 
 .btn-primary:active, .btn-primary:focus, .btn-primary:hover {
-  background-color: #bd0760 !important;
-  border-color: #bd0760 !important;
+  background-color: #b45a37 !important;
+  border-color: #b45a37 !important;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19) !important;
 }
 
 .btn-primary:focus {

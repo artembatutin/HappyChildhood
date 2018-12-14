@@ -1,7 +1,17 @@
 security:
+    encoders:
+        App\Entity\User:
+            algorithm: bcrypt
+            cost: 12
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory: { memory: ~ }
+        our_db_provider:
+            entity:
+                class: App\Entity\User
+                # the property to query by - e.g. username, email, etc
+                property: username
+                # if you're using multiple entity managers
+                # manager_name: customer
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -11,6 +21,8 @@ security:
             guard:
                 authenticators:
                     - App\Security\LoginAuthenticator
+            logout:
+                path:   logout
 
             # activate different ways to authenticate
 
