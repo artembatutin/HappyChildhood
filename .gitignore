@@ -1,5 +1,11 @@
 .idea/**
-!.idea/runConfigurations/
+
+###> phpStorm runConfigurations ###
+!.idea/
+.idea/*
+!idea/runConfigurations/
+###> phpStorm runConfigurations ###
+
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.*.local
