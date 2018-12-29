@@ -89,93 +89,105 @@ class User implements UserInterface {
      * @ORM\OneToMany(targetEntity="App\Entity\ParentFamilyLink", mappedBy="parent_id")
      */
     private $parentFamilyLinks;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Announcement", mappedBy="user")
+     */
+    private $announcements;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="user", orphanRemoval=true)
+     */
+    private $comments;
 	
 	/**
 	 * User constructor.
 	 */
 	public function __construct() {
-                                                                  		$this->roles = array('ROLE_USER');
-                                                                    $this->parentFamilyLinks = new ArrayCollection();
-                                                                  	}
+                                                                                                		$this->roles = array('ROLE_USER');
+                                                                                                  $this->parentFamilyLinks = new ArrayCollection();
+                                                                                                  $this->announcements = new ArrayCollection();
+                                                                                                  $this->comments = new ArrayCollection();
+                                                                                                	}
 	
 	public function getId(): ?int {
-                                                                  		return $this->id;
-                                                                  	}
+                                                                                                		return $this->id;
+                                                                                                	}
 	
 	public function getEmail(): ?string {
-                                                                  		return $this->email;
-                                                                  	}
+                                                                                                		return $this->email;
+                                                                                                	}
 	
 	public function setEmail(string $email): self {
-                                                                  		$this->email = $email;
-                                                                  		return $this;
-                                                                  	}
+                                                                                                		$this->email = $email;
+                                                                                                		return $this;
+                                                                                                	}
 	
 	public function getFirstName() {
-                                                                  		return $this->firstName;
-                                                                  	}
+                                                                                                		return $this->firstName;
+                                                                                                	}
 	
 	public function setFirstName($firstName): void {
-                                                                  		$this->firstName = $firstName;
-                                                                  	}
+                                                                                                		$this->firstName = $firstName;
+                                                                                                	}
 	
 	public function getLastName() {
-                                                                  		return $this->lastName;
-                                                                  	}
+                                                                                                		return $this->lastName;
+                                                                                                	}
 	
 	public function setLastName($lastName): void {
-                                                                  		$this->lastName = $lastName;
-                                                                  	}
+                                                                                                		$this->lastName = $lastName;
+                                                                                                	}
 	
 	public function getUsername(): string {
-                                                                  		return (string)$this->email;
-                                                                  	}
+                                                                                                		return (string)$this->email;
+                                                                                                	}
 	
 	public function getRoles(): array {
-                                                                  		return $this->roles;
-                                                                  	}
+                                                                                                		return $this->roles;
+                                                                                                	}
 	
 	public function setRoles(array $roles): self {
-                                                                  		$this->roles = $roles;
-                                                                  		return $this;
-                                                                  	}
+                                                                                                		$this->roles = $roles;
+                                                                                                		return $this;
+                                                                                                	}
 	
 	public function getPassword() {
-                                                                  		return $this->password;
-                                                                  	}
+                                                                                                		return $this->password;
+                                                                                                	}
 	
 	public function getPlainPassword() {
-                                                                  		return $this->plainPassword;
-                                                                  	}
+                                                                                                		return $this->plainPassword;
+                                                                                                	}
 	
 	public function setPlainPassword($password) {
-                                                                  		$this->plainPassword = $password;
-                                                                  	}
+                                                                                                		$this->plainPassword = $password;
+                                                                                                	}
 	
 	public function getSalt() {
-                                                                  		// The bcrypt and argon2i algorithms don't require a separate salt.
-                                                                  		// You *may* need a real salt if you choose a different encoder.
-                                                                  		return null;
-                                                                  	}
+                                                                                                		// The bcrypt and argon2i algorithms don't require a separate salt.
+                                                                                                		// You *may* need a real salt if you choose a different encoder.
+                                                                                                		return null;
+                                                                                                	}
 	
 	public function eraseCredentials() {
-                                                                  		// If you store any temporary, sensitive data on the user, clear it here
-                                                                  		// $this->plainPassword = null;
-                                                                  	}
+                                                                                                		// If you store any temporary, sensitive data on the user, clear it here
+                                                                                                		// $this->plainPassword = null;
+                                                                                                	}
 	
 	public function setPassword(string $password): self {
-                                                                  		$this->password = $password;
-                                                                  		return $this;
-                                                                  	}
+                                                                                                		$this->password = $password;
+                                                                                                		return $this;
+                                                                                                	}
 	
 	public function getDisabled(): ?bool {
-                                                                  		return $this->disabled;
-                                                                  	}
+                                                                                                		return $this->disabled;
+                                                                                                	}
 	
 	public function setDisabled(bool $disabled): self {
-                                                                  		$this->disabled = $disabled;
-                                                                  		return $this;
-                                                                  	}
+                                                                                                		$this->disabled = $disabled;
+                                                                                                		return $this;
+                                                                                                	}
 
     public function getConfirmed(): ?bool
     {
@@ -262,6 +274,68 @@ class User implements UserInterface {
             // set the owning side to null (unless already changed)
             if ($parentFamilyLink->getParentId() === $this) {
                 $parentFamilyLink->setParentId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Announcement[]
+     */
+    public function getAnnouncements(): Collection
+    {
+        return $this->announcements;
+    }
+
+    public function addAnnouncement(Announcement $announcement): self
+    {
+        if (!$this->announcements->contains($announcement)) {
+            $this->announcements[] = $announcement;
+            $announcement->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnnouncement(Announcement $announcement): self
+    {
+        if ($this->announcements->contains($announcement)) {
+            $this->announcements->removeElement($announcement);
+            // set the owning side to null (unless already changed)
+            if ($announcement->getUser() === $this) {
+                $announcement->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getUser() === $this) {
+                $comment->setUser(null);
             }
         }
 
