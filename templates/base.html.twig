@@ -44,18 +44,17 @@
                                     <i class="fas fa-user-circle fa-fw"></i>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                                    <a class="dropdown-item" href="#">Settings</a>
-                                    <a class="dropdown-item" href="#">Activity Log</a>
+                                    <a class="dropdown-item" href="{{ path('profile') }}">Profile</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="./logout">Logout</a>
+                                    <a class="dropdown-item" href="{{ path('logout') }}">Logout</a>
                                 </div>
                             </li>
                         {% else %}
                             <li class="nav-item">
-                                <a class="nav-link" href="./register">Sign Up</a>
+                                <a class="nav-link" href="{{ path('register') }}">Sign Up</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="./login">Log In</a>
+                                <a class="nav-link" href="{{ path('login') }}">Log In</a>
                             </li>
                         {% endif %}
                     </ul>
@@ -63,15 +62,15 @@
             </div>
         </nav>
 
+        <main>
         {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-        <!-- Bootstrap core JavaScript-->
+        </main>
+
         <script src="{{ asset('js/jquery/jquery.min.js') }}"></script>
         <script src="{{ asset('js/bootstrap/bootstrap.bundle.min.js') }}"></script>
-
-        <!-- Core plugin JavaScript-->
         <script src="{{ asset('js/jquery-easing/jquery.easing.min.js') }}" src="vendor/jquery-easing/jquery.easing.min.js"></script>
-        <!-- Footer -->
+        {% block javascripts %}{% endblock %}
+
         <footer class="py-5 bg-black">
             <div class="container">
                 <p class="m-0 text-center text-white small">Copyright &copy; Happy Childhood 2018</p>

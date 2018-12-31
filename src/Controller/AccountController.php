@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
-class SecurityController extends AbstractController {
+class AccountController extends AbstractController {
 	
 	/**
 	 * @Route("/login", name="app_login")
@@ -27,7 +27,7 @@ class SecurityController extends AbstractController {
 		// last entered username.
 		$lastUsername = $authenticationUtils->getLastUsername();
 		
-		return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+		return $this->render('account/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
 	}
 	
 	/**
@@ -61,6 +61,10 @@ class SecurityController extends AbstractController {
 			);
 		}
 		
-		return $this->render('security/register.html.twig', array('form' => $form->createView()));
+		return $this->render('account/register.html.twig', array('form' => $form->createView()));
+	}
+	
+	public function profile() {
+		return $this->render('account/profile.html.twig');
 	}
 }

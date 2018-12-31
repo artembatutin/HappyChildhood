@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+{% block title %}Log in{% endblock %}
+
+{% block body %}
+<header class="masthead">
+    <div class="container">
+            <div class="col-md-12 card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>Create your Account</h4>
+                            <hr>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            {{ form_start(form) }}
+                            <div class="form-label-group col-md-5 mx-auto">
+                                {{ form_row(form.firstName) }}
+                                {{ form_row(form.lastName) }}
+                                {{ form_row(form.email) }}
+                                {{ form_row(form.plainPassword.first) }}
+                                {{ form_row(form.plainPassword.second) }}
+                                <br/>
+                                <button class="btn btn-lg btn-secondary" type="submit">Register</button>
+                            </div>
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</header>
+{% endblock %}
+{% form_theme form 'form/fields.html.twig' %}

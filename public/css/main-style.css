@@ -1,5 +1,26 @@
 body {
   font-family: 'Lato';
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
+  /*background: -webkit-gradient(linear, left bottom, left top, from(#82c2a8), to(#cae3f2));
+  background: linear-gradient(0deg, #82c2a8 0%, #cae3f2, 100%);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: scroll;
+  background-size: cover;*/ // blue - green
+
+  background: -webkit-gradient(linear, left bottom, left top, from(#e0760f), to(#e3a130));
+  background: linear-gradient(0deg, #e0760f 0%, #e3a130 100%);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: scroll;
+  background-size: cover;
+}
+
+main {
+  flex: 1;
 }
 
 h1,
@@ -82,12 +103,7 @@ header.masthead {
   overflow: hidden;
   padding-top: calc(7rem + 72px);
   padding-bottom: 7rem;
-  background: -webkit-gradient(linear, left bottom, left top, from(#e0760f), to(#e3a130));
-  background: linear-gradient(0deg, #e0760f 0%, #e3a130 100%);
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-attachment: scroll;
-  background-size: cover;
+
 }
 
 header.masthead .masthead-content {
@@ -168,7 +184,7 @@ header.masthead .bg-circle-4 {
 .btn-primary:active, .btn-primary:focus, .btn-primary:hover {
   background-color: #bd4719 !important;
   border-color: #b45a37 !important;
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19) !important;
+  box-shadow: 0 3px 8px 0 rgba(0,0,0,0.2), 0 2px 5px 0 rgba(0,0,0,0.19) !important;
 }
 
 .btn-primary:focus {
@@ -195,8 +211,7 @@ header.masthead .bg-circle-4 {
   border-radius: 10% !important;
 }
 
-form {
-  padding: 20px;
-  background-color: rgba(0, 0, 0, 0.3);
-  border-radius: 5px;
+.centered {
+  display:block;
+  margin: 0 auto;
 }

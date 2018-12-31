@@ -1,7 +1,7 @@
 {% block form_row %}
     {% spaceless %}
-        <div class="form_row">
-            {{ form_label(form) }} :
+        <div class="form-group row">
+            <label for="username" class="col-form-label">{{ form_label(form) }}:</label>
             {% if not form.vars.valid %}
                 <div class="alert alert-danger">{{ form_errors(form) }}</div>
             {% endif %}
