@@ -180,68 +180,49 @@ class User implements UserInterface {
 		// $this->plainPassword = null;
 	}
 	
-	public function setPassword(string $password): self {
+	public function setPassword($password) {
 		$this->password = $password;
 		return $this;
 	}
 	
-	public function getDisabled(): ?bool {
+	public function getDisabled() {
 		return $this->disabled;
 	}
 	
-	public function setDisabled(bool $disabled): self {
+	public function setDisabled($disabled): void {
 		$this->disabled = $disabled;
-		return $this;
 	}
 	
-	public function getConfirmed(): ?bool {
-		return $this->confirmed;
-	}
-	
-	public function setConfirmed(bool $confirmed): self {
-		$this->confirmed = $confirmed;
-		
-		return $this;
-	}
-	
-	public function getAddress(): ?string {
+	public function getAddress() {
 		return $this->address;
 	}
 	
-	public function setAddress(?string $address): self {
+	public function setAddress($address): void {
 		$this->address = $address;
-		
-		return $this;
 	}
 	
-	public function getPostalCode(): ?string {
+	public function getPostalCode() {
 		return $this->postal_code;
 	}
 	
-	public function setPostalCode(?string $postal_code): self {
+	public function setPostalCode($postal_code): void {
 		$this->postal_code = $postal_code;
-		
-		return $this;
 	}
 	
-	public function getProvince(): ?string {
+	public function getProvince() {
 		return $this->province;
 	}
 	
-	public function setProvince(?string $province): self {
+	public function setProvince($province): void {
 		$this->province = $province;
-		
-		return $this;
 	}
 	
-	public function getPhone(): ?int {
+	public function getPhone() {
 		return $this->phone;
 	}
 	
-	public function setPhone(?int $phone): self {
+	public function setPhone($phone): void {
 		$this->phone = $phone;
-		
-		return $this;
 	}
 	
 	/**

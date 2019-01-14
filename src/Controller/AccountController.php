@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Form\UserProfile;
 use App\Security\LoginAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -64,7 +65,23 @@ class AccountController extends AbstractController {
 		return $this->render('account/register.html.twig', array('form' => $form->createView()));
 	}
 	
-	public function profile() {
-		return $this->render('account/profile.html.twig');
+	public function profile(Request $request) {
+		$user = $this->getUser();
+		$profileForm = $this->createForm(UserProfile::class, $user);
+		
+		//will only happen on POST.
+		$profileForm->handleRequest($request);
+		if($profileForm->isSubmitted() && $profileForm->isValid()) {
+			
+			$user = $profileForm->getData();
+			
+			//saving the user.
+			$entityManager = $this->getDoctrine()->getManager();
+			$entityManager->persist($user);
+			$entityManager->flush();
+			
+		}
+		
+		return $this->render('account/profile.html.twig', array('profileForm' => $profileForm->createView()));
 	}
 }
