@@ -5,9 +5,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminController extends AbstractController
 {
-    public function index()
+    public function panel()
     {
-        return $this->render('index.html.twig', [
+        return $this->render('admin/panel.html.twig', [
             //'number' => $number,
         ]);
     }

@@ -10,6 +10,9 @@ register:
 profile:
     path: /profile/
     controller: App\Controller\AccountController::profile
+adminpanel:
+    path: /admin/
+    controller: App\Controller\AdminController::panel
 logout:
     path: /logout
 
