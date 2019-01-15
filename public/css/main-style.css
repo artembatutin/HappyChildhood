@@ -215,3 +215,16 @@ header.masthead .bg-circle-4 {
   display:block;
   margin: 0 auto;
 }
+
+.list-group-item.active {
+  z-index: 2;
+  color: #fff;
+  background-color: #d57e56;
+  border-color: #b97251;
+}
+
+.title {
+  color: white;
+  margin-left: -15px;
+  margin-bottom: 15px;
+}

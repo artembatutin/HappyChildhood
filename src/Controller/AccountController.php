@@ -6,7 +6,7 @@ use App\Entity\Child;
 use App\Entity\Family;
 use App\Entity\User;
 use App\Form\UserChildrens;
-use App\Form\UserType;
+use App\Form\UserRegister;
 use App\Form\UserProfile;
 use App\Security\LoginAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -40,7 +40,7 @@ class AccountController extends AbstractController {
 	public function register(Request $request, LoginAuthenticator $authenticator, GuardAuthenticatorHandler $guardHandler, UserPasswordEncoderInterface $passwordEncoder) {
 		
 		$user = new User();
-		$form = $this->createForm(UserType::class, $user);
+		$form = $this->createForm(UserRegister::class, $user);
 		
 		//will only happen on POST.
 		$form->handleRequest($request);
