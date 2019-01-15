@@ -55,7 +55,12 @@ class User implements UserInterface {
 	private $password;
 	
 	/**
-	 * @Assert\Length(max=4096)
+	 * @Assert\Length(
+	 *      min = 3,
+	 *      max = 4096,
+	 *      minMessage = "Your password must be at least {{ limit }} characters long",
+	 *      maxMessage = "Your password cannot be longer than {{ limit }} characters"
+	 * )
 	 */
 	private $plainPassword;
 	
@@ -71,6 +76,7 @@ class User implements UserInterface {
 	
 	/**
 	 * @ORM\Column(type="string", length=6, nullable=true)
+	 * @Assert\Regex(pattern="/^([a-zA-Z]\d[a-zA-Z])\ {0,1}(\d[a-zA-Z]\d)$/", message="Enter Canadian postal code.")
 	 */
 	private $postal_code;
 	
@@ -80,7 +86,13 @@ class User implements UserInterface {
 	private $province;
 	
 	/**
-	 * @ORM\Column(type="string", length=10, nullable=true)
+	 * @ORM\Column(type="string", length=11, nullable=true)
+	 * @Assert\Length(
+	 *      min = 10,
+	 *      max = 11,
+	 *      minMessage = "Your password must be at least {{ limit }} characters long",
+	 *      maxMessage = "Your password cannot be longer than {{ limit }} characters"
+	 * )
 	 */
 	private $phone;
 	
