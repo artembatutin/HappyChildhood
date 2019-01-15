@@ -81,11 +81,6 @@ class User implements UserInterface {
 	private $postal_code;
 	
 	/**
-	 * @ORM\Column(type="string", length=25, nullable=true)
-	 */
-	private $province;
-	
-	/**
 	 * @ORM\Column(type="string", length=11, nullable=true)
 	 * @Assert\Length(
 	 *      min = 10,
