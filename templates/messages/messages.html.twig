@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+{% block title %}Your Mail Box{% endblock %}
+{% block javascripts %}<script src="{{ asset('js/grouplist.js') }}"></script>{% endblock %}
+{% block body %}
+
+<header class="masthead">
+    <div class="container">
+        <div class="row">
+
+
+            <div class="list-group account-menu">
+                <a class="list-group-item list-group-item-action active" href="#" data-target-id="inbox">Inbox</a></li>
+                <a class="list-group-item list-group-item-action" href="#" data-target-id="new_message">New Message</a></li>
+                <a class="list-group-item list-group-item-action" href="#" data-target-id="sent">Sent Messages</a></li>
+                <a class="list-group-item list-group-item-action" href="#" data-target-id="drafts">Drafts</a></li>
+            </div>
+
+            <div class="col-md-10 well account-content" id="inbox">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>Your Inbox</h4>
+                                <hr>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% for mr in messages_in %}
+                                    <h6>{{ mr.message.title }}</h6>
+                                    <span>Sender: {{ mr.message.sender_inbox.user.firstName }} {{ mr.message.sender_inbox.user.lastName }}</span>
+                                    <p>{{ mr.message.message_file }}</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-10 well account-content" id="new_message">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>New Message</h4>
+                                <hr>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <span>New Message form will be there</span>
+                                <!-- new message form to be here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-10 well account-content" id="sent">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>Sent Messages</h4>
+                                <hr>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <span>Sent Messages to be displayed here</span>
+                                <!-- sent messages  to be here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-10 well account-content" id="drafts">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>Drafts</h4>
+                                <hr>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <span>Drafts to be there</span>
+                                <!-- drafts to be here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ul>
+    </div>
+{% endblock %}

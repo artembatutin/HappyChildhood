@@ -13,6 +13,9 @@ profile:
 adminpanel:
     path: /admin/
     controller: App\Controller\AdminController::panel
+messages:
+    path: /messages/
+    controller: App\Controller\MessagesController::inbox
 logout:
     path: /logout
 

@@ -51,11 +51,11 @@ class Message {
 		return $this->id;
 	}
 	
-	public function getSenderInbox(): ?Inbox {
+	public function getSender_Inbox(): ?Inbox {
 		return $this->sender_inbox;
 	}
 	
-	public function setSenderInbox(?Inbox $sender_inbox): self {
+	public function setSender_Inbox(?Inbox $sender_inbox): self {
 		$this->sender_inbox = $sender_inbox;
 		
 		return $this;
@@ -71,7 +71,9 @@ class Message {
 		return $this;
 	}
 	
-	public function getMessageFile() {
+	public function getMessage_File() {
+		if($this->message_file != '')
+			return stream_get_contents($this->message_file);
 		return $this->message_file;
 	}
 	

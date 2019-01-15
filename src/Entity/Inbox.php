@@ -61,7 +61,7 @@ class Inbox {
 	public function addSentMessage(Message $sentMessage): self {
 		if(!$this->sent_messages->contains($sentMessage)) {
 			$this->sent_messages[] = $sentMessage;
-			$sentMessage->setSenderInbox($this);
+			$sentMessage->setSender_Inbox($this);
 		}
 		
 		return $this;
@@ -71,8 +71,8 @@ class Inbox {
 		if($this->sent_messages->contains($sentMessage)) {
 			$this->sent_messages->removeElement($sentMessage);
 			// set the owning side to null (unless already changed)
-			if($sentMessage->getSenderInbox() === $this) {
-				$sentMessage->setSenderInbox(null);
+			if($sentMessage->getSender_Inbox() === $this) {
+				$sentMessage->setSender_Inbox(null);
 			}
 		}
 		
