@@ -215,14 +215,6 @@ class User implements UserInterface {
 		$this->postal_code = $postal_code;
 	}
 	
-	public function getProvince() {
-		return $this->province;
-	}
-	
-	public function setProvince($province): void {
-		$this->province = $province;
-	}
-	
 	public function getPhone() {
 		return $this->phone;
 	}
