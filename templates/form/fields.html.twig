@@ -1,11 +1,11 @@
 {% block form_row %}
     {% spaceless %}
         <div class="form-group row">
-            <label class="col-3 col-form-label">{{ form_label(form) }} :</label>
+            <label class="col-4 col-form-label">{{ form_label(form) }}</label>
             {% if not form.vars.valid %}
                 <div class="alert alert-danger">{{ form_errors(form) }}</div>
             {% endif %}
-            <div class="col-9">
+            <div class="col-8">
                 {{ form_widget(form, {'attr': {'class': 'form-control'}}) }}
             </div>
             {{ form_help(form) }}

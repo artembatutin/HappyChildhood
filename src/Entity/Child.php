@@ -3,11 +3,16 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ChildRepository")
  */
-class Child {
+class Child extends AbstractType {
 	/**
 	 * @ORM\Id()
 	 * @ORM\GeneratedValue()
@@ -51,6 +56,16 @@ class Child {
 	 * @ORM\JoinColumn(nullable=false)
 	 */
 	private $group_id;
+	
+	public function buildForm(FormBuilderInterface $builder, array $options) {
+		$builder
+			->add('first_name', TextType::class)
+			->add('last_name', TextType::class)
+			->add('birth_date', DateTimeType::class)
+			->add('allergies', TextType::class)
+			->add('medications', TextType::class)
+			->add('save', SubmitType::class);
+	}
 	
 	public function getId(): ?int {
 		return $this->id;

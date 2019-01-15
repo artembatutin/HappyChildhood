@@ -55,7 +55,6 @@ class User implements UserInterface {
 	private $password;
 	
 	/**
-	 * @Assert\NotBlank
 	 * @Assert\Length(max=4096)
 	 */
 	private $plainPassword;
@@ -81,7 +80,7 @@ class User implements UserInterface {
 	private $province;
 	
 	/**
-	 * @ORM\Column(type="integer", nullable=true)
+	 * @ORM\Column(type="string", length=10, nullable=true)
 	 */
 	private $phone;
 	

@@ -132,6 +132,22 @@
                                 <hr>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                {{ form_start(childrenForm) }}
+                                    {% for child in childrenForm.children %}
+                                        {{ form_row(child.first_name) }}
+                                        {{ form_row(child.last_name) }}
+                                        {{ form_row(child.birth_date) }}
+                                        {{ form_row(child.allergies) }}
+                                        {{ form_row(child.medications) }}
+                                        {{ form_row(child.save) }}
+                                    {% endfor %}
+                                <br/>
+                                <button class="btn btn-secondary" type="submit">Update Childrens</button>
+                                {{ form_end(profileForm) }}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

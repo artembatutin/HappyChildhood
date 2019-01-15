@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Child;
+use App\Entity\Family;
 use App\Entity\User;
+use App\Form\UserChildrens;
 use App\Form\UserType;
 use App\Form\UserProfile;
 use App\Security\LoginAuthenticator;
@@ -66,22 +69,40 @@ class AccountController extends AbstractController {
 	}
 	
 	public function profile(Request $request) {
+		if(!$this->isGranted("IS_AUTHENTICATED_FULLY")) {
+			return $this->redirectToRoute('index');
+		}
 		$user = $this->getUser();
-		$profileForm = $this->createForm(UserProfile::class, $user);
 		
-		//will only happen on POST.
+		//TODO for Dorin: get childrens and allow the creation of childrens in a form.
+		/*$em = $this->getDoctrine()->getManager();
+		$childrens = array();
+		$families = $user->getParentFamilyLinks();
+		foreach($families as $family) {
+			$familyId = $family->getFamilyId();
+			$childs = $em->getRepository('AppBundle:Child')->findBy(['family_id' => $familyId]);
+			array_push($childrens, $childs);
+		}*/
+		
+		$family = new Family();
+		$childrenForm = $this->createForm(UserChildrens::class, $family);
+		
+		
+		
+		//change profile form
+		$profileForm = $this->createForm(UserProfile::class, $user);
 		$profileForm->handleRequest($request);
 		if($profileForm->isSubmitted() && $profileForm->isValid()) {
 			
 			$user = $profileForm->getData();
 			
 			//saving the user.
-			$entityManager = $this->getDoctrine()->getManager();
-			$entityManager->persist($user);
-			$entityManager->flush();
+			$em = $this->getDoctrine()->getManager();
+			$em->persist($user);
+			$em->flush();
 			
 		}
 		
-		return $this->render('account/profile.html.twig', array('profileForm' => $profileForm->createView()));
+		return $this->render('account/profile.html.twig', array('profileForm' => $profileForm->createView(), 'childrenForm' => $childrenForm->createView()));
 	}
 }
