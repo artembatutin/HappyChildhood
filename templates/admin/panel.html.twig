@@ -1,6 +1,9 @@
 {% extends 'base.html.twig' %}
 {% block title %}Admin Panel{% endblock %}
-{% block javascripts %}<script src="{{ asset('js/grouplist.js') }}"></script>{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('js/grouplist.js') }}"></script>
+    <script src="{{ asset('js/table.js') }}"></script>
+{% endblock %}
 {% block body %}
 
 <header class="masthead">
@@ -10,9 +13,9 @@
 
 
             <div class="col-md-2 list-group account-menu">
-                <a class="list-group-item list-group-item-action active" href="#" data-target-id="content">Content</a></li>
-                <a class="list-group-item list-group-item-action" href="#" data-target-id="groups">Groups</a></li>
-                <a class="list-group-item list-group-item-action" href="#" data-target-id="users">Users</a></li>
+                <a class="list-group-item list-group-item-action active" href="#" data-target-id="content"><i class="fas fa-clone"></i> Content</a></li>
+                <a class="list-group-item list-group-item-action" href="#" data-target-id="groups"><i class="fas fa-child"></i> Groups</a></li>
+                <a class="list-group-item list-group-item-action" href="#" data-target-id="users"><i class="fas fa-user-friends"></i> Users</a></li>
             </div>
 
             <div class="col-md-10 well account-content" id="content">
@@ -25,7 +28,56 @@
                             </div>
                         </div>
                         <div class="row">
-
+                            <div class="table-wrapper">
+                                <div class="col-md-8"><h4>Blocks</h4></div>
+                                <div class="col-md-12">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Content</th>
+                                        <th>Image</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>John Doe</td>
+                                        <td>Administration</td>
+                                        <td>(171) 555-2222</td>
+                                        <td>
+                                            <a class="add" title="Add" data-toggle="tooltip"><i class="fas fa-plus-square"></i></a>
+                                            <a class="edit" title="Edit" data-toggle="tooltip"><i class="fas fa-pen-square"></i></a>
+                                            <a class="delete" title="Delete" data-toggle="tooltip"><i class="fas fa-minus-square"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Peter Parker</td>
+                                        <td>Customer Service</td>
+                                        <td>(313) 555-5735</td>
+                                        <td>
+                                            <a class="add" title="Add" data-toggle="tooltip"><i class="fas fa-plus-square"></i></a>
+                                            <a class="edit" title="Edit" data-toggle="tooltip"><i class="fas fa-pen-square"></i></a>
+                                            <a class="delete" title="Delete" data-toggle="tooltip"><i class="fas fa-minus-square"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Fran Wilson</td>
+                                        <td>Human Resources</td>
+                                        <td>(503) 555-9931</td>
+                                        <td>
+                                            <a class="add" title="Add" data-toggle="tooltip"><i class="fas fa-plus-square"></i></a>
+                                            <a class="edit" title="Edit" data-toggle="tooltip"><i class="fas fa-pen-square"></i></a>
+                                            <a class="delete" title="Delete" data-toggle="tooltip"><i class="fas fa-minus-square"></i></a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                </div>
+                                <div class="col-sm-4">
+                                    <button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

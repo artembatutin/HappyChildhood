@@ -10,10 +10,10 @@
 
 
             <div class="col-md-2 list-group account-menu">
-                <a class="list-group-item list-group-item-action active" href="#" data-target-id="profile">Profile</a></li>
-                <a class="list-group-item list-group-item-action" href="#" data-target-id="activity">Activities</a></li>
-                <a class="list-group-item list-group-item-action" href="#" data-target-id="family">Family</a></li>
-                <a class="list-group-item list-group-item-action" href="#" data-target-id="messages">Messages</a></li>
+                <a class="list-group-item list-group-item-action active" href="#" data-target-id="profile"><i class="fas fa-user-circle"></i> Profile</a></li>
+                <a class="list-group-item list-group-item-action" href="#" data-target-id="activity"><i class="fas fa-layer-group"></i> Activities</a></li>
+                <a class="list-group-item list-group-item-action" href="#" data-target-id="family"><i class="fas fa-home"></i> Family</a></li>
+                <a class="list-group-item list-group-item-action" href="{{ path("messages") }}"><i class="fas fa-inbox"></i> Inbox</a></li>
             </div>
 
             <div class="col-md-10 well account-content" id="profile">
@@ -144,18 +144,6 @@
                                 <br/>
                                 <button class="btn btn-secondary" type="submit">Update Childrens</button>
                                 {{ form_end(profileForm) }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-10 well account-content" id="messages">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h4>Messages</h4>
-                                <hr>
                             </div>
                         </div>
                     </div>

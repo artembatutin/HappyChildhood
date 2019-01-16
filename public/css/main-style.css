@@ -98,6 +98,14 @@ h6 {
   font-size: 0.5rem;
 }
 
+header.head {
+  position: relative;
+  overflow: hidden;
+  padding-top: calc(5rem);
+  color: white;
+
+}
+
 header.masthead {
   position: relative;
   overflow: hidden;
@@ -156,6 +164,9 @@ header.masthead .bg-circle-4 {
 }
 
 @media (min-width: 992px) {
+  header.head {
+    padding-top: calc(7rem);
+  }
   header.masthead {
     padding-top: calc(10rem);
     padding-bottom: 10rem;
@@ -227,4 +238,21 @@ header.masthead .bg-circle-4 {
   color: white;
   margin-left: -15px;
   margin-bottom: 15px;
+}
+
+table {
+  display: table;
+  position: relative;
+  width: 100%;
+  table-layout: auto;
+}
+
+table.table td a.add {
+  color: #27C46B;
+}
+table.table td a.edit {
+  color: #FFC107;
+}
+table.table td a.delete {
+  color: #E34724;
 }
