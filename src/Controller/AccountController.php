@@ -54,6 +54,7 @@ class AccountController extends AbstractController {
 			//saving the user.
 			$entityManager = $this->getDoctrine()->getManager();
 			$entityManager->persist($user);
+			$entityManager->persist($user->getInbox());
 			$entityManager->flush();
 			
 			

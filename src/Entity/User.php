@@ -116,6 +116,8 @@ class User implements UserInterface {
 	 */
 	public function __construct() {
 		$this->roles = array('ROLE_USER');
+		$this->inbox = new Inbox();
+		$this->setInbox($this->inbox);
 		$this->parentFamilyLinks = new ArrayCollection();
 		$this->announcements = new ArrayCollection();
 		$this->comments = new ArrayCollection();
