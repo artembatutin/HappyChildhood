@@ -2,156 +2,155 @@
 {% block title %}Your profile{% endblock %}
 {% block javascripts %}<script src="{{ asset('js/grouplist.js') }}"></script>{% endblock %}
 {% block body %}
+    <header class="head">
+        <div class="container">
+            <h1 class="title">User Panel</h1>
+            <div class="row">
 
-<header class="masthead">
-    <div class="container">
-        <h1 class="title">User Panel</h1>
-        <div class="row">
 
+                <div class="col-md-2 list-group account-menu">
+                    <a class="list-group-item list-group-item-action active" href="#" data-target-id="profile"><i class="fas fa-user-circle"></i> Profile</a></li>
+                    <a class="list-group-item list-group-item-action" href="#" data-target-id="activity"><i class="fas fa-layer-group"></i> Activities</a></li>
+                    <a class="list-group-item list-group-item-action" href="#" data-target-id="family"><i class="fas fa-home"></i> Family</a></li>
+                    <a class="list-group-item list-group-item-action" href="{{ path("messages") }}"><i class="fas fa-inbox"></i> Inbox</a></li>
+                </div>
 
-            <div class="col-md-2 list-group account-menu">
-                <a class="list-group-item list-group-item-action active" href="#" data-target-id="profile"><i class="fas fa-user-circle"></i> Profile</a></li>
-                <a class="list-group-item list-group-item-action" href="#" data-target-id="activity"><i class="fas fa-layer-group"></i> Activities</a></li>
-                <a class="list-group-item list-group-item-action" href="#" data-target-id="family"><i class="fas fa-home"></i> Family</a></li>
-                <a class="list-group-item list-group-item-action" href="{{ path("messages") }}"><i class="fas fa-inbox"></i> Inbox</a></li>
-            </div>
-
-            <div class="col-md-10 well account-content" id="profile">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h4>Your Profile</h4>
-                                <hr>
+                <div class="col-md-10 well account-content" id="profile">
+                    <div class="card card-shadow">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4>Your Profile</h4>
+                                    <hr>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    {{ form_start(profileForm) }}
+                                        {{ form_row(profileForm.firstName) }}
+                                        {{ form_row(profileForm.lastName) }}
+                                        {{ form_row(profileForm.email) }}
+                                        {{ form_row(profileForm.address) }}
+                                        {{ form_row(profileForm.postal_code) }}
+                                        {{ form_row(profileForm.phone) }}
+                                        <br/>
+                                        <button class="btn btn-secondary" type="submit">Update Profile</button>
+                                    {{ form_end(profileForm) }}
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                {{ form_start(profileForm) }}
-                                    {{ form_row(profileForm.firstName) }}
-                                    {{ form_row(profileForm.lastName) }}
-                                    {{ form_row(profileForm.email) }}
-                                    {{ form_row(profileForm.address) }}
-                                    {{ form_row(profileForm.postal_code) }}
-                                    {{ form_row(profileForm.phone) }}
+                    </div>
+                </div>
+                <div class="col-md-10 well account-content" id="activity">
+                    <div class="card card-shadow">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4>Activity</h4>
+                                    <hr>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form>
+                                        <div class="form-group row">
+                                            <label for="username" class="col-4 col-form-label">User Name*</label>
+                                            <div class="col-8">
+                                                <input id="username" name="username" placeholder="Username" class="form-control here" required="required" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="name" class="col-4 col-form-label">First Name</label>
+                                            <div class="col-8">
+                                                <input id="name" name="name" placeholder="First Name" class="form-control here" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="lastname" class="col-4 col-form-label">Last Name</label>
+                                            <div class="col-8">
+                                                <input id="lastname" name="lastname" placeholder="Last Name" class="form-control here" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="text" class="col-4 col-form-label">Nick Name*</label>
+                                            <div class="col-8">
+                                                <input id="text" name="text" placeholder="Nick Name" class="form-control here" required="required" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="select" class="col-4 col-form-label">Display Name public as</label>
+                                            <div class="col-8">
+                                                <select id="select" name="select" class="custom-select">
+                                                    <option value="admin">Admin</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="email" class="col-4 col-form-label">Email*</label>
+                                            <div class="col-8">
+                                                <input id="email" name="email" placeholder="Email" class="form-control here" required="required" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="website" class="col-4 col-form-label">Website</label>
+                                            <div class="col-8">
+                                                <input id="website" name="website" placeholder="website" class="form-control here" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="publicinfo" class="col-4 col-form-label">Public Info</label>
+                                            <div class="col-8">
+                                                <textarea id="publicinfo" name="publicinfo" cols="40" rows="4" class="form-control"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="newpass" class="col-4 col-form-label">New Password</label>
+                                            <div class="col-8">
+                                                <input id="newpass" name="newpass" placeholder="New Password" class="form-control here" type="text">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="offset-4 col-8">
+                                                <button name="submit" type="submit" class="btn btn-primary">Update My Profile</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-10 well account-content" id="family">
+                    <div class="card card-shadow">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4>Family</h4>
+                                    <hr>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    {{ form_start(childrenForm) }}
+                                        {% for child in childrenForm.children %}
+                                            {{ form_row(child.first_name) }}
+                                            {{ form_row(child.last_name) }}
+                                            {{ form_row(child.birth_date) }}
+                                            {{ form_row(child.allergies) }}
+                                            {{ form_row(child.medications) }}
+                                            {{ form_row(child.save) }}
+                                        {% endfor %}
                                     <br/>
-                                    <button class="btn btn-secondary" type="submit">Update Profile</button>
-                                {{ form_end(profileForm) }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-10 well account-content" id="activity">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h4>Activity</h4>
-                                <hr>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <form>
-                                    <div class="form-group row">
-                                        <label for="username" class="col-4 col-form-label">User Name*</label>
-                                        <div class="col-8">
-                                            <input id="username" name="username" placeholder="Username" class="form-control here" required="required" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="name" class="col-4 col-form-label">First Name</label>
-                                        <div class="col-8">
-                                            <input id="name" name="name" placeholder="First Name" class="form-control here" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="lastname" class="col-4 col-form-label">Last Name</label>
-                                        <div class="col-8">
-                                            <input id="lastname" name="lastname" placeholder="Last Name" class="form-control here" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="text" class="col-4 col-form-label">Nick Name*</label>
-                                        <div class="col-8">
-                                            <input id="text" name="text" placeholder="Nick Name" class="form-control here" required="required" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="select" class="col-4 col-form-label">Display Name public as</label>
-                                        <div class="col-8">
-                                            <select id="select" name="select" class="custom-select">
-                                                <option value="admin">Admin</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="email" class="col-4 col-form-label">Email*</label>
-                                        <div class="col-8">
-                                            <input id="email" name="email" placeholder="Email" class="form-control here" required="required" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="website" class="col-4 col-form-label">Website</label>
-                                        <div class="col-8">
-                                            <input id="website" name="website" placeholder="website" class="form-control here" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="publicinfo" class="col-4 col-form-label">Public Info</label>
-                                        <div class="col-8">
-                                            <textarea id="publicinfo" name="publicinfo" cols="40" rows="4" class="form-control"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="newpass" class="col-4 col-form-label">New Password</label>
-                                        <div class="col-8">
-                                            <input id="newpass" name="newpass" placeholder="New Password" class="form-control here" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="offset-4 col-8">
-                                            <button name="submit" type="submit" class="btn btn-primary">Update My Profile</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-10 well account-content" id="family">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h4>Family</h4>
-                                <hr>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                {{ form_start(childrenForm) }}
-                                    {% for child in childrenForm.children %}
-                                        {{ form_row(child.first_name) }}
-                                        {{ form_row(child.last_name) }}
-                                        {{ form_row(child.birth_date) }}
-                                        {{ form_row(child.allergies) }}
-                                        {{ form_row(child.medications) }}
-                                        {{ form_row(child.save) }}
-                                    {% endfor %}
-                                <br/>
-                                <button class="btn btn-secondary" type="submit">Update Childrens</button>
-                                {{ form_end(profileForm) }}
+                                    <button class="btn btn-secondary" type="submit">Update Childrens</button>
+                                    {{ form_end(profileForm) }}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</header>
+    </header>
 {% endblock %}
 {% form_theme profileForm 'form/fields.html.twig' %}
 {% form_theme childrenForm 'form/fields.html.twig' %}

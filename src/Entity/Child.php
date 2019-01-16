@@ -58,13 +58,7 @@ class Child extends AbstractType {
 	private $group_id;
 	
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		$builder
-			->add('first_name', TextType::class)
-			->add('last_name', TextType::class)
-			->add('birth_date', DateTimeType::class)
-			->add('allergies', TextType::class)
-			->add('medications', TextType::class)
-			->add('save', SubmitType::class);
+		$builder->add('first_name', TextType::class)->add('last_name', TextType::class)->add('birth_date', DateTimeType::class)->add('allergies', TextType::class)->add('medications', TextType::class)->add('save', SubmitType::class);
 	}
 	
 	public function getId(): ?int {

@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * Represents a block/announcement in the system made by an Admin.
  * @ORM\Entity(repositoryClass="App\Repository\AnnouncementRepository")
  */
 class Announcement {
@@ -34,9 +35,9 @@ class Announcement {
 	private $content;
 	
 	/**
-	 * @ORM\Column(type="string", length=14)
+	 * @ORM\Column(type="boolean")
 	 */
-	private $visibility;
+	private $public;
 	
 	/**
 	 * @ORM\Column(type="boolean")
@@ -53,62 +54,101 @@ class Announcement {
 	 */
 	private $comments;
 	
+	/**
+	 * Announcement constructor.
+	 */
 	public function __construct() {
 		$this->announcementViewers = new ArrayCollection();
 		$this->comments = new ArrayCollection();
 	}
 	
+	/**
+	 * @return int|null
+	 */
 	public function getId(): ?int {
 		return $this->id;
 	}
 	
+	/**
+	 * @return User|null
+	 */
 	public function getUser(): ?User {
 		return $this->user;
 	}
 	
+	/**
+	 * @param User|null $user
+	 * @return Announcement
+	 */
 	public function setUser(?User $user): self {
 		$this->user = $user;
 		
 		return $this;
 	}
 	
+	/**
+	 * @return \DateTimeInterface|null
+	 */
 	public function getCreationDate(): ?\DateTimeInterface {
 		return $this->creation_date;
 	}
 	
+	/**
+	 * @param \DateTimeInterface $creation_date
+	 * @return Announcement
+	 */
 	public function setCreationDate(\DateTimeInterface $creation_date): self {
 		$this->creation_date = $creation_date;
 		
 		return $this;
 	}
 	
+	/**
+	 * @return mixed
+	 */
 	public function getContent() {
 		return $this->content;
 	}
 	
+	/**
+	 * @param $content
+	 * @return Announcement
+	 */
 	public function setContent($content): self {
 		$this->content = $content;
 		
 		return $this;
 	}
 	
-	public function getVisibility(): ?string {
-		return $this->visibility;
+	/**
+	 * @return bool|null
+	 */
+	public function isPublic(): ?bool {
+		return $this->public;
 	}
 	
-	public function setVisibility(string $visibility): self {
-		$this->visibility = $visibility;
-		
+	/**
+	 * @param bool $public
+	 * @return Announcement
+	 */
+	public function setPublic(bool $public): self {
+		$this->public = $public;
 		return $this;
 	}
 	
+	/**
+	 * @return bool|null
+	 */
 	public function getHidden(): ?bool {
 		return $this->hidden;
 	}
 	
+	/**
+	 * @param bool $hidden
+	 * @return Announcement
+	 */
 	public function setHidden(bool $hidden): self {
 		$this->hidden = $hidden;
-		
 		return $this;
 	}
 	
@@ -119,6 +159,10 @@ class Announcement {
 		return $this->announcementViewers;
 	}
 	
+	/**
+	 * @param AnnouncementViewers $announcementViewer
+	 * @return Announcement
+	 */
 	public function addAnnouncementViewer(AnnouncementViewers $announcementViewer): self {
 		if(!$this->announcementViewers->contains($announcementViewer)) {
 			$this->announcementViewers[] = $announcementViewer;
@@ -128,6 +172,10 @@ class Announcement {
 		return $this;
 	}
 	
+	/**
+	 * @param AnnouncementViewers $announcementViewer
+	 * @return Announcement
+	 */
 	public function removeAnnouncementViewer(AnnouncementViewers $announcementViewer): self {
 		if($this->announcementViewers->contains($announcementViewer)) {
 			$this->announcementViewers->removeElement($announcementViewer);
@@ -147,15 +195,22 @@ class Announcement {
 		return $this->comments;
 	}
 	
+	/**
+	 * @param Comment $comment
+	 * @return Announcement
+	 */
 	public function addComment(Comment $comment): self {
 		if(!$this->comments->contains($comment)) {
 			$this->comments[] = $comment;
 			$comment->setAnnouncement($this);
 		}
-		
 		return $this;
 	}
 	
+	/**
+	 * @param Comment $comment
+	 * @return Announcement
+	 */
 	public function removeComment(Comment $comment): self {
 		if($this->comments->contains($comment)) {
 			$this->comments->removeElement($comment);

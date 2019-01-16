@@ -55,7 +55,7 @@ class Message {
 		return $this->sender_inbox;
 	}
 	
-	public function setSender_Inbox(?Inbox $sender_inbox): self {
+	public function setSenderInbox(?Inbox $sender_inbox): self {
 		$this->sender_inbox = $sender_inbox;
 		
 		return $this;

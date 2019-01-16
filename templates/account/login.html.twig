@@ -4,7 +4,7 @@
 {% block body %}
     <header class="masthead">
         <div class="container">
-            <div class="col-md-6 card centered">
+            <div class="col-md-6 card centered card-shadow">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
@@ -15,31 +15,29 @@
                     <div class="row">
                         <div class="col-md-12">
                             <form method="post">
-                    {% if error %}
-                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                    {% endif %}
-                    <div class="form-label-group col-md-12 mx-auto">
-                        <label for="inputEmail" class="sr-only">Email</label><br/>
-                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus>
-                        <label for="inputPassword" class="sr-only">Password</label><br/>
-                        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
-                    </div>
-                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                                {% if error %}
+                                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                                {% endif %}
+                                <div class="form-label-group col-md-12 mx-auto">
+                                    <label for="inputEmail" class="sr-only">Email</label><br/>
+                                    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus>
+                                    <label for="inputPassword" class="sr-only">Password</label><br/>
+                                    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                                </div>
+                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-                    {#
-                        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-                        See https://symfony.com/doc/current/security/remember_me.html
+                                {#
+                                    Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+                                    See https://symfony.com/doc/current/security/remember_me.html
 
-                        <div class="checkbox mb-3">
-                            <label>
-                                <input type="checkbox" name="_remember_me"> Remember me
-                            </label>
-                        </div>
-                    #}
-                    <br/>
-                    <button class="btn btn-lg btn-primary centered" type="submit">
-                        Sign in
-                    </button>
+                                    <div class="checkbox mb-3">
+                                        <label>
+                                            <input type="checkbox" name="_remember_me"> Remember me
+                                        </label>
+                                    </div>
+                                #}
+                                <br/>
+                                <button class="btn btn-lg btn-primary centered" type="submit">Sign in</button>
                         </div>
                     </div>
                 </div>
