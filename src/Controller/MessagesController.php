@@ -34,6 +34,15 @@ class MessagesController extends AbstractController {
 		$inbox = $user->getInbox();
 		$messages_in = $inbox->getReceivedMessages();
 		
+		return $this->render('messages/inbox.html.twig', array('user' => $user, 'inbox' => $inbox, 'messages_in' => $messages_in));
+	}
+	
+	public function new_message() {
+		if(!$this->isGranted("IS_AUTHENTICATED_FULLY")) {
+			return $this->redirectToRoute('index');
+		}
+		$user = $this->getUser();
+		$inbox = $user->getInbox();
 		$em = $this->getDoctrine()->getManager();
 		$users = $em->getRepository(User::class)->findAll();
 		
@@ -51,8 +60,24 @@ class MessagesController extends AbstractController {
 				'multiple' => true))
 			->add('title', TextType::class)
 			->add('message', TextareaType::class, array('empty_data' => 'Your message here...',))->getForm();
-		
-		return $this->render('messages/messages.html.twig', array('user' => $user, 'inbox' => $inbox, 'messages_in' => $messages_in, 'createForm' => $createForm->createView()));
+		return $this->render('messages/new_message.html.twig', array('user' => $user, 'inbox' => $inbox, 'createForm' => $createForm->createView()));
 	}
 	
+	public function sent() {
+		if(!$this->isGranted("IS_AUTHENTICATED_FULLY")) {
+			return $this->redirectToRoute('index');
+		}
+		$user = $this->getUser();
+		$inbox = $user->getInbox();
+		$messages_out = $inbox->getSentMessages();
+		
+		return $this->render('messages/sent.html.twig', array('user' => $user, 'inbox' => $inbox, 'messages_out' => $messages_out));
+	}
+	
+	public function drafts() {
+		if(!$this->isGranted("IS_AUTHENTICATED_FULLY")) {
+			return $this->redirectToRoute('index');
+		}
+		return $this->render('messages/drafts.html.twig');
+	}
 }

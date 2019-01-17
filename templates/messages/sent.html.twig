@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+{% block title %}Your Mail Box{% endblock %}
+{% block body %}
+
+    <header class="head">
+        <div class="container">
+            <h1 class="title">Inbox</h1>
+            <div class="row">
+
+
+            <div class="col-md-2 list-group account-menu">
+                <a class="list-group-item list-group-item-action" href="{{ path('messages_inbox') }}" data-target-id="inbox"><i class="fas fa-inbox"></i> Inbox</a></li>
+                <a class="list-group-item list-group-item-action" href="{{ path('messages_new') }}" data-target-id="new_message"><i class="fas fa-share-square"></i> New Message</a></li>
+                <a class="list-group-item list-group-item-action active" href="{{ path('messages_sent') }}" data-target-id="sent"><i class="fas fa-envelope"></i> Sent Messages</a></li>
+                <a class="list-group-item list-group-item-action" href="{{ path('messages_drafts') }}" data-target-id="drafts"><i class="fas fa-envelope-open"></i> Drafts</a></li>
+                <a class="list-group-item list-group-item-action" href="{{ path("profile") }}"><i class="fas fa-user-circle"></i> Profile</a></li>
+            </div>
+
+            <div class="col-md-10 well account-content" id="sent">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>Sent Messages</h4>
+                                <hr>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% for message in messages_out %}
+                                    <h6>{{ message.title }}</h6>
+                                    <div id="receivers">
+                                        To:<br>
+                                        {% for mr in message.messageReceivers %}
+                                            {{ mr.receiver_inbox.user.firstName }} {{ mr.receiver_inbox.user.lastName }}<br>
+                                        {% endfor %}
+                                    </div>
+                                    <p>{{ message.message_file }}</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+    </div>
+{% endblock %}

@@ -99,7 +99,7 @@ class Inbox {
 		if($this->received_messages->contains($receivedMessage)) {
 			$this->received_messages->removeElement($receivedMessage);
 			// set the owning side to null (unless already changed)
-			if($receivedMessage->getReceiverInbox() === $this) {
+			if($receivedMessage->getReceiver_Inbox() === $this) {
 				$receivedMessage->setReceiverInbox(null);
 			}
 		}

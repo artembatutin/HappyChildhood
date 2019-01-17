@@ -46,7 +46,7 @@ class MessageReceiver {
 		return $this;
 	}
 	
-	public function getReceiverInbox(): ?Inbox {
+	public function getReceiver_Inbox(): ?Inbox {
 		return $this->receiver_inbox;
 	}
 	

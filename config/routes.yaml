@@ -13,9 +13,18 @@ profile:
 adminpanel:
     path: /admin/
     controller: App\Controller\AdminController::panel
-messages:
-    path: /messages/
+messages_inbox:
+    path: /messages/inbox
     controller: App\Controller\MessagesController::inbox
+messages_new:
+    path: /messages/new
+    controller: App\Controller\MessagesController::new_message
+messages_sent:
+    path: /messages/sent
+    controller: App\Controller\MessagesController::sent
+messages_drafts:
+    path: /messages/drafts
+    controller: App\Controller\MessagesController::drafts
 logout:
     path: /logout
 
