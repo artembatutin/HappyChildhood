@@ -15,6 +15,7 @@ use App\Entity\MessageReceiver;
 use App\Security\LoginAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,7 +38,7 @@ class MessagesController extends AbstractController {
 		return $this->render('messages/inbox.html.twig', array('user' => $user, 'inbox' => $inbox, 'messages_in' => $messages_in));
 	}
 	
-	public function new_message() {
+	public function new_message(Request $request) {
 		if(!$this->isGranted("IS_AUTHENTICATED_FULLY")) {
 			return $this->redirectToRoute('index');
 		}
@@ -48,6 +49,10 @@ class MessagesController extends AbstractController {
 		
 		$message = new Message();
 		$message->setSenderInbox($inbox);
+		try {
+			$message->setDateSent(new \DateTime("now"));
+		} catch(\Exception $e) {
+		}
 		$createForm = $this->createFormBuilder()
 			->add('user', ChoiceType::class, array(
 				'choices' => $users, 'choice_label' => function($user, $key, $value) {
@@ -60,6 +65,32 @@ class MessagesController extends AbstractController {
 				'multiple' => true))
 			->add('title', TextType::class)
 			->add('message', TextareaType::class, array('empty_data' => 'Your message here...',))->getForm();
+		
+		if($request->isMethod('POST')) {
+			$createForm->handleRequest($request);
+			
+			if($createForm->isValid()) {
+				$message->setTitle($createForm->get('title')->getData());
+				$message->setMessageFile($createForm->get('message')->getData());
+				$em->persist($message);
+				$em->flush();
+				$receivers = $createForm->get('user')->getData();
+				foreach($receivers as $u) {
+					$i = $em->getRepository(Inbox::class)->findOneBy(array('user' => $u));
+					$messageReceiver = new MessageReceiver();
+					$messageReceiver->setMessage($message);
+					$messageReceiver->setReceiverInbox($i);
+					$messageReceiver->setReadFlag(false);
+					$em->persist($messageReceiver);
+					$em->flush();
+				}
+				
+				$request->getSession()->getFlashBag()->add('notice', 'Message sent.');
+				
+				return $this->redirectToRoute('messages_inbox');
+			}
+		}
+		
 		return $this->render('messages/new_message.html.twig', array('user' => $user, 'inbox' => $inbox, 'createForm' => $createForm->createView()));
 	}
 	
