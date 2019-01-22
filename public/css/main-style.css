@@ -23,6 +23,10 @@ main {
   flex: 1;
 }
 
+footer {
+  color: white;
+}
+
 h1,
 h2,
 h3,
