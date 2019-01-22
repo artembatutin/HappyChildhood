@@ -73,9 +73,24 @@
         <script src="{{ asset('js/jquery-easing/jquery.easing.min.js') }}" src="vendor/jquery-easing/jquery.easing.min.js"></script>
         {% block javascripts %}{% endblock %}
 
-        <footer class="py-5 bg-black">
+        <footer class="py-5">
             <div class="container">
-                <p class="m-0 text-center text-white small">Copyright &copy; Happy Childhood 2018</p>
+                <div class="row">
+                    <div class="col-md-4 footer-part">
+                        <p class="m-0 text-center text-white small">Copyright &copy; Happy Childhood 2018</p>
+                    </div>
+                    <div class="col-md-3 footer-part">
+                    </div>
+                    <div class="col-md-5 footer-part">
+                        <div class="social-links">
+                            <div class="social-link"><i class="fab fa-facebook-f"></i></div>
+                            <div class="social-link"><i class="fab fa-twitter"></i></div>
+                            <div class="social-link"><i class="fas fa-hands-helping"></i></div>
+                            <div class="social-link"><i class="fas fa-phone"></i></div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </footer>
     </body>
