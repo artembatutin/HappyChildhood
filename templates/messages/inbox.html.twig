@@ -29,6 +29,7 @@
                             <div class="col-md-12">
                                 {% for mr in messages_in %}
                                     <h6>{{ mr.message.title }}</h6>
+                                    <span>Date Sent: {{ mr.message.date_sent|date("Y-m-d H:i:s") }}</span><br>
                                     <span>Sender: {{ mr.message.sender_inbox.user.firstName }} {{ mr.message.sender_inbox.user.lastName }}</span>
                                     <p>{{ mr.message.message_file }}</p>
                                 {% endfor %}

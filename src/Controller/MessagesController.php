@@ -27,17 +27,24 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class MessagesController extends AbstractController {
 	
+	/**
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+	 */
 	public function inbox() {
 		if(!$this->isGranted("IS_AUTHENTICATED_FULLY")) {
 			return $this->redirectToRoute('index');
 		}
 		$user = $this->getUser();
 		$inbox = $user->getInbox();
-		$messages_in = $inbox->getReceivedMessages();
+		$messages_in = $this->getInboxOrdered($inbox->getId());
 		
 		return $this->render('messages/inbox.html.twig', array('user' => $user, 'inbox' => $inbox, 'messages_in' => $messages_in));
 	}
 	
+	/**
+	 * @param Request $request
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+	 */
 	public function new_message(Request $request) {
 		if(!$this->isGranted("IS_AUTHENTICATED_FULLY")) {
 			return $this->redirectToRoute('index');
@@ -94,6 +101,9 @@ class MessagesController extends AbstractController {
 		return $this->render('messages/new_message.html.twig', array('user' => $user, 'inbox' => $inbox, 'createForm' => $createForm->createView()));
 	}
 	
+	/**
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+	 */
 	public function sent() {
 		if(!$this->isGranted("IS_AUTHENTICATED_FULLY")) {
 			return $this->redirectToRoute('index');
@@ -105,10 +115,30 @@ class MessagesController extends AbstractController {
 		return $this->render('messages/sent.html.twig', array('user' => $user, 'inbox' => $inbox, 'messages_out' => $messages_out));
 	}
 	
+	/**
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+	 */
 	public function drafts() {
 		if(!$this->isGranted("IS_AUTHENTICATED_FULLY")) {
 			return $this->redirectToRoute('index');
 		}
 		return $this->render('messages/drafts.html.twig');
+	}
+	
+	/**
+	 * @param $receiver_inbox_id
+	 * @return mixed
+	 */
+	public function getInboxOrdered($receiver_inbox_id) {
+		$mrRepo = $this->getDoctrine()->getRepository('App:MessageReceiver');
+		$qb = $mrRepo->createQueryBuilder('mr');
+		$qb->join('mr.message', 'm')
+			->where('mr.receiver_inbox = ?1')
+			->orderBy('m.date_sent', 'DESC')
+			->setParameter(1, $receiver_inbox_id);
+			
+		$query = $qb->getQuery();
+		$result = $query->getResult();
+		return $result;
 	}
 }

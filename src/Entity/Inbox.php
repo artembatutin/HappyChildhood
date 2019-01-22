@@ -24,6 +24,7 @@ class Inbox {
 	
 	/**
 	 * @ORM\OneToMany(targetEntity="App\Entity\Message", mappedBy="sender_inbox")
+	 * @ORM\OrderBy({"date_sent" = "DESC"})
 	 */
 	private $sent_messages;
 	

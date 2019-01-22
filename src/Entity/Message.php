@@ -88,7 +88,7 @@ class Message {
          		return $this;
          	}
 	
-	public function getDateSent(): ?\DateTimeInterface {
+	public function getDate_Sent(): ?\DateTimeInterface {
          		return $this->date_sent;
          	}
 	
