@@ -134,6 +134,7 @@ class MessagesController extends AbstractController {
 		$qb = $mrRepo->createQueryBuilder('mr');
 		$qb->join('mr.message', 'm')
 			->where('mr.receiver_inbox = ?1')
+			->set('mr.message.message_file', $qb->expr()->substring('mr.message.message_file', 1, 150))
 			->orderBy('m.date_sent', 'DESC')
 			->setParameter(1, $receiver_inbox_id);
 			

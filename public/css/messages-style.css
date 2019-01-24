@@ -1,0 +1,65 @@
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+}
+
+div.ms_container {
+    flex-wrap: nowrap;
+    margin: 0;
+    height: 30pt;
+    display: flex;
+    flex-direction: row;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+hr.ms_divider {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+div.ms_preview,
+div.ms_date,
+div.ms_sender,
+div.ms_title {
+    overflow: hidden;
+    display: inline-block;
+    margin-left: 10pt;
+    margin-right: 10pt;
+}
+
+div.ms_preview {
+    flex-basis: 35%;
+    -webkit-flex-basis: 35%;
+    color: darkgrey;
+}
+
+div.ms_sender {
+    flex-basis: 15%;
+    -webkit-flex-basis: 15%;
+}
+
+div.ms_title {
+    flex-basis: 20%;
+    -webkit-flex-basis: 20%;
+}
+
+div.ms_date {
+    flex-basis: fit-content;
+    flex-basis: -moz-fit-content;
+    color: grey;
+    font-size: small;
+}
+
+div.ms_container:nth-of-type(2n) {
+    background: #fae5d0;
+}
+
+div.ms_container:hover {
+    background: #ffc690;
+    cursor: pointer;
+}
