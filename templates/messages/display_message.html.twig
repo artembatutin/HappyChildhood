@@ -23,32 +23,21 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-12">
-                                <h4>Your Inbox</h4>
-                                <hr>
-                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                {% for mr in messages_in %}
-                                    <a class="ms_link" href="{{ path('message', {'message_id': mr.message.id}) }}">
-                                        <div id="ms_{{ mr.message.id }}" class="ms_container">
-                                            <div id="ms_{{ mr.message.id }}_sender" class="ms_sender ellipsis">
-                                                {{ mr.message.sender_inbox.user.firstName }} {{ mr.message.sender_inbox.user.lastName }}
-                                            </div>
-                                            <div id="ms_{{ mr.message.id }}_title" class="ms_title ellipsis">
-                                                {{ mr.message.title }}
-                                            </div>
-                                            <div id="ms_{{ mr.message.id }}_preview" class="ms_preview ellipsis">
-                                                {{ mr.message.message_file }}
-                                            </div>
-                                            <div id="ms_{{ mr.message.id }}_date" class="ms_date">
-                                                {{ mr.message.date_sent|date("Y-m-d H:i:s") }}
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <hr class="ms_divider">
-                                {% endfor %}
+                                <div id="ms_{{ message.id }}_sender">
+                                    {{ message.sender_inbox.user.firstName }} {{ message.sender_inbox.user.lastName }}
+                                </div>
+                                <div id="ms_{{ message.id }}_date">
+                                    {{ message.date_sent|date("Y-m-d H:i:s") }}
+                                </div>
+                                <div id="ms_{{ message.id }}_title">
+                                    {{ message.title }}
+                                </div>
+                                <div id="ms_{{ message.id }}_preview">
+                                    {{ message.message_file }}
+                                </div>
                             </div>
                         </div>
                     </div>

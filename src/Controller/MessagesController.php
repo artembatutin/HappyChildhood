@@ -41,6 +41,28 @@ class MessagesController extends AbstractController {
 		return $this->render('messages/inbox.html.twig', array('user' => $user, 'inbox' => $inbox, 'messages_in' => $messages_in));
 	}
 	
+	public function display_message(Request $request, $message_id) {
+		if(!$this->isGranted("IS_AUTHENTICATED_FULLY")) {
+			return $this->redirectToRoute('index');
+		}
+		$user = $this->getUser();
+		$inbox = $user->getInbox();
+		$em = $this->getDoctrine()->getManager();
+		$message = $em->getRepository(Message::class)->find($message_id);
+		$message_receivers = $message->getMessageReceivers();
+		$allow = false;
+		foreach($message_receivers as $mr) {
+			if($mr->getReceiver_Inbox()->getId() == $inbox->getId()) {
+				$allow = true;
+				break;
+			}
+		}
+		if($allow)
+			return $this->render('messages/display_message.html.twig', array('user' => $user, 'inbox' => $inbox, 'message' => $message));
+		else
+			return $this->redirectToRoute('index');
+	}
+	
 	/**
 	 * @param Request $request
 	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response

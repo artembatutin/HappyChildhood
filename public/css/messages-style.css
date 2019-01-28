@@ -1,3 +1,9 @@
+a {
+    outline: none;
+    text-decoration: none;
+    color: black;
+}
+
 .ellipsis {
     white-space: nowrap;
     overflow: hidden;
