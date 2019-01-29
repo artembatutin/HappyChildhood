@@ -1,5 +1,8 @@
 {% extends 'base.html.twig' %}
 {% block title %}Your Mail Box{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/messages-style.css') }}">
+{% endblock %}
 {% block body %}
 
     <header class="head">
@@ -28,14 +31,29 @@
                         <div class="row">
                             <div class="col-md-12">
                                 {% for message in messages_out %}
-                                    <h6>{{ message.title }}</h6>
-                                    <div id="receivers">
-                                        To:<br>
-                                        {% for mr in message.messageReceivers %}
-                                            {{ mr.receiver_inbox.user.firstName }} {{ mr.receiver_inbox.user.lastName }}<br>
-                                        {% endfor %}
-                                    </div>
-                                    <p>{{ message.message_file }}</p>
+                                    <a class="ms_link" href="{{ path('message', {'message_id': message.id}) }}">
+                                        <div id="ms_{{ message.id }}" class="ms_container">
+                                            <div id="ms_{{ message.id }}_receivers" class="ms_receivers ellipsis">
+                                                To:
+                                                {% for mr in message.messageReceivers %}
+                                                    {{ mr.receiver_inbox.user.firstName }} {{ mr.receiver_inbox.user.lastName }}
+                                                    {% if not loop.last %}
+                                                        ,
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                            <div id="ms_{{ message.id }}_title" class="ms_title ellipsis">
+                                                {{ message.title }}
+                                            </div>
+                                            <div id="ms_{{ message.id }}_preview" class="ms_preview ellipsis">
+                                                {{ message.message_file }}
+                                            </div>
+                                            <div id="ms_{{ message.id }}_date" class="ms_date">
+                                                {{ message.date_sent|date("Y-m-d H:i:s") }}
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <hr class="ms_divider">
                                 {% endfor %}
                             </div>
                         </div>

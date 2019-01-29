@@ -17,7 +17,7 @@ messages_inbox:
     path: /messages/inbox
     controller: App\Controller\MessagesController::inbox
 message:
-    path: /message/inbox/{message_id}
+    path: /message/{message_id}
     controller: App\Controller\MessagesController::display_message
 messages_new:
     path: /messages/new

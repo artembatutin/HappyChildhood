@@ -31,6 +31,7 @@ hr.ms_divider {
 div.ms_preview,
 div.ms_date,
 div.ms_sender,
+div.ms_receivers,
 div.ms_title {
     overflow: hidden;
     display: inline-block;
@@ -49,7 +50,8 @@ div.ms_sender {
     -webkit-flex-basis: 15%;
 }
 
-div.ms_title {
+div.ms_title,
+div.ms_receivers {
     flex-basis: 20%;
     -webkit-flex-basis: 20%;
 }
