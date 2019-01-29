@@ -83,8 +83,7 @@ class MessagesController extends AbstractController {
 		}
 		if($allow) {
 			return $this->render('messages/display_message.html.twig', array('user' => $user, 'inbox' => $inbox, 'message' => $message));
-		}
-		else
+		} else
 			return $this->redirectToRoute('index');
 	}
 	

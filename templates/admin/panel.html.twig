@@ -18,6 +18,7 @@
                 <a class="list-group-item list-group-item-action" href="#" data-target-id="users"><i class="fas fa-user-friends"></i> Users</a></li>
             </div>
 
+            <!-- BLOCKS -->
             <div class="col-md-10 well account-content" id="content">
                 <div class="card card-shadow">
                     <div class="card-body">
@@ -82,6 +83,7 @@
                     </div>
                 </div>
             </div>
+            <!-- GROUPS -->
             <div class="col-md-10 well account-content" id="groups">
                 <div class="card card-shadow">
                     <div class="card-body">
@@ -93,11 +95,37 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Capacity</th>
+                                        <th>Registered</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+
+                                {% for grp in groups %}
+                                    <tr>
+                                        <td>{{ grp.name }}</td>
+                                        <td>{{ grp.MaxCapacity }}</td>
+                                        <td>{{ grp.children|length }}</td>
+                                        <td>
+                                            <a class="edit" title="Edit" data-toggle="tooltip"><i class="fas fa-pen-square"></i></a>
+                                            {% if grp.children|length > 0 %}
+                                                <a class="delete" href="{{ path('admin_delgrp', {'group': grp}) }}" title="Delete" data-toggle="tooltip"><i class="fas fa-minus-square"></i></a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+                                </table>
+                                <hr>
+                                <h5>Create Group</h5>
                                 {{ form_start(groupForm) }}
                                     {{ form_row(groupForm.name) }}
                                     {{ form_row(groupForm.max_capacity) }}
-                                <br/>
-                                <button class="btn btn-secondary" type="submit">Create Group</button>
+                                <button class="btn btn-secondary" type="submit">Create</button>
                                 {{ form_end(groupForm) }}
                             </div>
                         </div>

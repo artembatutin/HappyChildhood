@@ -12,14 +12,14 @@
 
 
             <div class="col-md-2 list-group account-menu">
-                <a class="list-group-item list-group-item-action" href="{{ path('messages_inbox') }}" data-target-id="inbox"><i class="fas fa-inbox"></i> Inbox</a></li>
-                <a class="list-group-item list-group-item-action" href="{{ path('messages_new') }}" data-target-id="new_message"><i class="fas fa-share-square"></i> New Message</a></li>
-                <a class="list-group-item list-group-item-action active" href="{{ path('messages_sent') }}" data-target-id="sent"><i class="fas fa-envelope"></i> Sent Messages</a></li>
-                <a class="list-group-item list-group-item-action" href="{{ path('messages_drafts') }}" data-target-id="drafts"><i class="fas fa-envelope-open"></i> Drafts</a></li>
-                <a class="list-group-item list-group-item-action" href="{{ path("profile") }}"><i class="fas fa-user-circle"></i> Profile</a></li>
+                <a class="list-group-item list-group-item-action" href="{{ path('messages_inbox') }}"><i class="fas fa-inbox"></i> Inbox</a>
+                <a class="list-group-item list-group-item-action" href="{{ path('messages_new') }}"><i class="fas fa-share-square"></i> New Message</a>
+                <a class="list-group-item list-group-item-action active" href="{{ path('messages_sent') }}"><i class="fas fa-envelope"></i> Sent Messages</a>
+                <a class="list-group-item list-group-item-action" href="{{ path('messages_drafts') }}"><i class="fas fa-envelope-open"></i> Drafts</a>
+                <a class="list-group-item list-group-item-action" href="{{ path("profile") }}"><i class="fas fa-user-circle"></i> Profile</a>
             </div>
 
-            <div class="col-md-10 well account-content" id="sent">
+            <div class="col-md-10 well account-content">
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
@@ -63,5 +63,4 @@
         </div>
     </div>
 </header>
-    </div>
 {% endblock %}

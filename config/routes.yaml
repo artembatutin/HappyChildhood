@@ -10,9 +10,12 @@ register:
 profile:
     path: /profile/
     controller: App\Controller\AccountController::profile
-adminpanel:
+admin:
     path: /admin/
     controller: App\Controller\AdminController::panel
+admin_delgrp:
+    path: /admin/
+    controller: App\Controller\AdminController::delete_group
 messages_inbox:
     path: /messages/inbox
     controller: App\Controller\MessagesController::inbox
