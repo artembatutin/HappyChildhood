@@ -113,7 +113,7 @@
                                         <td>
                                             <a class="edit" title="Edit" data-toggle="tooltip"><i class="fas fa-pen-square"></i></a>
                                             {% if grp.children|length > 0 %}
-                                                <a class="delete" href="{{ path('admin_delgrp', {'group': grp}) }}" title="Delete" data-toggle="tooltip"><i class="fas fa-minus-square"></i></a>
+                                                <a class="delete" href="{{ path('admin_group_del', {'group': grp}) }}" title="Delete" data-toggle="tooltip"><i class="fas fa-minus-square"></i></a>
                                             {% endif %}
                                         </td>
                                     </tr>

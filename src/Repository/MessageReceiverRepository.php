@@ -18,33 +18,14 @@ class MessageReceiverRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, MessageReceiver::class);
     }
-
-    // /**
-    //  * @return MessageReceiver[] Returns an array of MessageReceiver objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('m.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+    
+    public function getOrdered($receiver_inbox_id) {
+	    $qb = $this->createQueryBuilder('mr');
+	    return $qb->join('mr.message', 'm')
+		    ->where('mr.receiver_inbox = ?1')
+		    ->set('mr.message.message_file', $qb->expr()->substring('mr.message.message_file', 1, 150))
+		    ->orderBy('m.date_sent', 'DESC')
+		    ->setParameter(1, $receiver_inbox_id)->getQuery()->getResult();
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?MessageReceiver
-    {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

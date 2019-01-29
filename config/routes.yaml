@@ -1,6 +1,9 @@
 index:
     path: /
     controller: App\Controller\MainController::index
+
+
+
 login:
     path: /login/
     controller: App\Controller\AccountController::login
@@ -10,12 +13,27 @@ register:
 profile:
     path: /profile/
     controller: App\Controller\AccountController::profile
+
+
+
 admin:
     path: /admin/
-    controller: App\Controller\AdminController::panel
-admin_delgrp:
+    controller: App\Controller\AdminController::content
+admin_block:
+    path: /admin/block
+    controller: App\Controller\AdminController::content
+admin_group:
+    path: /admin/group
+    controller: App\Controller\AdminController::group
+admin_group_delete:
     path: /admin/
-    controller: App\Controller\AdminController::delete_group
+    controller: App\Controller\AdminController::group_delete
+admin_user:
+    path: /admin/user
+    controller: App\Controller\AdminController::user
+
+
+
 messages_inbox:
     path: /messages/inbox
     controller: App\Controller\MessagesController::inbox
@@ -31,6 +49,10 @@ messages_sent:
 messages_drafts:
     path: /messages/drafts
     controller: App\Controller\MessagesController::drafts
+
+
+
+
 logout:
     path: /logout
 

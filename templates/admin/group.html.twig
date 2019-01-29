@@ -1,0 +1,71 @@
+{%extends 'base.html.twig'%}
+{%block title%}Your Mail Box{%endblock%}
+{%block stylesheets%}
+	<link rel="stylesheet" href="{{asset('css/messages-style.css')}}">
+{%endblock%}
+{%block body%}
+	
+	<header class="head">
+		<div class="container">
+			<h1 class="title">Inbox</h1>
+			<div class="row">
+				
+				<div class="col-md-2 list-group account-menu">
+					<a class="list-group-item list-group-item-action" href="{{path('admin_block')}}"><i class="fas fa-clone"></i> Content</a>
+					<a class="list-group-item list-group-item-action active" href="{{path('admin_group')}}"><i class="fas fa-child"></i> Groups</a>
+					<a class="list-group-item list-group-item-action" href="{{path('admin_user')}}"><i class="fas fa-user-friends"></i> Users</a>
+				</div>
+				
+				<div class="col-md-10 well account-content">
+					<div class="card card-shadow">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-12">
+									<h4>Groups</h4>
+									<hr>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<table class="table table-bordered">
+										<thead>
+										<tr>
+											<th>Name</th>
+											<th>Capacity</th>
+											<th>Registered</th>
+											<th>Actions</th>
+										</tr>
+										</thead>
+										
+										{%for grp in groups%}
+											<tr>
+												<td>{{grp.name}}</td>
+												<td>{{grp.MaxCapacity}}</td>
+												<td>{{grp.children|length}}</td>
+												<td>
+													<a class="edit" title="Edit" data-toggle="tooltip"><i class="fas fa-pen-square"></i></a>
+													{%if grp.children|length < 1%}
+														<a class="delete" href="{{path('admin_group_delete', {'group': grp.id})}}" title="Delete" data-toggle="tooltip"><i class="fas fa-minus-square"></i></a>
+													{%endif%}
+												</td>
+											</tr>
+										{%endfor%}
+									
+									</table>
+									<hr>
+									<h5>Create Group</h5>
+									{{form_start(form)}}
+									{{form_row(form.name)}}
+									{{form_row(form.max_capacity)}}
+									<button class="btn btn-secondary" type="submit">Create</button>
+									{{form_end(form)}}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+{%endblock%}
+{% form_theme form 'form/fields.html.twig' %}

@@ -168,7 +168,7 @@ class MessagesController extends AbstractController {
 		if(!$this->isGranted("IS_AUTHENTICATED_FULLY")) {
 			return $this->redirectToRoute('index');
 		}
-		return $this->render('messages/drafts.html.twig');
+		return $this->render('messages/admin_group_edit.html.twig');
 	}
 	
 	/**
@@ -176,16 +176,6 @@ class MessagesController extends AbstractController {
 	 * @return mixed
 	 */
 	public function getInboxOrdered($receiver_inbox_id) {
-		$mrRepo = $this->getDoctrine()->getRepository('App:MessageReceiver');
-		$qb = $mrRepo->createQueryBuilder('mr');
-		$qb->join('mr.message', 'm')
-			->where('mr.receiver_inbox = ?1')
-			->set('mr.message.message_file', $qb->expr()->substring('mr.message.message_file', 1, 150))
-			->orderBy('m.date_sent', 'DESC')
-			->setParameter(1, $receiver_inbox_id);
-			
-		$query = $qb->getQuery();
-		$result = $query->getResult();
-		return $result;
+		return $this->getDoctrine()->getRepository(MessageReceiver::class)->getOrdered($receiver_inbox_id);
 	}
 }

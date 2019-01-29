@@ -1,0 +1,37 @@
+{%extends 'base.html.twig'%}
+{%block title%}Your Mail Box{%endblock%}
+{%block body%}
+	
+	<header class="head">
+		<div class="container">
+			<h1 class="title">Inbox</h1>
+			<div class="row">
+				
+				<div class="col-md-2 list-group account-menu">
+					<a class="list-group-item list-group-item-action" href="{{path('admin_block')}}"><i class="fas fa-clone"></i> Content</a>
+					<a class="list-group-item list-group-item-action active" href="{{path('admin_group')}}"><i class="fas fa-child"></i> Groups</a>
+					<a class="list-group-item list-group-item-action" href="{{path('admin_user')}}"><i class="fas fa-user-friends"></i> Users</a>
+				</div>
+				
+				<div class="col-md-10 well account-content">
+					<div class="card">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-12">
+									<h4>Drafts</h4>
+									<hr>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<span>Drafts to be there</span>
+									<!-- drafts to be here -->
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+{%endblock%}
