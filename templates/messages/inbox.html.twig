@@ -40,7 +40,12 @@
                                                 {{ mr.message.title }}
                                             </div>
                                             <div id="ms_{{ mr.message.id }}_preview" class="ms_preview ellipsis">
-                                                {{ mr.message.message_file }}
+                                                {%set preview = mr.message.message_file%}
+                                                {% if preview|length > 250%}
+                                                    {{preview|slice(0, 250)}}
+                                                {%else%}
+                                                    {{ preview }}
+                                                {%endif%}
                                             </div>
                                             <div id="ms_{{ mr.message.id }}_date" class="ms_date">
                                                 {{ mr.message.date_sent|date("Y-m-d H:i:s") }}
