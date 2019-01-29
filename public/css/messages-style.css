@@ -1,7 +1,11 @@
-a {
-    outline: none;
+a.ms_link:hover,
+a.ms_link:visited,
+a.ms_link:link,
+a.ms_link:active,
+a.ms_link {
     text-decoration: none;
     color: black;
+    display: block;
 }
 
 .ellipsis {
@@ -40,8 +44,8 @@ div.ms_title {
 }
 
 div.ms_preview {
-    flex-basis: 35%;
-    -webkit-flex-basis: 35%;
+    flex-basis: 30%;
+    -webkit-flex-basis: 30%;
     color: darkgrey;
 }
 
@@ -63,7 +67,7 @@ div.ms_date {
     font-size: small;
 }
 
-div.ms_container:nth-of-type(2n) {
+a.ms_link:nth-of-type(even) {
     background: #fae5d0;
 }
 
@@ -72,6 +76,7 @@ div.ms_container:hover {
     cursor: pointer;
 }
 
-div.unread_ms {
-    font-weight: bold;
+div.unread_ms > .ms_sender,
+div.unread_ms > .ms_title {
+    font-weight: 900;
 }
