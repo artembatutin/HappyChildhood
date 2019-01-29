@@ -27,6 +27,21 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class MessagesController extends AbstractController {
 	
+	public function inboxNum() {
+		$user = $this->getUser();
+		$inbox = $user->getInbox();
+		$mrRepo = $this->getDoctrine()->getRepository('App:MessageReceiver');
+		$qb = $mrRepo->createQueryBuilder('mr');
+		$qb->join('mr.message', 'm')
+			->where('mr.receiver_inbox = ?1')
+			->andWhere('mr.read_flag = 0')
+			->select('count(m.id)')
+			->setParameter(1, $inbox->getId());
+		$count = $qb->getQuery()->getSingleScalarResult();
+		
+		return $this->render('messages/unread_icon.html.twig', array('unread_ms_count' => $count));
+	}
+	
 	/**
 	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
 	 */
@@ -41,7 +56,11 @@ class MessagesController extends AbstractController {
 		return $this->render('messages/inbox.html.twig', array('user' => $user, 'inbox' => $inbox, 'messages_in' => $messages_in));
 	}
 	
-	public function display_message(Request $request, $message_id) {
+	/**
+	 * @param $message_id
+	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+	 */
+	public function display_message($message_id) {
 		if(!$this->isGranted("IS_AUTHENTICATED_FULLY")) {
 			return $this->redirectToRoute('index');
 		}
@@ -49,16 +68,22 @@ class MessagesController extends AbstractController {
 		$inbox = $user->getInbox();
 		$em = $this->getDoctrine()->getManager();
 		$message = $em->getRepository(Message::class)->find($message_id);
+		$allow = $inbox->getId() == $message->getSender_Inbox()->getId();
 		$message_receivers = $message->getMessageReceivers();
-		$allow = false;
 		foreach($message_receivers as $mr) {
 			if($mr->getReceiver_Inbox()->getId() == $inbox->getId()) {
+				if($mr->getRead_Flag() == false) {
+					$mr->setReadFlag(true);
+					$em->persist($mr);
+					$em->flush();
+				}
 				$allow = true;
 				break;
 			}
 		}
-		if($allow)
+		if($allow) {
 			return $this->render('messages/display_message.html.twig', array('user' => $user, 'inbox' => $inbox, 'message' => $message));
+		}
 		else
 			return $this->redirectToRoute('index');
 	}

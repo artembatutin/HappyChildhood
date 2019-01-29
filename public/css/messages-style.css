@@ -71,3 +71,7 @@ div.ms_container:hover {
     background: #ffc690;
     cursor: pointer;
 }
+
+div.unread_ms {
+    font-weight: bold;
+}

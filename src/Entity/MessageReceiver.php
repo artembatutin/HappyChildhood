@@ -56,7 +56,7 @@ class MessageReceiver {
 		return $this;
 	}
 	
-	public function getReadFlag(): ?bool {
+	public function getRead_Flag(): ?bool {
 		return $this->read_flag;
 	}
 	
