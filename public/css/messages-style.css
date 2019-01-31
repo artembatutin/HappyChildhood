@@ -80,3 +80,29 @@ div.unread_ms > .ms_sender,
 div.unread_ms > .ms_title {
     font-weight: 900;
 }
+
+div.ms_display_sender_row,
+div.ms_display_date_row,
+div.ms_display_receivers_row {
+    display: flex;
+    display: -moz-flex;
+    display: -ms-flex;
+    display: -o-flex;
+    display: -webkit-flex;
+    flex-wrap: nowrap;
+    -webkit-flex-wrap: nowrap;
+    -ms-flex-wrap: nowrap;
+    align-items: stretch;
+    -webkit-align-items: stretch;
+}
+
+span.ms_display_sender_lbl,
+span.ms_display_date_lbl,
+span.ms_display_receivers_lbl {
+    flex-basis: 15%;
+    color: grey;
+}
+
+div.ms_display {
+    margin-top: 10pt;
+}
