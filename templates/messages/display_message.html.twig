@@ -24,16 +24,32 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <div id="ms_{{ message.id }}_sender">
+                                <h3 class="ms_display_title" id="ms_{{ message.id }}_title">{{ message.title }}</h3>
+                                <div class="ms_display_sender_row">
+                                    <span class="ms_display_sender_lbl">Sender: </span>
+                                    <span id="ms_{{ message.id }}_sender" class="ms_display_sender">
                                     {{ message.sender_inbox.user.firstName }} {{ message.sender_inbox.user.lastName }}
+                                    </span>
                                 </div>
-                                <div id="ms_{{ message.id }}_date">
+                                <div class="ms_display_date_row">
+                                    <span class="ms_display_date_lbl">Date sent: </span>
+                                    <span id="ms_{{ message.id }}_date" class="ms_display_date">
                                     {{ message.date_sent|date("Y-m-d H:i:s") }}
+                                    </span>
                                 </div>
-                                <div id="ms_{{ message.id }}_title">
-                                    {{ message.title }}
+                                <div class="ms_display_receivers_row">
+                                    <span class="ms_display_receivers_lbl">To: </span>
+                                    <span class="ms_display_receivers">
+                                        {% for mr in msr %}
+                                            {{ mr.receiver_inbox.user.firstName }} {{ mr.receiver_inbox.user.lastName }}
+                                            {% if not loop.last %}
+                                                ,
+                                            {% endif %}
+                                        {% endfor %}
+                                    </span>
                                 </div>
-                                <div id="ms_{{ message.id }}_preview">
+                                <hr>
+                                <div id="ms_{{ message.id }}_preview" class="ms_display">
                                     {{ message.message_file }}
                                 </div>
                             </div>
