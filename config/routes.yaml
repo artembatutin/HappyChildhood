@@ -25,8 +25,9 @@ admin_block:
 admin_group:
     path: /admin/group
     controller: App\Controller\AdminController::group
+    defaults:   { message: null }
 admin_group_delete:
-    path: /admin/
+    path: /admin/delete{group_id}
     controller: App\Controller\AdminController::group_delete
 admin_user:
     path: /admin/user

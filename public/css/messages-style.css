@@ -68,12 +68,16 @@ div.ms_date {
 }
 
 a.ms_link:nth-of-type(even) {
-    background: #fae5d0;
+    /*background: #fae5d0;*/
 }
 
 div.ms_container:hover {
     background: #ffc690;
     cursor: pointer;
+}
+
+div.unread_ms {
+    background: #fae5d0;
 }
 
 div.unread_ms > .ms_sender,

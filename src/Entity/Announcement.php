@@ -25,14 +25,24 @@ class Announcement {
 	private $user;
 	
 	/**
+	 * @ORM\Column(type="string", length=64)
+	 */
+	private $title;
+	
+	/**
+	 * @ORM\Column(type="string", length=1000)
+	 */
+	private $message;
+	
+	/**
 	 * @ORM\Column(type="datetime")
 	 */
 	private $creation_date;
 	
 	/**
-	 * @ORM\Column(type="blob")
+	 * @ORM\Column(type="array")
 	 */
-	private $content;
+	private $files;
 	
 	/**
 	 * @ORM\Column(type="boolean")
@@ -43,6 +53,11 @@ class Announcement {
 	 * @ORM\Column(type="boolean")
 	 */
 	private $hidden;
+	
+	/**
+	 * @ORM\Column(type="boolean")
+	 */
+	private $commenting;
 	
 	/**
 	 * @ORM\OneToMany(targetEntity="App\Entity\AnnouncementViewers", mappedBy="announcement", orphanRemoval=true)
@@ -87,6 +102,38 @@ class Announcement {
 	}
 	
 	/**
+	 * @return string|null
+	 */
+	public function getTitle(): ?string {
+		return $this->title;
+	}
+	
+	/**
+	 * @param string $title
+	 * @return Announcement
+	 */
+	public function setTitle(string $title): self {
+		$this->title = $title;
+		return $this;
+	}
+	
+	/**
+	 * @return string|null
+	 */
+	public function getMessage(): ?string {
+		return $this->message;
+	}
+	
+	/**
+	 * @param string $message
+	 * @return Announcement
+	 */
+	public function setMessage(string $message): self {
+		$this->message = $message;
+		return $this;
+	}
+	
+	/**
 	 * @return \DateTimeInterface|null
 	 */
 	public function getCreationDate(): ?\DateTimeInterface {
@@ -106,16 +153,16 @@ class Announcement {
 	/**
 	 * @return mixed
 	 */
-	public function getContent() {
-		return $this->content;
+	public function getFiles() {
+		return $this->files;
 	}
 	
 	/**
-	 * @param $content
+	 * @param $files
 	 * @return Announcement
 	 */
-	public function setContent($content): self {
-		$this->content = $content;
+	public function setContent($files): self {
+		$this->files = $files;
 		
 		return $this;
 	}
@@ -149,6 +196,22 @@ class Announcement {
 	 */
 	public function setHidden(bool $hidden): self {
 		$this->hidden = $hidden;
+		return $this;
+	}
+	
+	/**
+	 * @return bool|null
+	 */
+	public function isCommenting(): ?bool {
+		return $this->hidden;
+	}
+	
+	/**
+	 * @param bool $commenting
+	 * @return Announcement
+	 */
+	public function setCommenting(bool $commenting): self {
+		$this->commenting = $commenting;
 		return $this;
 	}
 	

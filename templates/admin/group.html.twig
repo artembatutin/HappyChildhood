@@ -7,7 +7,7 @@
 	
 	<header class="head">
 		<div class="container">
-			<h1 class="title">Inbox</h1>
+			<h1 class="title">Admin Panel</h1>
 			<div class="row">
 				
 				<div class="col-md-2 list-group account-menu">
@@ -27,6 +27,14 @@
 							</div>
 							<div class="row">
 								<div class="col-md-12">
+									{%if message is defined%}
+										<div class="alert alert-success alert-dismissible fade show" role="alert">
+											{{message}}
+											<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+									{%endif%}
 									<table class="table table-bordered">
 										<thead>
 										<tr>
@@ -45,7 +53,7 @@
 												<td>
 													<a class="edit" title="Edit" data-toggle="tooltip"><i class="fas fa-pen-square"></i></a>
 													{%if grp.children|length < 1%}
-														<a class="delete" href="{{path('admin_group_delete', {'group': grp.id})}}" title="Delete" data-toggle="tooltip"><i class="fas fa-minus-square"></i></a>
+														<a class="delete" href="{{path('admin_group_delete', {'group_id': grp.id})}}" title="Delete" data-toggle="tooltip"><i class="fas fa-minus-square"></i></a>
 													{%endif%}
 												</td>
 											</tr>

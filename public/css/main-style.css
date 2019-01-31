@@ -305,6 +305,10 @@ table.table td a.delete {
   margin-bottom: 15px;
 }
 
+.form-control {
+  padding: 3px;
+}
+
 @media (max-width: 991px) {
   .list-group {
     padding-left: 15px;

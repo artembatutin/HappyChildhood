@@ -4,7 +4,7 @@
 	
 	<header class="head">
 		<div class="container">
-			<h1 class="title">Inbox</h1>
+			<h1 class="title">Admin Panel</h1>
 			<div class="row">
 				
 				<div class="col-md-2 list-group account-menu">
@@ -18,60 +18,44 @@
 						<div class="card-body">
 							<div class="row">
 								<div class="col-md-12">
-									<h4>New Message</h4>
+									<h4>Announcements</h4>
 									<hr>
 								</div>
 							</div>
 							<div class="row">
-								<div class="table-wrapper">
-									<div class="col-md-8"><h4>Blocks</h4></div>
-									<div class="col-md-12">
-										<table class="table table-bordered">
-											<thead>
-											<tr>
-												<th>Title</th>
-												<th>Content</th>
-												<th>Image</th>
-												<th>Actions</th>
-											</tr>
-											</thead>
-											<tbody>
-											<tr>
-												<td>John Doe</td>
-												<td>Administration</td>
-												<td>(171) 555-2222</td>
-												<td>
-													<a class="add" title="Add" data-toggle="tooltip"><i class="fas fa-plus-square"></i></a>
-													<a class="edit" title="Edit" data-toggle="tooltip"><i class="fas fa-pen-square"></i></a>
-													<a class="delete" title="Delete" data-toggle="tooltip"><i class="fas fa-minus-square"></i></a>
-												</td>
-											</tr>
-											<tr>
-												<td>Peter Parker</td>
-												<td>Customer Service</td>
-												<td>(313) 555-5735</td>
-												<td>
-													<a class="add" title="Add" data-toggle="tooltip"><i class="fas fa-plus-square"></i></a>
-													<a class="edit" title="Edit" data-toggle="tooltip"><i class="fas fa-pen-square"></i></a>
-													<a class="delete" title="Delete" data-toggle="tooltip"><i class="fas fa-minus-square"></i></a>
-												</td>
-											</tr>
-											<tr>
-												<td>Fran Wilson</td>
-												<td>Human Resources</td>
-												<td>(503) 555-9931</td>
-												<td>
-													<a class="add" title="Add" data-toggle="tooltip"><i class="fas fa-plus-square"></i></a>
-													<a class="edit" title="Edit" data-toggle="tooltip"><i class="fas fa-pen-square"></i></a>
-													<a class="delete" title="Delete" data-toggle="tooltip"><i class="fas fa-minus-square"></i></a>
-												</td>
-											</tr>
-											</tbody>
-										</table>
-									</div>
-									<div class="col-sm-4">
-										<button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New</button>
-									</div>
+								<div class="col-md-12">
+									{%if message is defined%}
+										<div class="alert alert-success alert-dismissible fade show" role="alert">
+											{{message}}
+											<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+									{%endif%}
+									<table class="table table-bordered">
+										<thead>
+										<tr>
+											<th>Title</th>
+											<th>Visible</th>
+											<th>Hidden</th>
+											<th>Actions</th>
+										</tr>
+										</thead>
+										
+									
+									</table>
+									<hr>
+									<h5>Create Announcement</h5>
+									{{form_start(form)}}
+									{{form_row(form.title)}}
+									{{form_row(form.message)}}
+									{{form_row(form.pictures)}}
+
+									{{form_row(form.public)}}
+									{{form_row(form.hidden)}}
+									{{form_row(form.commenting)}}
+									<button class="btn btn-secondary" type="submit">Create</button>
+									{{form_end(form)}}
 								</div>
 							</div>
 						</div>
@@ -81,3 +65,4 @@
 		</div>
 	</header>
 {%endblock%}
+{% form_theme form 'form/fields.html.twig' %}
