@@ -50,6 +50,9 @@ messages_sent:
 messages_drafts:
     path: /messages/drafts
     controller: App\Controller\MessagesController::drafts
+attachment_download:
+    path: /messages/attachments/{message_id}-{attachment_id}
+    controller: App\Controller\MessagesController::download_attachment
 
 
 

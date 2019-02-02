@@ -49,6 +49,20 @@
                                     </span>
                                 </div>
                                 <hr>
+                                <div class="ms_display_attachments_row">
+                                    <span class="ms_display_attachments_lbl">Attachments: </span>
+                                    <div class="attachments_container">
+                                    {%for attch in attachments%}
+                                        <span class="ms_display_attachment">
+                                            <a class="attachment_link" href="{{ path("attachment_download", {'message_id': message.id, 'attachment_id': attch.id}) }}" target="_blank">
+                                                <img class="attachment_icon" src="/img/file_download_icon.png" alt="download_attachment_icon">
+                                                {{ attch.file_name }}
+                                            </a>
+                                        </span>
+                                    {%endfor%}
+                                    </div>
+                                </div>
+                                <hr>
                                 <div id="ms_{{ message.id }}_preview" class="ms_display">
                                     {{ message.message_file }}
                                 </div>

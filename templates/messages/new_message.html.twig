@@ -1,5 +1,8 @@
 {% extends 'base.html.twig' %}
 {% block title %}Your Mail Box{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/messages-style.css') }}">
+{% endblock %}
 {% block body %}
 
     <header class="head">
@@ -30,9 +33,10 @@
                                 {{ form_start(createForm) }}
                                 {{ form_row(createForm.user) }}
                                 {{ form_row(createForm.title) }}
+                                {{ form_row(createForm.attachments) }}
                                 {{ form_row(createForm.message) }}
-                                    <br/>
-                                    <button class="btn btn-secondary" type="submit">Send Message</button>
+                                <br/>
+                                <button class="btn btn-secondary" type="submit">Send Message</button>
                                 {{ form_end(createForm) }}
                             </div>
                         </div>

@@ -8,6 +8,7 @@
 
 namespace App\Controller;
 
+use App\Entity\MessageAttachment;
 use App\Entity\User;
 use App\Entity\Inbox;
 use App\Entity\Message;
@@ -24,9 +25,17 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+
+use Psr\Log\LoggerInterface;
 
 class MessagesController extends AbstractController {
 	
+	/**
+	 * @return Response
+	 */
 	public function inboxNum() {
 		$user = $this->getUser();
 		$inbox = $user->getInbox();
@@ -81,10 +90,44 @@ class MessagesController extends AbstractController {
 				break;
 			}
 		}
+		$attachments = $message->getAttachments();
 		if($allow) {
-			return $this->render('messages/display_message.html.twig', array('user' => $user, 'inbox' => $inbox, 'message' => $message, 'msr' => $message_receivers));
+			return $this->render('messages/display_message.html.twig', array('user' => $user, 'inbox' => $inbox, 'message' => $message, 'msr' => $message_receivers, 'attachments' => $attachments));
 		} else
 			return $this->redirectToRoute('index');
+	}
+	
+	/**
+	 * @param $message_id
+	 * @param $attachment_id
+	 * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Symfony\Component\HttpFoundation\RedirectResponse
+	 */
+	public function download_attachment($message_id, $attachment_id) {
+		if(!$this->isGranted("IS_AUTHENTICATED_FULLY")) {
+			return $this->redirectToRoute('index');
+		}
+		$user = $this->getUser();
+		$inbox = $user->getInbox();
+		$em = $this->getDoctrine()->getManager();
+		$message = $em->getRepository(Message::class)->find($message_id);
+		$attachment = $em->getRepository(MessageAttachment::class)->find($attachment_id);
+		if($message->getId() != $attachment->getMessage()->getId()) {
+			return $this->redirectToRoute('index');
+		}
+		$message_receivers = $message->getMessageReceivers();
+		$allow = $inbox->getId() == $message->getSender_Inbox()->getId();
+		foreach($message_receivers as $mr) {
+			if($mr->getReceiver_Inbox()->getId() == $inbox->getId()) {
+				$allow = true;
+				break;
+			}
+		}
+		if(!$allow) {
+			return $this->redirectToRoute('index');
+		}
+		$path = $attachment->getAbsolutePath();
+		$file = new File($path);
+		return $this->file($file);
 	}
 	
 	/**
@@ -117,6 +160,7 @@ class MessagesController extends AbstractController {
 				'mapped' => false,
 				'multiple' => true))
 			->add('title', TextType::class)
+			->add('attachments', FileType::class, ['multiple' => true, 'required' => false])
 			->add('message', TextareaType::class, array('empty_data' => 'Your message here...',))->getForm();
 		
 		if($request->isMethod('POST')) {
@@ -124,9 +168,20 @@ class MessagesController extends AbstractController {
 			
 			if($createForm->isValid()) {
 				$message->setTitle($createForm->get('title')->getData());
+				
 				$message->setMessageFile($createForm->get('message')->getData());
 				$em->persist($message);
 				$em->flush();
+				$attachments = $createForm->get('attachments')->getData();
+				foreach($attachments as $attachment) {
+					$atchm = new MessageAttachment();
+					$atchm->setFileName($attachment->getClientOriginalName());
+					$atchm->setData($attachment);
+					$atchm->setMessage($message);
+					$atchm->upload();
+					$em->persist($atchm);
+					$em->flush();
+				}
 				$receivers = $createForm->get('user')->getData();
 				foreach($receivers as $u) {
 					$i = $em->getRepository(Inbox::class)->findOneBy(array('user' => $u));
