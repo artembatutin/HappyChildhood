@@ -7,6 +7,11 @@ use App\Entity\Group;
 use App\Form\AnnouncementForm;
 use App\Form\GroupForm;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 
 class AdminController extends AbstractController {
@@ -14,25 +19,45 @@ class AdminController extends AbstractController {
 	public function content(Request $request) {
 		$this->denyAccessUnlessGranted('ROLE_ADMIN');
 		$em = $this->getDoctrine()->getManager();
+		$groups = $em->getRepository(Group::class)->findAll();
 		
 		//creating the new announcement.
 		$announcement = new Announcement();
-		$form = $this->createForm(AnnouncementForm::class, $announcement);
-		$form->handleRequest($request);
-		if($form->isSubmitted() && $form->isValid()) {
-			$announcement = $form->getData();
-			$announcement->setUser($this->getUser());
-			try {
-				$announcement->setCreationDate(new \DateTime());
-			} catch(\Exception $e) {
-				throw $e;
+		$createForm = $this->createFormBuilder($announcement)
+			->add('title', TextType::class)
+			->add('message', TextareaType::class, ['label' => 'Content'])
+			->add('public', CheckboxType::class, ['label' => 'Announcement public'])
+			->add('hidden', CheckboxType::class, ['label' => 'Hide it temporary'])
+			->add('commenting', CheckboxType::class, ['label' => 'Allow comments'])
+			->add('pictures', FileType::class, ['required' => false, 'label' => 'Pictures', 'mapped' => false, 'multiple' => true])
+			->add('groups', ChoiceType::class, array(
+				'choices' => $groups, 'choice_label' => function($grp, $key, $value) {
+					return $grp->getName();
+				},
+				'choice_value' => function (Group $grp = null) {
+					return $grp ? $grp->getId() : '';
+				},
+				'mapped' => false,
+				'multiple' => true))->getForm();
+		
+		
+		if($request->isMethod('POST')) {
+			$createForm->handleRequest($request);
+			if($createForm->isSubmitted() && $createForm->isValid()) {
+				$announcement = $createForm->getData();
+				$announcement->setUser($this->getUser());
+				try {
+					$announcement->setCreationDate(new \DateTime());
+				} catch(\Exception $e) {
+					throw $e;
+				}
+				$em->persist($announcement);
+				$em->flush();
 			}
-			$em->persist($announcement);
-			$em->flush();
 		}
 		$blocks = $em->getRepository(Announcement::class)->findAll();
 		
-		return $this->render('admin/block.html.twig', ['blocks' => $blocks, 'form' => $form->createView()]);
+		return $this->render('admin/block.html.twig', ['blocks' => $blocks, 'form' => $createForm->createView()]);
 	}
 	
 	public function group(Request $request, $message) {

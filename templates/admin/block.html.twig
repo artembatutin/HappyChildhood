@@ -1,5 +1,8 @@
 {%extends 'base.html.twig'%}
 {%block title%}Your Mail Box{%endblock%}
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('css/messages-style.css') }}">
+{% endblock %}
 {%block body%}
 	
 	<header class="head">
@@ -48,6 +51,7 @@
 									<h5>Create Announcement</h5>
 									{{form_start(form)}}
 									{{form_row(form.title)}}
+									{{form_row(form.groups)}}
 									{{form_row(form.message)}}
 									{{form_row(form.pictures)}}
 

@@ -13,8 +13,8 @@
             {% endif %}
             {% if form.vars.block_prefixes.1 == "file" %}
                 <div class="col-8">
-                    <label for="form_attachments" class="custom-file-upload">
-                        <img class="upload_icon" src="/img/file_upload_icon.png"> Upload Files
+                    <label for="form_pictures" class="custom-file-upload">
+                        <img class="upload_icon" src="{{asset('img/file_upload_icon.png')}}"> Upload Files
                     </label>
                     {{ form_widget(form, {'attr': {'class': 'form-control'}}) }}
                 </div>

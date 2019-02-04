@@ -154,7 +154,8 @@ span.ms_display_attachment:hover {
     background-color:white;
 }
 
-input#form_attachments {
+input#form_attachments,
+input#form_pictures{
     display: none;
 }
 

@@ -30,6 +30,9 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
+                                {%if messages_in|length < 1%}
+                                    <h4>Empty</h4>
+                                {%endif%}
                                 {% for mr in messages_in %}
                                     <a class="ms_link" href="{{ path('message', {'message_id': mr.message.id}) }}">
                                         <div id="ms_{{ mr.message.id }}" class="ms_container {% if mr.read_flag == false %} unread_ms {% endif %}">
