@@ -24,21 +24,18 @@ class AdminController extends AbstractController {
 		//creating the new announcement.
 		$announcement = new Announcement();
 		$createForm = $this->createFormBuilder($announcement)
-			->add('title', TextType::class)
-			->add('message', TextareaType::class, ['label' => 'Content'])
-			->add('public', CheckboxType::class, ['label' => 'Announcement public'])
-			->add('hidden', CheckboxType::class, ['label' => 'Hide it temporary'])
-			->add('commenting', CheckboxType::class, ['label' => 'Allow comments'])
-			->add('pictures', FileType::class, ['required' => false, 'label' => 'Pictures', 'mapped' => false, 'multiple' => true])
-			->add('groups', ChoiceType::class, array(
-				'choices' => $groups, 'choice_label' => function($grp, $key, $value) {
-					return $grp->getName();
-				},
-				'choice_value' => function (Group $grp = null) {
-					return $grp ? $grp->getId() : '';
-				},
-				'mapped' => false,
-				'multiple' => true))->getForm();
+		                   ->add('title', TextType::class)
+		                   ->add('message', TextareaType::class, ['label' => 'Content'])
+		                   ->add('public', CheckboxType::class, ['label' => 'Announcement public'])
+		                   ->add('hidden', CheckboxType::class, ['label' => 'Hide it temporary'])
+		                   ->add('commenting', CheckboxType::class, ['label' => 'Allow comments'])
+		                   ->add('pictures', FileType::class, ['required' => false, 'label' => 'Pictures', 'mapped' => false, 'multiple' => true])
+		                   ->add('groups', ChoiceType::class, array('choices' => $groups, 'choice_label' => function($grp, $key, $value) {
+			                   return $grp->getName();
+		                   }, 'choice_value' => function(Group $grp = null) {
+			                   return $grp ? $grp->getId() : '';
+		                   }, 'mapped' => false, 'multiple' => true))
+		                   ->getForm();
 		
 		
 		if($request->isMethod('POST')) {
@@ -50,6 +47,16 @@ class AdminController extends AbstractController {
 					$announcement->setCreationDate(new \DateTime());
 				} catch(\Exception $e) {
 					throw $e;
+				}
+				$pictures = $createForm->get('pictures')->getData();
+				foreach($pictures as $picture) {
+					$atchm = new MessageAttachment();
+					$atchm->setFileName($attachment->getClientOriginalName());
+					$atchm->setData($attachment);
+					$atchm->setMessage($message);
+					$atchm->upload();
+					$em->persist($atchm);
+					$em->flush();
 				}
 				$em->persist($announcement);
 				$em->flush();
@@ -86,7 +93,7 @@ class AdminController extends AbstractController {
 		
 		$repository = $this->getDoctrine()->getRepository(Group::class);
 		$group = $repository->find($group_id);
-		if (!$group) {
+		if(!$group) {
 			throw $this->createNotFoundException('No product found for id ' . $group_id);
 		}
 		if(count($group->getChildren()) > 0) {

@@ -8,28 +8,19 @@
 
 namespace App\Controller;
 
-use App\Entity\MessageAttachment;
-use App\Entity\User;
 use App\Entity\Inbox;
 use App\Entity\Message;
+use App\Entity\MessageAttachment;
 use App\Entity\MessageReceiver;
-use App\Security\LoginAuthenticator;
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-
-use Psr\Log\LoggerInterface;
 
 class MessagesController extends AbstractController {
 	
@@ -42,10 +33,10 @@ class MessagesController extends AbstractController {
 		$mrRepo = $this->getDoctrine()->getRepository('App:MessageReceiver');
 		$qb = $mrRepo->createQueryBuilder('mr');
 		$qb->join('mr.message', 'm')
-			->where('mr.receiver_inbox = ?1')
-			->andWhere('mr.read_flag = 0')
-			->select('count(m.id)')
-			->setParameter(1, $inbox->getId());
+		   ->where('mr.receiver_inbox = ?1')
+		   ->andWhere('mr.read_flag = 0')
+		   ->select('count(m.id)')
+		   ->setParameter(1, $inbox->getId());
 		$count = $qb->getQuery()->getSingleScalarResult();
 		
 		return $this->render('messages/unread_icon.html.twig', array('unread_ms_count' => $count));
@@ -150,18 +141,15 @@ class MessagesController extends AbstractController {
 		} catch(\Exception $e) {
 		}
 		$createForm = $this->createFormBuilder()
-			->add('user', ChoiceType::class, array(
-				'choices' => $users, 'choice_label' => function($user, $key, $value) {
-					return $user->getFirstName() . " " . $user->getLastName();
-				},
-				'choice_value' => function (User $user = null) {
-					return $user ? $user->getId() : '';
-				},
-				'mapped' => false,
-				'multiple' => true))
-			->add('title', TextType::class)
-			->add('attachments', FileType::class, ['multiple' => true, 'required' => false])
-			->add('message', TextareaType::class, array('empty_data' => 'Your message here...',))->getForm();
+		                   ->add('user', ChoiceType::class, array('choices' => $users, 'choice_label' => function($user, $key, $value) {
+			                   return $user->getFirstName() . " " . $user->getLastName();
+		                   }, 'choice_value' => function(User $user = null) {
+			                   return $user ? $user->getId() : '';
+		                   }, 'mapped' => false, 'multiple' => true))
+		                   ->add('title', TextType::class)
+		                   ->add('attachments', FileType::class, ['multiple' => true, 'required' => false])
+		                   ->add('message', TextareaType::class, array('empty_data' => 'Your message here...',))
+		                   ->getForm();
 		
 		if($request->isMethod('POST')) {
 			$createForm->handleRequest($request);
@@ -171,7 +159,6 @@ class MessagesController extends AbstractController {
 				
 				$message->setMessageFile($createForm->get('message')->getData());
 				$em->persist($message);
-				$em->flush();
 				$attachments = $createForm->get('attachments')->getData();
 				foreach($attachments as $attachment) {
 					$atchm = new MessageAttachment();
@@ -180,7 +167,6 @@ class MessagesController extends AbstractController {
 					$atchm->setMessage($message);
 					$atchm->upload();
 					$em->persist($atchm);
-					$em->flush();
 				}
 				$receivers = $createForm->get('user')->getData();
 				foreach($receivers as $u) {
@@ -190,11 +176,10 @@ class MessagesController extends AbstractController {
 					$messageReceiver->setReceiverInbox($i);
 					$messageReceiver->setReadFlag(false);
 					$em->persist($messageReceiver);
-					$em->flush();
 				}
 				
 				$request->getSession()->getFlashBag()->add('notice', 'Message sent.');
-				
+				$em->flush();
 				return $this->redirectToRoute('messages_inbox');
 			}
 		}

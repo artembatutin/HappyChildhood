@@ -12,39 +12,37 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method Inbox[]    findAll()
  * @method Inbox[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class InboxRepository extends ServiceEntityRepository
-{
-    public function __construct(RegistryInterface $registry)
-    {
-        parent::__construct($registry, Inbox::class);
-    }
-
-    // /**
-    //  * @return Inbox[] Returns an array of Inbox objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('i.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Inbox
-    {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+class InboxRepository extends ServiceEntityRepository {
+	public function __construct(RegistryInterface $registry) {
+		parent::__construct($registry, Inbox::class);
+	}
+	
+	// /**
+	//  * @return Inbox[] Returns an array of Inbox objects
+	//  */
+	/*
+	public function findByExampleField($value)
+	{
+		return $this->createQueryBuilder('i')
+			->andWhere('i.exampleField = :val')
+			->setParameter('val', $value)
+			->orderBy('i.id', 'ASC')
+			->setMaxResults(10)
+			->getQuery()
+			->getResult()
+		;
+	}
+	*/
+	
+	/*
+	public function findOneBySomeField($value): ?Inbox
+	{
+		return $this->createQueryBuilder('i')
+			->andWhere('i.exampleField = :val')
+			->setParameter('val', $value)
+			->getQuery()
+			->getOneOrNullResult()
+		;
+	}
+	*/
 }

@@ -2,17 +2,15 @@
 
 namespace App\Controller;
 
-use App\Entity\Child;
 use App\Entity\Family;
 use App\Entity\User;
 use App\Form\UserChildrens;
-use App\Form\UserRegister;
 use App\Form\UserProfile;
+use App\Form\UserRegister;
 use App\Security\LoginAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -58,12 +56,7 @@ class AccountController extends AbstractController {
 			$entityManager->flush();
 			
 			
-			return $guardHandler->authenticateUserAndHandleSuccess(
-				$user,
-				$request,
-				$authenticator,
-				'main'
-			);
+			return $guardHandler->authenticateUserAndHandleSuccess($user, $request, $authenticator, 'main');
 		}
 		
 		return $this->render('account/register.html.twig', array('form' => $form->createView()));
@@ -87,7 +80,6 @@ class AccountController extends AbstractController {
 		
 		$family = new Family();
 		$childrenForm = $this->createForm(UserChildrens::class, $family);
-		
 		
 		
 		//change profile form
