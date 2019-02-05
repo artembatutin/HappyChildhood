@@ -43,7 +43,10 @@
 											<tr>
 												<td>{{enrl.email}}</td>
 												<td>{{enrl.group.name}}</td>
-												<td>{{enrl.enrollmenthash}}</td>
+												<td class="ellipsis">
+													<i class="copy_code fas fa-minus-square"></i>
+													<a id="enrl{{enrl.id}}" class="enrl_code" href="{{path('parent_register', {'enrollment_hash': enrl.enrollmenthash})}}">localhost:8000{{path('parent_register', {'enrollment_hash': enrl.enrollmenthash})}}</a>
+												</td>
 												<td>{{enrl.creationdate|date("Y-m-d H:i:s")}}</td>
 												<td>
 													{%if enrl.expired%}
@@ -71,5 +74,8 @@
 			</div>
 		</div>
 	</header>
+{% block javascripts %}
+	<script src="{{ asset('js/copyToClipboard.js') }}"></script>
+{% endblock %}
 {%endblock%}
 {% form_theme form 'form/fields.html.twig' %}

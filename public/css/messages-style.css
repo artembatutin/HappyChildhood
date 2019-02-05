@@ -129,6 +129,8 @@ div.ms_display {
     margin-top: 10pt;
 }
 
+/* Start of Styling for Custom Upload Button */
+
 img.attachment_icon {
     width: 10%;
     height: 10%;
@@ -182,4 +184,20 @@ img.upload_icon {
 
 .custom-file-upload:hover {
     background-color:white;
+}
+
+/* End of Styling for Custom Upload Button */
+
+/* Start of Table Styling */
+
+table {
+    table-layout: fixed;
+}
+
+/* End of Table Styling */
+
+/* Enrollments Styling */
+
+i.copy_code {
+    cursor: pointer;
 }

@@ -35,7 +35,7 @@
                                 {%endif%}
                                 {% for mr in messages_in %}
                                     <a class="ms_link" href="{{ path('message', {'message_id': mr.message.id}) }}">
-                                        <div id="ms_{{ mr.message.id }}" class="ms_container {% if mr.read_flag == false %} unread_ms {% endif %}">
+                                        <div id="ms_{{ mr.message.id }}" class="ms_container ellipsis_container {% if mr.read_flag == false %} unread_ms {% endif %}">
                                             <div id="ms_{{ mr.message.id }}_sender" class="ms_sender ellipsis">
                                                 {{ mr.message.sender_inbox.user.firstName }} {{ mr.message.sender_inbox.user.lastName }}
                                             </div>
