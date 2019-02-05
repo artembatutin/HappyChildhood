@@ -26,7 +26,7 @@ class Enrollment {
 	/**
 	 * @ORM\Column(type="string", length=255, unique=true)
 	 */
-	private $enrollment_hash;
+	private $enrollment_hash = null;
 	
 	/**
 	 * @ORM\Column(type="string", length=180)
@@ -47,11 +47,11 @@ class Enrollment {
 		return $this->id;
 	}
 	
-	public function getGroupId(): ?Group {
+	public function getGroup(): ?Group {
 		return $this->group_id;
 	}
 	
-	public function setGroupId(?Group $group_id): self {
+	public function setGroup(?Group $group_id): self {
 		$this->group_id = $group_id;
 		
 		return $this;
@@ -95,5 +95,17 @@ class Enrollment {
 		$this->expired = $expired;
 		
 		return $this;
+	}
+	
+	public function generate_enrollment_hash() {
+		if($this->enrollment_hash == null) {
+			$salt = '@X+usi0lfknP';
+			$plain_text = $this->getEmail().$salt.($this->getCreationDate())->format('Y-m-d H:i:s');
+			$cypher_text = hash('sha256', $plain_text);
+			$this->setEnrollmentHash($cypher_text);
+			return $cypher_text;
+		} else {
+			return null;
+		}
 	}
 }

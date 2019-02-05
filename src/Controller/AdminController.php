@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Announcement;
+use App\Entity\Enrollment;
 use App\Entity\Group;
 use App\Form\AnnouncementForm;
+use App\Form\EnrollmentForm;
 use App\Form\GroupForm;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -104,5 +106,38 @@ class AdminController extends AbstractController {
 		
 		return $this->redirectToRoute("admin_group", array('message' => "Group" . $group->getName() . " can't be removed because it contains children."));
 		
+	}
+	
+	public function enrollments(Request $request) {
+		$this->denyAccessUnlessGranted('ROLE_ADMIN');
+		$em = $this->getDoctrine()->getManager();
+		$groups = $em->getRepository(Group::class)->findAll();
+		
+		$enrollment = new Enrollment();
+		$form = $this->createForm(EnrollmentForm::class, $enrollment, array(
+			'data_class' => null,
+			'data' => $groups
+		));
+		if($request->isMethod('POST')) {
+			$form->handleRequest($request);
+			
+			if($form->isValid()) {
+				$enrollment->setGroup($em->getRepository(Group::class)->find($form->get('group')->getData()));
+				$enrollment->setEmail($form->get('email')->getData());
+				try {
+					$enrollment->setCreationDate(new \DateTime("now"));
+				} catch(\Exception $e) {
+					$e->getMessage();
+				}
+				$enrollment->setExpired(false);
+				$enrollment->generate_enrollment_hash();
+				$em->persist($enrollment);
+				$em->flush();
+			}
+		}
+		
+		$enrollments = $em->getRepository(Enrollment::class)->findAll();
+		
+		return $this->render('admin/enrollments.html.twig', ['enrollments' => $enrollments, 'form' => $form->createView()]);
 	}
 }
