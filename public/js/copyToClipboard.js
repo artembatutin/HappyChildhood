@@ -1,14 +1,21 @@
-enrl_code = document.getElementsByClassName("copy_code");
+clipboard_btns = $('.clipboard_btn');
+clipboard_btns.tooltip({trigger: 'manual'});
 
-for(let i = 0; i < enrl_code.length; i++) {
-    enrl_code[i].onclick = function () {
-        document.execCommand("copy");
-    };
+clipboard_btns.on('mouseover', function (event) {
+    //target.setAttribute('title', 'Copy Link');
+    $(this).tooltip('hide').attr('data-original-title', 'Copy Link').tooltip('show');
+});
+clipboard_btns.on('mouseout', function (event) {
+    //target.setAttribute('title', 'Copy Link');
+    $(this).tooltip('hide').attr('data-original-title', 'Copy Link');
+});
+clipboard_btns.on('click', function (event) {
+    //target.setAttribute('title', 'Link Copied!');
+    $(this).attr('data-original-title', 'Link Copied!').tooltip('show');
+});
 
-    enrl_code[i].addEventListener("copy", function (event) {
-        event.preventDefault();
-        if (event.clipboardData) {
-            event.clipboardData.setData("text/plain", event.srcElement.nextElementSibling.href);
-        }
-    });
-}
+new ClipboardJS(".clipboard_btn", {
+    text: function (trigger) {
+        return trigger.nextElementSibling.href;
+    }
+});

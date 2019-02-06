@@ -198,6 +198,14 @@ table {
 
 /* Enrollments Styling */
 
-i.copy_code {
+.clipboard_btn {
     cursor: pointer;
+}
+
+.clipboard_btn:hover {
+    color: #19ac45;
+}
+
+.clipboard_btn:active {
+    color: orange;
 }
