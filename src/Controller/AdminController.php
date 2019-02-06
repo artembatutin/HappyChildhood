@@ -108,7 +108,7 @@ class AdminController extends AbstractController {
 		
 	}
 	
-	public function enrollments(Request $request) {
+	public function enrollments(Request $request, \Swift_Mailer $mailer) {
 		$this->denyAccessUnlessGranted('ROLE_ADMIN');
 		$em = $this->getDoctrine()->getManager();
 		$groups = $em->getRepository(Group::class)->findAll();
@@ -131,6 +131,7 @@ class AdminController extends AbstractController {
 				}
 				$enrollment->setExpired(false);
 				$enrollment->generate_enrollment_hash();
+				$this->send_registration_email($mailer, $enrollment->getEmail(), $enrollment->getEnrollmentHash());
 				$em->persist($enrollment);
 				$em->flush();
 			}
@@ -139,5 +140,14 @@ class AdminController extends AbstractController {
 		$enrollments = $em->getRepository(Enrollment::class)->findAll();
 		
 		return $this->render('admin/enrollments.html.twig', ['enrollments' => $enrollments, 'form' => $form->createView()]);
+	}
+	
+	private function send_registration_email(\Swift_Mailer $mailer, $email, $enrl_hash) {
+		$registration_link = 'localhost:8000/parent-register/'.$enrl_hash;
+		$message = (new \Swift_Message('Registration Email'))
+			->setFrom('dorin.artem.test@gmail.com')
+			->setTo($email)
+			->setBody($registration_link, 'text/plain');
+		$mailer->send($message);
 	}
 }
