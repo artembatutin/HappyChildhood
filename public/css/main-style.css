@@ -11,8 +11,8 @@ body {
   background-attachment: scroll;
   background-size: cover;*/ // blue - green
 
-  background: -webkit-gradient(linear, left bottom, left top, from(#e0760f), to(#e3a130));
-  background: linear-gradient(0deg, #e0760f 0%, #e3a130 100%);
+  background: -webkit-gradient(linear, left bottom, left top, from(#1E8ECD), to(#A9DDF3));
+  background: linear-gradient(0deg, #1E8ECD 0%, #A9DDF3 100%);
   background-repeat: no-repeat;
   background-position: center center;
   background-attachment: scroll;
@@ -53,13 +53,14 @@ h6 {
   margin-left: 10px;
   margin-bottom: 10px;
   border-radius: 60%;
-  background-color: #e39d2d;
-  color: white;
+  background-color: #387190;
+  color: #cfeeff;
 }
 
 .social-link:hover {
   cursor: pointer;
-  background-color: #8d5821;
+  background-color: #64afda;
+  color:white;
 }
 
 .btn-xl {
@@ -86,7 +87,7 @@ h6 {
 .navbar-custom {
   padding-top: 1rem;
   padding-bottom: 1rem;
-  background-color: #d57e56;
+  background-color: #1E8ECD;
   box-shadow: 0px 2px 3px rgba(0,0,0,0.4);
 }
 
@@ -223,18 +224,18 @@ header.masthead .bg-circle-4 {
 }
 
 .btn {
-  transition: color .3s ease-in-out,background-color .3s ease-in-out,border-color .3s ease-in-out,box-shadow .3s ease-in-out;
+  transition: color .6s ease-in-out,background-color .6s ease-in-out,border-color .6s ease-in-out,box-shadow .6s ease-in-out;
 }
 
 .btn-primary {
-  background-color: #ee4a09;
-  border-color: #ee4a09;
+  background-color: #FF8039;
+  border-color: #FF8039;
+  box-shadow: 0 0px 8px 0 rgba(0,0,0,0.2) !important;
 }
 
 .btn-primary:active, .btn-primary:focus, .btn-primary:hover {
-  background-color: #bd4719 !important;
-  border-color: #b45a37 !important;
-  box-shadow: 0 3px 8px 0 rgba(0,0,0,0.2), 0 2px 5px 0 rgba(0,0,0,0.19) !important;
+  background-color: #e66855 !important;
+  border-color: #d4937a !important;
 }
 
 .btn-primary:focus {
@@ -258,7 +259,7 @@ header.masthead .bg-circle-4 {
 }
 
 .rounded-circle {
-  border-radius: 10% !important;
+  border-radius: 5% !important;
 }
 
 .centered {
@@ -269,8 +270,8 @@ header.masthead .bg-circle-4 {
 .list-group-item.active {
   z-index: 2;
   color: #fff;
-  background-color: #d57e56;
-  border-color: #b97251;
+  background-color: #e87421;
+  border-color: #f7802b;
   box-shadow: 0px 0px 4px rgba(0,0,0,0.4);
 }
 
@@ -307,6 +308,11 @@ table.table td a.delete {
 
 .form-control {
   padding: 3px;
+}
+
+footer {
+  background-color: #00000030;
+  margin-top: 3em;
 }
 
 @media (max-width: 991px) {

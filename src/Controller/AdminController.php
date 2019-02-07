@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Announcement;
 use App\Entity\Enrollment;
 use App\Entity\Group;
+use App\Entity\User;
 use App\Form\AnnouncementForm;
 use App\Form\EnrollmentForm;
 use App\Form\GroupForm;
@@ -147,7 +148,8 @@ class AdminController extends AbstractController {
 		$message = (new \Swift_Message('Registration Email'))
 			->setFrom('dorin.artem.test@gmail.com')
 			->setTo($email)
-			->setBody($registration_link, 'text/plain');
+			->setBody($this->renderView('emails/invitation.html.twig', ['link' => $registration_link]), 'text/html')
+			->addPart("Your registration link for Happy Childhood: " . $registration_link, 'text/plain');
 		$mailer->send($message);
 	}
 }
