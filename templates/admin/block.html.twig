@@ -40,12 +40,33 @@
 										<thead>
 										<tr>
 											<th>Title</th>
-											<th>Visible</th>
+											<th>Public</th>
 											<th>Hidden</th>
 											<th>Actions</th>
 										</tr>
 										</thead>
-										
+										{%for block in blocks%}
+											<tr>
+												<td>{{block.title}}</td>
+												<td>{%if block.isPublic%}
+														Yes
+													{%else%}
+														No
+													{%endif%}</td>
+												<td>
+													{%if block.isHidden%}
+														Yes
+													{%else%}
+														No
+													{%endif%}
+												</td>
+												<td>
+													<a class="edit" title="Edit" data-toggle="tooltip"><i class="fas fa-pen-square"></i></a>
+													<a class="delete" href="{{path('admin_block_delete', {'block_id': block.id})}}" title="Delete" data-toggle="tooltip"><i class="fas fa-minus-square"></i></a>
+
+												</td>
+											</tr>
+										{%endfor%}
 									
 									</table>
 									<hr>

@@ -18,6 +18,10 @@ profile:
     controller: App\Controller\AccountController::profile
 
 
+block_img:
+    path: /block_image{name}
+    controller: App\Controller\AdminController::showImage
+
 
 admin:
     path: /admin/
@@ -25,12 +29,15 @@ admin:
 admin_block:
     path: /admin/block
     controller: App\Controller\AdminController::content
+admin_block_delete:
+    path: /admin/block_delete{block_id}
+    controller: App\Controller\AdminController::block_delete
 admin_group:
     path: /admin/group
     controller: App\Controller\AdminController::group
     defaults:   { message: null }
 admin_group_delete:
-    path: /admin/delete{group_id}
+    path: /admin/group_delete{group_id}
     controller: App\Controller\AdminController::group_delete
 admin_enrollments:
     path: /admin/enrollments

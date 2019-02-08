@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Announcement;
+use App\Entity\AnnouncementViewers;
 use App\Entity\Enrollment;
 use App\Entity\Group;
 use App\Entity\User;
@@ -15,7 +16,9 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class AdminController extends AbstractController {
 	
@@ -29,21 +32,23 @@ class AdminController extends AbstractController {
 		$createForm = $this->createFormBuilder($announcement)
 		                   ->add('title', TextType::class)
 		                   ->add('message', TextareaType::class, ['label' => 'Content'])
-		                   ->add('public', CheckboxType::class, ['label' => 'Announcement public'])
-		                   ->add('hidden', CheckboxType::class, ['label' => 'Hide it temporary'])
-		                   ->add('commenting', CheckboxType::class, ['label' => 'Allow comments'])
+		                   ->add('public', CheckboxType::class, ['label' => 'Announcement public',  'required' => false])
+		                   ->add('hidden', CheckboxType::class, ['label' => 'Hide it temporary', 'required' => false])
+		                   ->add('commenting', CheckboxType::class, ['label' => 'Allow comments',  'required' => false])
 		                   ->add('pictures', FileType::class, ['required' => false, 'label' => 'Pictures', 'mapped' => false, 'multiple' => true])
-		                   ->add('groups', ChoiceType::class, array('choices' => $groups, 'choice_label' => function($grp, $key, $value) {
+		                   ->add('groups', ChoiceType::class, array( 'required' => false,
+		                   	'choices' => $groups, 'choice_label' => function($grp, $key, $value) {
 			                   return $grp->getName();
 		                   }, 'choice_value' => function(Group $grp = null) {
 			                   return $grp ? $grp->getId() : '';
 		                   }, 'mapped' => false, 'multiple' => true))
 		                   ->getForm();
 		
-		
+		//request submitted.
 		if($request->isMethod('POST')) {
 			$createForm->handleRequest($request);
 			if($createForm->isSubmitted() && $createForm->isValid()) {
+				//creating announcement.
 				$announcement = $createForm->getData();
 				$announcement->setUser($this->getUser());
 				try {
@@ -51,23 +56,42 @@ class AdminController extends AbstractController {
 				} catch(\Exception $e) {
 					throw $e;
 				}
+				//uploading pictures.
 				$pictures = $createForm->get('pictures')->getData();
 				foreach($pictures as $picture) {
-					$atchm = new MessageAttachment();
-					$atchm->setFileName($attachment->getClientOriginalName());
-					$atchm->setData($attachment);
-					$atchm->setMessage($message);
-					$atchm->upload();
-					$em->persist($atchm);
-					$em->flush();
+					$announcement->upload($picture);
+				}
+				//creating views per group.
+				$viewers = $createForm->get('groups')->getData();
+				foreach($viewers as $viewer) {
+					$announceViewer = new AnnouncementViewers();
+					$announceViewer->setAnnouncement($announcement);
+					$announceViewer->setChildGroup($viewer);
+					$em->persist($announceViewer);
 				}
 				$em->persist($announcement);
 				$em->flush();
 			}
 		}
-		$blocks = $em->getRepository(Announcement::class)->findAll();
 		
+		$blocks = $em->getRepository(Announcement::class)->findAll();
 		return $this->render('admin/block.html.twig', ['blocks' => $blocks, 'form' => $createForm->createView()]);
+	}
+	
+	public function block_delete($block_id) {
+		$this->denyAccessUnlessGranted('ROLE_ADMIN');
+		$em = $this->getDoctrine()->getManager();
+		
+		$repository = $this->getDoctrine()->getRepository(Announcement::class);
+		$block = $repository->find($block_id);
+		if(!$block) {
+			throw $this->createNotFoundException('No announcement found for id ' . $block_id);
+		}
+		$em->remove($block);
+		$em->flush();
+		
+		return $this->redirectToRoute("admin_block", array('message' => "Group" . $block->getTitle() . " removed."));
+		
 	}
 	
 	public function group(Request $request, $message) {
@@ -151,5 +175,22 @@ class AdminController extends AbstractController {
 			->setBody($this->renderView('emails/invitation.html.twig', ['link' => $registration_link]), 'text/html')
 			->addPart("Your registration link for Happy Childhood: " . $registration_link, 'text/plain');
 		$mailer->send($message);
+	}
+	
+	/**
+	 * @param $name
+	 * @return BinaryFileResponse
+	 */
+	public function showImage($name)
+	{
+		$response = new BinaryFileResponse(Announcement::getUploadRootDir().'/'.$name);
+		$response->trustXSendfileTypeHeader();
+		$response->setContentDisposition(
+			ResponseHeaderBag::DISPOSITION_INLINE,
+			$name,
+			iconv('UTF-8', 'ASCII//TRANSLIT', $name)
+		);
+		
+		return $response;
 	}
 }

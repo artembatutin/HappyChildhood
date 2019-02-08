@@ -17,32 +17,19 @@ class AnnouncementRepository extends ServiceEntityRepository {
 		parent::__construct($registry, Announcement::class);
 	}
 	
-	// /**
-	//  * @return Announcement[] Returns an array of Announcement objects
-	//  */
-	/*
-	public function findByExampleField($value)
+	/**
+	 * @param $group
+	 * @return array
+	 */
+	public function findForGroups($group): array
 	{
-		return $this->createQueryBuilder('a')
-			->andWhere('a.exampleField = :val')
-			->setParameter('val', $value)
-			->orderBy('a.id', 'ASC')
-			->setMaxResults(10)
-			->getQuery()
-			->getResult()
-		;
+		$qb = $this->createQueryBuilder('a');
+		$qb = $qb
+			->join('a.announcementViewers', 'v')
+			->where('a.hidden = false')
+			->where('v.child_group = :group')
+			->setParameter('group', $group)
+			->getQuery();
+		return $qb->execute();
 	}
-	*/
-	
-	/*
-	public function findOneBySomeField($value): ?Announcement
-	{
-		return $this->createQueryBuilder('a')
-			->andWhere('a.exampleField = :val')
-			->setParameter('val', $value)
-			->getQuery()
-			->getOneOrNullResult()
-		;
-	}
-	*/
 }

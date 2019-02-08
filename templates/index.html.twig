@@ -21,57 +21,31 @@
         </header>
     {% endif %}
 
-    <section>
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 order-lg-2">
-                    <div class="p-5">
-                        <img class="img-fluid rounded-circle" src="{{asset('img/01.jpg')}}" alt="">
-                    </div>
-                </div>
-                <div class="col-lg-6 order-lg-1 card rounded-circle">
-                    <div class="p-5">
-                        <h2 class="display-5">We learn something new everyday!</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod aliquid, mollitia odio veniam sit iste esse assumenda amet aperiam exercitationem, ea animi blanditiis recusandae! Ratione voluptatum molestiae adipisci, beatae obcaecati.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    {%if blocks is defined and blocks|length > 0%}
+        {% for block in blocks %}
+            <section>
+                <div class="container">
+                    <div class="row align-items-center">
 
-    <section>
+                        {%if loop.index is divisible by(2) %}
+                            {{ block("block_image", "index_images.html.twig") }}
+                        {%endif%}
+                        <div class="col-lg-6 card rounded-circle">
+                            <div class="p-5">
+                                <h2 class="display-5">{{ block.getTitle }}</h2>
+                                <p>{{ block.getMessage }}</p>
+                            </div>
+                        </div>
+                        {%if loop.index is not divisible by(2)%}
+                            {{ block("block_image", "index_images.html.twig") }}
+                        {%endif%}
+                    </div>
+                </div>
+            </section>
+        {% endfor %}
+    {% else %}
         <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <div class="p-5">
-                        <img class="img-fluid rounded-circle" src="{{asset('img/02.jpg')}}" alt="">
-                    </div>
-                </div>
-                <div class="col-lg-6 card rounded-circle">
-                    <div class="p-5">
-                        <h2 class="display-5">Working on our creativity.</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod aliquid, mollitia odio veniam sit iste esse assumenda amet aperiam exercitationem, ea animi blanditiis recusandae! Ratione voluptatum molestiae adipisci, beatae obcaecati.</p>
-                    </div>
-                </div>
-            </div>
+            <h2 class="title">There is no announcements for you at this moment.</h2>
         </div>
-    </section>
-
-    <section>
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 order-lg-2">
-                    <div class="p-5">
-                        <img class="img-fluid rounded-circle" src="{{asset('img/03.jpg')}}" alt="">
-                    </div>
-                </div>
-                <div class="col-lg-6 order-lg-1 card rounded-circle">
-                    <div class="p-5">
-                        <h2 class="display-5">Our latest workshop was fun.</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod aliquid, mollitia odio veniam sit iste esse assumenda amet aperiam exercitationem, ea animi blanditiis recusandae! Ratione voluptatum molestiae adipisci, beatae obcaecati.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    {% endif %}
 {% endblock %}
