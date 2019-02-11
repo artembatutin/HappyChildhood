@@ -72,9 +72,6 @@
         "warmup": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache"
-        ],
-        "heroku-postbuild": [
-            "webpack -p --config ./resources/webpack/webpack.config.js"
         ]
     },
     "conflict": {
