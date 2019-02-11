@@ -99,7 +99,7 @@ class Enrollment {
 	
 	public function generate_enrollment_hash() {
 		if($this->enrollment_hash == null) {
-			$salt = '@X+usi0lfknP';
+			$salt = 'yp2k,.P(&,pAGC!R]%t+gq&mp';
 			$plain_text = $this->getEmail().$salt.($this->getCreationDate())->format('Y-m-d H:i:s');
 			$cypher_text = hash('sha256', $plain_text);
 			$this->setEnrollmentHash($cypher_text);
