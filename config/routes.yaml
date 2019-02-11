@@ -10,9 +10,6 @@ login:
 register:
     path: /register/
     controller: App\Controller\AccountController::register
-parent_register:
-    path: /parent-register/{enrollment_hash}
-    controller: App\Controller\AccountController::register_parent
 profile:
     path: /profile/
     controller: App\Controller\AccountController::profile
@@ -67,6 +64,11 @@ attachment_download:
     path: /messages/attachments/{message_id}-{attachment_id}
     controller: App\Controller\MessagesController::download_attachment
 
+
+
+parent_register:
+    path: /parent-register/{enrollment_hash}
+    controller: App\Controller\AccountController::register_parent
 
 
 

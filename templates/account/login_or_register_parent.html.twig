@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+{% block title %}Log in{% endblock %}
+
+{% block body %}
+    <header class="masthead">
+        <div class="container">
+            <div class="row">
+                {{ render(controller('App\\Controller\\AccountController::login_form', {'authenticationUtils': authenticationUtils})) }}
+                <div class="col-md-2 centered"> - OR - </div>
+                {{ render(controller('App\\Controller\\AccountController::register_form', {'request': request, 'authenticator': authenticator, 'guardHandler': guardHandler, 'passwordEncoder': passwordEncoder})) }}
+            </div>
+        </div>
+    </header>
+{% endblock %}

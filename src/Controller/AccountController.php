@@ -33,6 +33,18 @@ class AccountController extends AbstractController {
 		return $this->render('account/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
 	}
 	
+	public function login_form(AuthenticationUtils $authenticationUtils): Response {
+		if($this->isGranted("IS_AUTHENTICATED_FULLY")) {
+			return $this->redirectToRoute('index');
+		}
+		// last login error.
+		$error = $authenticationUtils->getLastAuthenticationError();
+		// last entered username.
+		$lastUsername = $authenticationUtils->getLastUsername();
+		
+		return $this->render('account/login_form.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+	}
+	
 	/**
 	 * @Route("/register", name="user_registration")
 	 */
@@ -61,6 +73,46 @@ class AccountController extends AbstractController {
 		}
 		
 		return $this->render('account/register.html.twig', array('form' => $form->createView()));
+	}
+	
+	public function register_form(Request $request, LoginAuthenticator $authenticator, GuardAuthenticatorHandler $guardHandler, UserPasswordEncoderInterface $passwordEncoder) {
+		$user = new User();
+		$form = $this->createForm(UserRegister::class, $user);
+		
+		//will only happen on POST.
+		$form->handleRequest($request);
+		if($form->isSubmitted() && $form->isValid()) {
+			
+			//password encoding.
+			$password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
+			$user->setPassword($password);
+			$user->setDisabled(false);
+			
+			//saving the user.
+			$entityManager = $this->getDoctrine()->getManager();
+			$entityManager->persist($user);
+			$entityManager->persist($user->getInbox());
+			$entityManager->flush();
+			
+			
+			return $guardHandler->authenticateUserAndHandleSuccess($user, $request, $authenticator, 'main');
+		}
+		
+		return $this->render('account/register_form.html.twig', array('form' => $form->createView()));
+	}
+	
+	public function register_parent(AuthenticationUtils $authenticationUtils, Request $request, LoginAuthenticator $authenticator, GuardAuthenticatorHandler $guardHandler, UserPasswordEncoderInterface $passwordEncoder, $enrollment_hash) {
+		if($this->isGranted("IS_AUTHENTICATED_FULLY")) {
+			return $this->redirectToRoute('index');
+		}
+		/*
+		if($request->getMethod() === 'POST') {
+			if($request -> request->has('form')) {
+				$this->register()
+			}
+		}
+		*/
+		return $this->render('account/login_or_register_parent.html.twig', ['authenticationUtils' => $authenticationUtils, 'request' => $request, 'authenticator' => $authenticator, 'guardHandler' => $guardHandler, 'passwordEncoder' => $passwordEncoder]);
 	}
 	
 	public function profile(Request $request) {
