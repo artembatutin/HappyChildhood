@@ -8,11 +8,10 @@ login:
     path: /login/
     controller: App\Controller\AccountController::login
 register:
-    path: /register/
+    path: /register/{enrollment_hash}
     controller: App\Controller\AccountController::register
-parent_register:
-    path: /parent-register/{enrollment_hash}
-    controller: App\Controller\AccountController::register_parent
+    defaults:
+        enrollment_hash: "none"
 profile:
     path: /profile/
     controller: App\Controller\AccountController::profile
@@ -66,7 +65,6 @@ messages_drafts:
 attachment_download:
     path: /messages/attachments/{message_id}-{attachment_id}
     controller: App\Controller\MessagesController::download_attachment
-
 
 
 

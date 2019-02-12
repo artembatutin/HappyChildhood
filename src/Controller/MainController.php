@@ -12,7 +12,7 @@ class MainController extends AbstractController {
 		if($this->isGranted("IS_AUTHENTICATED_FULLY")) {
 			$em = $this->getDoctrine()->getManager();
 			$user = $this->getUser();
-			$blocks = $em->getRepository(Announcement::class)->findForGroups(3);
+			$blocks = $em->getRepository(Announcement::class)->findForGroups(1);
 			
 		}
 		return $this->render('index.html.twig', ['blocks' => $blocks]);

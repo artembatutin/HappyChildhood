@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Enrollment;
 use App\Entity\Family;
 use App\Entity\User;
 use App\Form\UserChildrens;
@@ -34,11 +35,27 @@ class AccountController extends AbstractController {
 	}
 	
 	/**
-	 * @Route("/register", name="user_registration")
+	 * @Route("/register/{enrollment_hash}", name="user_registration")
 	 */
-	public function register(Request $request, LoginAuthenticator $authenticator, GuardAuthenticatorHandler $guardHandler, UserPasswordEncoderInterface $passwordEncoder) {
+	public function register($enrollment_hash, Request $request, LoginAuthenticator $authenticator, GuardAuthenticatorHandler $guardHandler, UserPasswordEncoderInterface $passwordEncoder) {
+		$em = $this->getDoctrine()->getManager();
+		$enrollment = $em->getRepository(Enrollment::class)->findOneBy(['enrollment_hash' => $enrollment_hash]);
+		
+		if($enrollment == null) {
+			return $this->redirectToRoute('index');
+		}
+		
+		if($this->isGranted("IS_AUTHENTICATED_FULLY")) {
+			return $this->redirectToRoute('index');
+		}
+		
+		$existing_user = $em->getRepository(User::class)->findOneBy(['email' => $enrollment->getEmail()]);
+		if($existing_user != null) {
+			return $this->redirectToRoute('login');
+		}
 		
 		$user = new User();
+		$user->setEmail($enrollment->getEmail());
 		$form = $this->createForm(UserRegister::class, $user);
 		
 		//will only happen on POST.

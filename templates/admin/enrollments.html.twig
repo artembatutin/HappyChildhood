@@ -45,7 +45,7 @@
 												<td>{{enrl.group.name}}</td>
 												<td class="ellipsis">
 													<i class="clipboard_btn fa fa-clipboard" data-toggle="tooltip"></i>
-													<a id="enrl{{enrl.id}}" class="enrl_code" href="{{path('parent_register', {'enrollment_hash': enrl.enrollmenthash})}}">localhost:8000{{path('parent_register', {'enrollment_hash': enrl.enrollmenthash})}}</a>
+													<a id="enrl{{enrl.id}}" class="enrl_code" href="{{path('register', {'enrollment_hash': enrl.enrollmenthash})}}">localhost:8000{{path('register', {'enrollment_hash': enrl.enrollmenthash})}}</a>
 												</td>
 												<td>{{enrl.creationdate|date("Y-m-d H:i:s")}}</td>
 												<td>
