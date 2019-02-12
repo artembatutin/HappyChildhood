@@ -24,14 +24,14 @@
     {%if blocks is defined and blocks|length > 0%}
         {% for block in blocks %}
             <section>
-                <div class="container">
-                    <div class="row align-items-center">
+                <div class="container block-post">
+                    <div class="row row-eq-height">
 
                         {%if loop.index is divisible by(2) %}
                             {{ block("block_image", "index_images.html.twig") }}
                         {%endif%}
-                        <div class="col-lg-6 card rounded-circle">
-                            <div class="p-5">
+                        <div class="col-6 card rounded-circle {%if loop.index is divisible by(2) %}even-align{%endif%}">
+                            <div class="p-content">
                                 <h2 class="display-5">{{ block.getTitle }}</h2>
                                 <p>{{ block.getMessage }}</p>
                             </div>

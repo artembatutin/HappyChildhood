@@ -1,12 +1,12 @@
 {% block block_image %}
-    <div class="col-lg-6">
+    <div class="col-6 block-img">
         <div class="p-5">
             {% if block.getFiles|length < 2 %}
                 {% for picture in block.getFiles %}
                     <img class="img-fluid rounded-circle" src="{{ path('block_img', {'name': picture}) }}" alt="">
                 {% endfor %}
             {% else %}
-                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <div id="block-{{block.id}}" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner rounded-circle">
                         {% for picture in block.getFiles %}
                             <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
@@ -14,11 +14,11 @@
                             </div>
                         {% endfor %}
                     </div>
-                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <a class="carousel-control-prev" href="#block-{{block.id}}" role="button" data-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="sr-only">Previous</span>
                     </a>
-                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                    <a class="carousel-control-next" href="#block-{{block.id}}" role="button" data-slide="next">
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="sr-only">Next</span>
                     </a>
