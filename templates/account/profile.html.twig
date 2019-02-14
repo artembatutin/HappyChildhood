@@ -11,7 +11,7 @@
                 <div class="col-md-2 list-group account-menu">
                     <a class="list-group-item list-group-item-action active" href="#" data-target-id="profile"><i class="fas fa-user-circle"></i> Profile</a></li>
                     <a class="list-group-item list-group-item-action" href="#" data-target-id="activity"><i class="fas fa-layer-group"></i> Activities</a></li>
-                    <a class="list-group-item list-group-item-action" href="#" data-target-id="family"><i class="fas fa-home"></i> Family</a></li>
+                    <a class="list-group-item list-group-item-action" href="{{ path("profile_family") }}"><i class="fas fa-home"></i> Family</a></li>
                     <a class="list-group-item list-group-item-action" href="{{ path("messages_inbox") }}"><i class="fas fa-inbox"></i> Inbox</a></li>
                 </div>
 
@@ -120,37 +120,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-10 well account-content" id="family">
-                    <div class="card card-shadow">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h4>Family</h4>
-                                    <hr>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    {{ form_start(childrenForm) }}
-                                        {% for child in childrenForm.children %}
-                                            {{ form_row(child.first_name) }}
-                                            {{ form_row(child.last_name) }}
-                                            {{ form_row(child.birth_date) }}
-                                            {{ form_row(child.allergies) }}
-                                            {{ form_row(child.medications) }}
-                                            {{ form_row(child.save) }}
-                                        {% endfor %}
-                                    <br/>
-                                    <button class="btn btn-secondary" type="submit">Update Childrens</button>
-                                    {{ form_end(profileForm) }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </header>
 {% endblock %}
 {% form_theme profileForm 'form/fields.html.twig' %}
-{% form_theme childrenForm 'form/fields.html.twig' %}
