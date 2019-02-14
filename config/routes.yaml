@@ -28,6 +28,9 @@ admin:
 admin_block:
     path: /admin/block
     controller: App\Controller\AdminController::content
+admin_block_edit:
+    path: /admin/block{block_id}
+    controller: App\Controller\AdminController::content
 admin_block_delete:
     path: /admin/block_delete{block_id}
     controller: App\Controller\AdminController::block_delete

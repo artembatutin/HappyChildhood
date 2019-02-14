@@ -14,6 +14,7 @@ use App\Entity\MessageAttachment;
 use App\Entity\MessageReceiver;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -129,10 +130,10 @@ class MessagesController extends AbstractController {
 		if(!$this->isGranted("IS_AUTHENTICATED_FULLY")) {
 			return $this->redirectToRoute('index');
 		}
+		$isStaff = $this->isGranted('ROLE_ADMIN') or $this->isGranted('ROLE_MOD');
 		$user = $this->getUser();
 		$inbox = $user->getInbox();
 		$em = $this->getDoctrine()->getManager();
-		$users = $em->getRepository(User::class)->findAll();
 		
 		$message = new Message();
 		$message->setSenderInbox($inbox);
@@ -140,23 +141,31 @@ class MessagesController extends AbstractController {
 			$message->setDateSent(new \DateTime("now"));
 		} catch(\Exception $e) {
 		}
-		$createForm = $this->createFormBuilder()
-		                   ->add('user', ChoiceType::class, array('choices' => $users, 'choice_label' => function($user, $key, $value) {
-			                   return $user->getFirstName() . " " . $user->getLastName();
-		                   }, 'choice_value' => function(User $user = null) {
-			                   return $user ? $user->getId() : '';
-		                   }, 'mapped' => false, 'multiple' => true))
-		                   ->add('title', TextType::class)
-		                   ->add('attachments', FileType::class, ['multiple' => true, 'required' => false])
-		                   ->add('message', TextareaType::class, array('empty_data' => 'Your message here...',))
-		                   ->getForm();
+		$createForm = $isStaff ?
+			//admin message sending option allowing to send to everyone and select specific users.
+			$this->createFormBuilder()
+			->add('everyone', CheckboxType::class, array('mapped' => false, 'label' => 'Send this message to everyone.'))
+			->add('user', ChoiceType::class, array('choices' => $em->getRepository(User::class)->findAll(), 'choice_label' => function($user, $key, $value) {
+				return $user->getFirstName() . " " . $user->getLastName();
+			}, 'choice_value' => function(User $user = null) {
+				return $user ? $user->getId() : '';
+			}, 'mapped' => false, 'multiple' => true, 'required' => false))
+			->add('title', TextType::class)
+			->add('attachments', FileType::class, ['multiple' => true, 'required' => false])
+			->add('message', TextareaType::class, array('empty_data' => 'Your message here...',))
+			->getForm() :
+			//regular parent/user sending a message only to staff.
+			$this->createFormBuilder()
+			->add('title', TextType::class)
+			->add('attachments', FileType::class, ['multiple' => true, 'required' => false])
+			->add('message', TextareaType::class, array('empty_data' => 'Your message here...',))
+			->getForm();;
 		
 		if($request->isMethod('POST')) {
 			$createForm->handleRequest($request);
 			
 			if($createForm->isValid()) {
 				$message->setTitle($createForm->get('title')->getData());
-				
 				$message->setMessageFile($createForm->get('message')->getData());
 				$em->persist($message);
 				$attachments = $createForm->get('attachments')->getData();
@@ -168,14 +177,38 @@ class MessagesController extends AbstractController {
 					$atchm->upload();
 					$em->persist($atchm);
 				}
-				$receivers = $createForm->get('user')->getData();
-				foreach($receivers as $u) {
-					$i = $em->getRepository(Inbox::class)->findOneBy(array('user' => $u));
-					$messageReceiver = new MessageReceiver();
-					$messageReceiver->setMessage($message);
-					$messageReceiver->setReceiverInbox($i);
-					$messageReceiver->setReadFlag(false);
-					$em->persist($messageReceiver);
+				$sendToAll = $createForm->has("everyone") and $createForm->get('everyone')->getData();;
+				//Sending automatically staff from regular user.
+				if(!$isStaff) {
+					$admins = $em->getRepository(User::class)->findByRole('ROLE_ADMIN');
+					foreach($admins as $admin) {
+						$messageReceiver = new MessageReceiver();
+						$messageReceiver->setMessage($message);
+						$messageReceiver->setReceiverInbox($admin->getInbox());
+						$messageReceiver->setReadFlag(false);
+						$em->persist($messageReceiver);
+					}
+				} else if($sendToAll) {
+					//sending to all (staff only).
+					$inboxes = $em->getRepository(Inbox::class)->findAll();
+					foreach($inboxes as $i) {
+						$messageReceiver = new MessageReceiver();
+						$messageReceiver->setMessage($message);
+						$messageReceiver->setReceiverInbox($i);
+						$messageReceiver->setReadFlag(false);
+						$em->persist($messageReceiver);
+					}
+				} else {
+					//sending to specific users (staff only).
+					$receivers = $createForm->get('user')->getData();
+					foreach($receivers as $u) {
+						$i = $em->getRepository(Inbox::class)->findOneBy(array('user' => $u));
+						$messageReceiver = new MessageReceiver();
+						$messageReceiver->setMessage($message);
+						$messageReceiver->setReceiverInbox($i);
+						$messageReceiver->setReadFlag(false);
+						$em->persist($messageReceiver);
+					}
 				}
 				
 				$request->getSession()->getFlashBag()->add('notice', 'Message sent.');

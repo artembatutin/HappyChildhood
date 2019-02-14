@@ -31,7 +31,15 @@
                         <div class="row">
                             <div class="col-md-12">
                                 {{ form_start(createForm) }}
-                                {{ form_row(createForm.user) }}
+                                {% if createForm.everyone is defined %}
+                                    {{ form_row(createForm.everyone) }}
+                                {% endif %}
+                                {% if createForm.user is defined %}
+                                    {{ form_row(createForm.user) }}
+                                {% else %}
+                                    <label>Note: This message will be sent to all admins.</label>
+                                    <br/><br/>
+                                {% endif %}
                                 {{ form_row(createForm.title) }}
                                 {{ form_row(createForm.attachments) }}
                                 {{ form_row(createForm.message) }}

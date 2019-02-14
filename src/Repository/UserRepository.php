@@ -18,4 +18,36 @@ class UserRepository extends ServiceEntityRepository {
 		parent::__construct($registry, User::class);
 	}
 	
+	/**
+	 * Finds only staff users.
+	 * @return array
+	 */
+	public function findStaffOnly(): array
+	{
+		$qb = $this->createQueryBuilder('u');
+		$qb = $qb
+			->select('u')
+			->where('u.roles in (:moderator)')
+			->orWhere('u.roles in (:administrator)')
+			->setParameter('moderator', 'ROLE_MOD')
+			->setParameter('administrator', 'ROLE_ADMIN')
+			->getQuery();
+		return $qb->execute();
+	}
+	
+	/**
+	 * @param string $role
+	 * @return array
+	 */
+	public function findByRole($role)
+	{
+		$qb = $this->_em->createQueryBuilder();
+		$qb->select('u')
+			->from($this->_entityName, 'u')
+			->where('u.roles LIKE :roles')
+			->setParameter('roles', '%"'.$role.'"%');
+		
+		return $qb->getQuery()->getResult();
+	}
+	
 }
