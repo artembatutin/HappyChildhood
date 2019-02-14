@@ -14,7 +14,7 @@
 					<a class="list-group-item list-group-item-action" href="{{path('admin_block')}}"><i class="fas fa-clone"></i> Content</a>
 					<a class="list-group-item list-group-item-action" href="{{path('admin_group')}}"><i class="fas fa-child"></i> Groups</a>
 					<a class="list-group-item list-group-item-action active" href="{{path('admin_enrollments')}}"><i class="fa fa-book"></i> Enrollments</a>
-					<a class="list-group-item list-group-item-action" href="{{path('admin_user')}}"><i class="fas fa-user-friends"></i> Users</a>
+					<a class="list-group-item list-group-item-action" href="{{path('admin_users')}}"><i class="fas fa-user-friends"></i> Users</a>
 				</div>
 				
 				<div class="col-md-10 well account-content">
@@ -28,17 +28,18 @@
 							</div>
 							<div class="row">
 								<div class="col-md-12">
-									<table class="table table-bordered">
+									<table class="table table-bordered" data-toggle="table" data-sort-name="enrollments" data-sort-order="desc" data-sortable="true">
 										<thead>
 										<tr>
-											<th>Email</th>
-											<th>Group</th>
-											<th>Enrollment Code</th>
-											<th>Creation Date</th>
-											<th>Expired</th>
+											<th data-field="email" data-sortable="true">Email</th>
+											<th data-field="group" data-sortable="true">Group</th>
+											<th data-field="enrollment_hash" data-sortable="true">Enrollment Code</th>
+											<th data-field="date" data-sortable="true">Creation Date</th>
+											<th data-field="expired" data-sortable="true">Expired</th>
 										</tr>
 										</thead>
 										
+										<tbody>
 										{%for enrl in enrollments%}
 											<tr>
 												<td>{{enrl.email}}</td>
@@ -57,7 +58,7 @@
 												</td>
 											</tr>
 										{%endfor%}
-									
+										</tbody>
 									</table>
 									<hr>
 									<h5>Create Enrollments</h5>

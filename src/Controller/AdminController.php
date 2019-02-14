@@ -7,9 +7,9 @@ use App\Entity\AnnouncementViewers;
 use App\Entity\Enrollment;
 use App\Entity\Group;
 use App\Entity\User;
-use App\Form\AnnouncementForm;
 use App\Form\EnrollmentForm;
 use App\Form\GroupForm;
+use App\Form\UserCreate;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -19,6 +19,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Psr\Log\LoggerInterface;
 
 class AdminController extends AbstractController {
 	
@@ -185,7 +187,7 @@ class AdminController extends AbstractController {
 			}
 		}
 		
-		$enrollments = $em->getRepository(Enrollment::class)->findAll();
+		$enrollments = $em->getRepository(Enrollment::class)->getAllOrderedByDateDesc();
 		
 		return $this->render('admin/enrollments.html.twig', ['enrollments' => $enrollments, 'form' => $form->createView()]);
 	}
@@ -198,6 +200,34 @@ class AdminController extends AbstractController {
 			->setBody($this->renderView('emails/invitation.html.twig', ['link' => $registration_link]), 'text/html')
 			->addPart("Your registration link for Happy Childhood: " . $registration_link, 'text/plain');
 		$mailer->send($message);
+	}
+	
+	public function users(Request $request, UserPasswordEncoderInterface $passwordEncoder, LoggerInterface $logger) {
+		$this->denyAccessUnlessGranted('ROLE_ADMIN');
+		
+		$em = $this->getDoctrine()->getManager();
+		
+		$user = new User();
+		$form = $this->createForm(UserCreate::class, $user);
+		
+		//will only happen on POST.
+		$form->handleRequest($request);
+		if($form->isSubmitted() && $form->isValid()) {
+			
+			//password encoding.
+			$password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
+			$user->setPassword($password);
+			$user->setDisabled(false);
+			
+			//saving the user.
+			$em->persist($user);
+			$em->persist($user->getInbox());
+			$em->flush();
+		}
+		
+		$users = $em->getRepository(User::class)->findAll();
+		
+		return $this->render('admin/users.html.twig', ['form' => $form->createView(), 'users' => $users]);
 	}
 	
 	/**

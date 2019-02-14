@@ -193,7 +193,7 @@ class User implements UserInterface {
 		return $this;
 	}
 	
-	public function getDisabled() {
+	public function isDisabled() {
 		return $this->disabled;
 	}
 	

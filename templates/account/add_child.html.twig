@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+{% block title %}Your profile{% endblock %}
+{% block body %}
+    <header class="head">
+        <div class="container">
+            <h1 class="title">User Panel</h1>
+            <div class="row">
+
+
+                <div class="col-md-2 list-group account-menu">
+                    <a class="list-group-item list-group-item-action" href="#"><i class="fas fa-user-circle"></i> Profile</a>
+                    <a class="list-group-item list-group-item-action" href="#"><i class="fas fa-layer-group"></i> Activities</a>
+                    <a class="list-group-item list-group-item-action active" href="{{ path("profile_family") }}"><i class="fas fa-home"></i> Family</a>
+                    <a class="list-group-item list-group-item-action" href="{{ path("messages_inbox") }}"><i class="fas fa-inbox"></i> Inbox</a>
+                </div>
+                
+                <div class="col-md-10 well account-content" id="family">
+                    <div class="card card-shadow">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4>Add Child</h4>
+                                    <hr>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    {{form_start(form)}}
+                                        {{form_row(form.first_name)}}
+                                        {{form_row(form.last_name)}}
+                                        {{form_row(form.birth_date)}}
+                                        {{form_row(form.group)}}
+                                        {{form_row(form.family)}}
+                                        {%if families is not null %}
+                                            {{form_row(form.new_family)}}
+                                        {%endif%}
+                                        {{form_row(form.allergies)}}
+                                        {{form_row(form.medication)}}
+                                        <br>
+                                        <button class="btn btn-secondary" type="submit">Add Child</button>
+                                    {{form_end(form)}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+{% form_theme form 'form/fields.html.twig' %}

@@ -1,4 +1,10 @@
 security:
+
+    role_hierarchy:
+        ROLE_MOD:           ROLE_USER
+        ROLE_ADMIN:         ROLE_MOD
+        ROLE_SUPER_ADMIN:   [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
     encoders:
         App\Entity\User:
             algorithm: bcrypt
@@ -17,6 +23,8 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
+            pattern: ^/
+            user_checker: App\Security\UserChecker
             anonymous: true
             guard:
                 authenticators:

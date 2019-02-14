@@ -12,9 +12,19 @@ register:
     controller: App\Controller\AccountController::register
     defaults:
         enrollment_hash: "none"
+
 profile:
     path: /profile/
     controller: App\Controller\AccountController::profile
+profile_family:
+    path: /profile/family
+    controller: App\Controller\AccountController::family
+profile_add_child:
+    path: /profile/family/add_child
+    controller: App\Controller\AccountController::add_child
+profile_add_caretaker:
+    path: /profile/family/add_caretaker
+    controller: App\Controller\AccountController::add_caretacker
 
 
 block_img:
@@ -44,9 +54,9 @@ admin_group_delete:
 admin_enrollments:
     path: /admin/enrollments
     controller: App\Controller\AdminController::enrollments
-admin_user:
-    path: /admin/user
-    controller: App\Controller\AdminController::user
+admin_users:
+    path: /admin/users
+    controller: App\Controller\AdminController::users
 
 
 
