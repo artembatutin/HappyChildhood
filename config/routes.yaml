@@ -44,9 +44,9 @@ admin_group_delete:
 admin_enrollments:
     path: /admin/enrollments
     controller: App\Controller\AdminController::enrollments
-admin_user:
-    path: /admin/user
-    controller: App\Controller\AdminController::user
+admin_users:
+    path: /admin/users
+    controller: App\Controller\AdminController::users
 
 
 

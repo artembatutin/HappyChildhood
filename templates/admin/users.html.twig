@@ -1,0 +1,101 @@
+{%extends 'base.html.twig'%}
+{%block title%}Admin Panel - Users{%endblock%}
+{%block stylesheets%}
+	<link rel="stylesheet" href="{{asset('css/messages-style.css')}}">
+{%endblock%}
+{%block body%}
+	
+	<header class="head">
+		<div class="container">
+			<h1 class="title">Admin Panel</h1>
+			<div class="row">
+				
+				<div class="col-md-2 list-group account-menu">
+					<a class="list-group-item list-group-item-action" href="{{path('admin_block')}}"><i class="fas fa-clone"></i> Content</a>
+					<a class="list-group-item list-group-item-action" href="{{path('admin_group')}}"><i class="fas fa-child"></i> Groups</a>
+					<a class="list-group-item list-group-item-action" href="{{path('admin_enrollments')}}"><i class="fa fa-book"></i> Enrollments</a>
+					<a class="list-group-item list-group-item-action active" href="{{path('admin_users')}}"><i class="fas fa-user-friends"></i> Users</a>
+				</div>
+				
+				<div class="col-md-10 well account-content">
+					<div class="card card-shadow">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-12">
+									<h4>Users</h4>
+									<hr>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									
+									<h5>Create User</h5>
+									{{form_start(form)}}
+									{{form_row(form.firstName)}}
+									{{form_row(form.lastName)}}
+									{{form_row(form.email)}}
+									{{form_row(form.plainPassword)}}
+									{{form_row(form.disabled)}}
+									{{form_row(form.roles)}}
+									{{form_row(form.address)}}
+									{{form_row(form.postalCode)}}
+									{{form_row(form.phone)}}
+									<button class="btn btn-secondary" type="submit">Create</button>
+									{{form_end(form)}}
+									
+									<hr>
+									
+									<table class="table table-bordered" data-toggle="table" data-sort-name="users" data-sortable="true">
+										<thead>
+										<tr>
+											<th data-field="email" data-sortable="true">Email</th>
+											<th data-field="first_name" data-sortable="true">First Name</th>
+											<th data-field="last_name" data-sortable="true">Last Name</th>
+											<th data-field="role" data-sortable="true">Role</th>
+											<th data-field="address" data-sortable="true">Address</th>
+											<th data-field="postal_code" data-sortable="true">Postal Code</th>
+											<th data-field="phone" data-sortable="true">Phone</th>
+											<th data-field="disabled" data-sortable="true">Disabled</th>
+										</tr>
+										</thead>
+										
+										<tbody>
+										{%for user in users%}
+											<tr>
+												<td>{{user.email}}</td>
+												<td>{{user.firstName}}</td>
+												<td>{{user.lastName}}</td>
+												<td>
+													{% set role = user.roles[0]%}
+													{%dump user.roles%}
+													{% if role == 'ROLE_USER'%}
+														Parent
+													{% endif %}
+													{% if role == 'ROLE_ADMIN'%}
+														Admin
+													{% endif %}
+												</td>
+												<td>{{user.address}}</td>
+												<td>{{user.postalCode}}</td>
+												<td>{{user.phone}}</td>
+												<td>
+													{%if user.disabled%}
+														Yes
+													{%else%}
+														No
+													{%endif%}
+												</td>
+											</tr>
+										{%endfor%}
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+{%endblock%}
+{% form_theme form 'form/fields.html.twig' %}

@@ -17,6 +17,14 @@ class EnrollmentRepository extends ServiceEntityRepository {
 		parent::__construct($registry, Enrollment::class);
 	}
 	
+	public function getAllOrderedByDateDesc() {
+		$qb = $this->createQueryBuilder('enrl');
+		return $qb  ->select()
+					->orderBy('enrl.creation_date', 'DESC')
+					->getQuery()
+					->getResult();
+	}
+	
 	// /**
 	//  * @return Enrollment[] Returns an array of Enrollment objects
 	//  */
