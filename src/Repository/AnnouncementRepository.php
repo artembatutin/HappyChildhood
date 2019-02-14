@@ -3,6 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Announcement;
+use App\Entity\AnnouncementViewers;
+use App\Entity\Group;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -32,19 +35,26 @@ class AnnouncementRepository extends ServiceEntityRepository {
 	}
 	
 	/**
-	 * @param $group
+	 * @param User $user
 	 * @return array
 	 */
-	public function findForGroups($group): array
+	public function findForUser(User $user): array
 	{
+		$groups = $this->getEntityManager()->getRepository(Group::class)->getUserGroups($user);
+		
 		$qb = $this->createQueryBuilder('a');
-		$qb = $qb
-			->join('a.announcementViewers', 'v')
-			->where('v.child_group = :group')
-			->andWhere('a.hidden = 0')
-			->orderBy('a.creation_date', 'ASC')
-			->setParameter('group', $group)
-			->getQuery();
-		return $qb->execute();
+		$qb ->join(AnnouncementViewers::class, 'av');
+		$qb ->where('a.public = 1');
+		
+		if(sizeof($groups) > 0) {
+			foreach($groups as $index=>$group) {
+				$qb ->orWhere('av.child_group = ?'.$index)
+					->setParameter($index, $group->getId());
+			}
+		}
+		$qb ->andWhere('a.hidden = 0')
+			->orderBy('a.creation_date', 'DESC');
+		
+		return $qb->getQuery()->getResult();
 	}
 }

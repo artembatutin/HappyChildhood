@@ -2,7 +2,11 @@
 
 namespace App\Repository;
 
+use App\Entity\Child;
+use App\Entity\Family;
 use App\Entity\Group;
+use App\Entity\ParentFamilyLink;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -15,6 +19,19 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 class GroupRepository extends ServiceEntityRepository {
 	public function __construct(RegistryInterface $registry) {
 		parent::__construct($registry, Group::class);
+	}
+	
+	public function getUserGroups(User $user) {
+		$qb = $this ->createQueryBuilder('g');
+		return $qb  ->select('g')
+					->innerJoin(Child::class, 'c')
+					->innerJoin(Family::class, 'f')
+					->innerJoin(ParentFamilyLink::class, 'pfl')
+					->where('pfl.parent_id = ?1')
+					->groupBy('g')
+					->setParameter(1, $user->getId())
+					->getQuery()
+					->getResult();
 	}
 	
 	// /**
