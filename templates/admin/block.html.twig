@@ -61,16 +61,17 @@
 													{%endif%}
 												</td>
 												<td>
-													<a class="edit" title="Edit" data-toggle="tooltip"><i class="fas fa-pen-square"></i></a>
+													<a class="edit" href="{{path('admin_block_edit', {'block_id': block.id})}}" title="Edit" data-toggle="tooltip"><i class="fas fa-pen-square"></i></a>
 													<a class="delete" href="{{path('admin_block_delete', {'block_id': block.id})}}" title="Delete" data-toggle="tooltip"><i class="fas fa-minus-square"></i></a>
-
 												</td>
 											</tr>
 										{%endfor%}
-									
 									</table>
+									{% if mode == 'Edit' %}
+										<a href="{{path('admin_block_edit', {'block_id': -1})}}"><button class="btn btn-secondary">Add New</button></a>
+									{% endif %}
 									<hr>
-									<h5>Create Announcement</h5>
+									<h5>{{ mode }} Announcement</h5>
 									{{form_start(form)}}
 									{{form_row(form.title)}}
 									{{form_row(form.groups)}}
@@ -80,7 +81,7 @@
 									{{form_row(form.public)}}
 									{{form_row(form.hidden)}}
 									{{form_row(form.commenting)}}
-									<button class="btn btn-secondary" type="submit">Create</button>
+									<button class="btn btn-secondary" type="submit">{{ mode }}</button>
 									{{form_end(form)}}
 								</div>
 							</div>

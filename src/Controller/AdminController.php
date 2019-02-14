@@ -22,13 +22,22 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class AdminController extends AbstractController {
 	
-	public function content(Request $request) {
+	public function content(Request $request, $block_id = -1) {
 		$this->denyAccessUnlessGranted('ROLE_ADMIN');
 		$em = $this->getDoctrine()->getManager();
 		$groups = $em->getRepository(Group::class)->findAll();
 		
-		//creating the new announcement.
+		
 		$announcement = new Announcement();
+		$mode = "Create";
+		//edit mode.
+		if($block_id != -1) {
+			$repository = $this->getDoctrine()->getRepository(Announcement::class);
+			$announcement = $repository->find($block_id);
+			$mode = "Edit";
+		}
+		
+		//creating the new announcement.
 		$createForm = $this->createFormBuilder($announcement)
 		                   ->add('title', TextType::class)
 		                   ->add('message', TextareaType::class, ['label' => 'Content'])
@@ -75,7 +84,21 @@ class AdminController extends AbstractController {
 		}
 		
 		$blocks = $em->getRepository(Announcement::class)->findAll();
-		return $this->render('admin/block.html.twig', ['blocks' => $blocks, 'form' => $createForm->createView()]);
+		return $this->render('admin/block.html.twig', ['blocks' => $blocks, 'form' => $createForm->createView(), 'mode' => $mode]);
+	}
+	
+	public function block_edit($block_id) {
+		$this->denyAccessUnlessGranted('ROLE_ADMIN');
+		$em = $this->getDoctrine()->getManager();
+		
+		$repository = $this->getDoctrine()->getRepository(Announcement::class);
+		$block = $repository->find($block_id);
+		if(!$block) {
+			throw $this->createNotFoundException('No announcement found with id ' . $block_id);
+		}
+		
+		return $this->redirectToRoute("admin_block", array('message' => "Group" . $block->getTitle() . " removed."));
+		
 	}
 	
 	public function block_delete($block_id) {
@@ -85,7 +108,7 @@ class AdminController extends AbstractController {
 		$repository = $this->getDoctrine()->getRepository(Announcement::class);
 		$block = $repository->find($block_id);
 		if(!$block) {
-			throw $this->createNotFoundException('No announcement found for id ' . $block_id);
+			throw $this->createNotFoundException('No announcement found with id ' . $block_id);
 		}
 		$em->remove($block);
 		$em->flush();
@@ -121,7 +144,7 @@ class AdminController extends AbstractController {
 		$repository = $this->getDoctrine()->getRepository(Group::class);
 		$group = $repository->find($group_id);
 		if(!$group) {
-			throw $this->createNotFoundException('No product found for id ' . $group_id);
+			throw $this->createNotFoundException('No product found with id ' . $group_id);
 		}
 		if(count($group->getChildren()) > 0) {
 			return $this->render('admin/group_delete.html.twig', ['message' => "Group" . $group->getName() . " can't be removed because it contains children."]);

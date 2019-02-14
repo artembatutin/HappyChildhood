@@ -26,8 +26,8 @@ class AnnouncementRepository extends ServiceEntityRepository {
 		$qb = $this->createQueryBuilder('a');
 		$qb = $qb
 			->join('a.announcementViewers', 'v')
-			->where('a.hidden = false')
 			->where('v.child_group = :group')
+			->andWhere('a.hidden = 0')
 			->setParameter('group', $group)
 			->getQuery();
 		return $qb->execute();
