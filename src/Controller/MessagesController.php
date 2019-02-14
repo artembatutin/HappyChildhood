@@ -145,7 +145,7 @@ class MessagesController extends AbstractController {
 			//admin message sending option allowing to send to everyone and select specific users.
 			$this->createFormBuilder()
 			->add('everyone', CheckboxType::class, array('mapped' => false, 'label' => 'Send this message to everyone.'))
-			->add('user', ChoiceType::class, array('choices' => $em->getRepository(User::class)->findAll(), 'choice_label' => function($user, $key, $value) {
+			->add('user', ChoiceType::class, array('choices' => $em->getRepository(User::class)->findAll(), 'label' => 'All Users', 'choice_label' => function($user, $key, $value) {
 				return $user->getFirstName() . " " . $user->getLastName();
 			}, 'choice_value' => function(User $user = null) {
 				return $user ? $user->getId() : '';
@@ -156,6 +156,11 @@ class MessagesController extends AbstractController {
 			->getForm() :
 			//regular parent/user sending a message only to staff.
 			$this->createFormBuilder()
+				->add('user', ChoiceType::class, array('choices' => $em->getRepository(User::class)->findByRole('ROLE_ADMIN'), 'label' => 'Administrators', 'choice_label' => function($user, $key, $value) {
+					return $user->getFirstName() . " " . $user->getLastName();
+				}, 'choice_value' => function(User $user = null) {
+					return $user ? $user->getId() : '';
+				}, 'mapped' => false, 'multiple' => true, 'required' => false))
 			->add('title', TextType::class)
 			->add('attachments', FileType::class, ['multiple' => true, 'required' => false])
 			->add('message', TextareaType::class, array('empty_data' => 'Your message here...',))
@@ -178,17 +183,7 @@ class MessagesController extends AbstractController {
 					$em->persist($atchm);
 				}
 				$sendToAll = $createForm->has("everyone") and $createForm->get('everyone')->getData();;
-				//Sending automatically staff from regular user.
-				if(!$isStaff) {
-					$admins = $em->getRepository(User::class)->findByRole('ROLE_ADMIN');
-					foreach($admins as $admin) {
-						$messageReceiver = new MessageReceiver();
-						$messageReceiver->setMessage($message);
-						$messageReceiver->setReceiverInbox($admin->getInbox());
-						$messageReceiver->setReadFlag(false);
-						$em->persist($messageReceiver);
-					}
-				} else if($sendToAll) {
+				if($sendToAll && $isStaff) {
 					//sending to all (staff only).
 					$inboxes = $em->getRepository(Inbox::class)->findAll();
 					foreach($inboxes as $i) {

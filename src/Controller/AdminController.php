@@ -83,7 +83,7 @@ class AdminController extends AbstractController {
 			}
 		}
 		
-		$blocks = $em->getRepository(Announcement::class)->findAll();
+		$blocks = $em->getRepository(Announcement::class)->allOrdered();
 		return $this->render('admin/block.html.twig', ['blocks' => $blocks, 'form' => $createForm->createView(), 'mode' => $mode]);
 	}
 	

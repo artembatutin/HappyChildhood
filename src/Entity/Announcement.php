@@ -203,7 +203,7 @@ class Announcement {
 	 * @return bool|null
 	 */
 	public function isCommenting(): ?bool {
-		return $this->hidden;
+		return $this->commenting;
 	}
 	
 	/**

@@ -18,6 +18,20 @@ class AnnouncementRepository extends ServiceEntityRepository {
 	}
 	
 	/**
+	 * Grabs all announcement in date order format.
+	 * @return array
+	 */
+	public function allOrdered(): array
+	{
+		$qb = $this->createQueryBuilder('a');
+		$qb = $qb
+			->select('a')
+			->orderBy('a.creation_date', 'ASC')
+			->getQuery();
+		return $qb->execute();
+	}
+	
+	/**
 	 * @param $group
 	 * @return array
 	 */
@@ -28,6 +42,7 @@ class AnnouncementRepository extends ServiceEntityRepository {
 			->join('a.announcementViewers', 'v')
 			->where('v.child_group = :group')
 			->andWhere('a.hidden = 0')
+			->orderBy('a.creation_date', 'ASC')
 			->setParameter('group', $group)
 			->getQuery();
 		return $qb->execute();
