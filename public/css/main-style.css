@@ -235,7 +235,7 @@ header.masthead .bg-circle-4 {
 }
 
 .btn {
-  transition: color .6s ease-in-out,background-color .6s ease-in-out,border-color .6s ease-in-out,box-shadow .6s ease-in-out;
+  transition: color .4s ease-in-out,background-color .4s ease-in-out,border-color .4s ease-in-out,box-shadow .4s ease-in-out;
 }
 
 .btn-primary {
