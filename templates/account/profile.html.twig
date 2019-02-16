@@ -4,9 +4,11 @@
 {% block body %}
     <header class="head">
         <div class="container">
-            <h1 class="title">User Panel</h1>
             <div class="row">
-
+            <h1 class="title">User Panel</h1>
+            </div>
+            {{ block("block_notifs", "base.notifs.html.twig") }}
+            <div class="row">
 
                 <div class="col-md-2 list-group account-menu">
                     <a class="list-group-item list-group-item-action active" href="#" data-target-id="profile"><i class="fas fa-user-circle"></i> Profile</a></li>

@@ -101,7 +101,7 @@ class AccountController extends AbstractController {
 			$em = $this->getDoctrine()->getManager();
 			$em->persist($user);
 			$em->flush();
-			
+			$this->addFlash('success', "Profile updated.");
 		}
 		
 		return $this->render('account/profile.html.twig', array('profileForm' => $profileForm->createView()));

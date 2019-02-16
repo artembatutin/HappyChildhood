@@ -20,7 +20,7 @@
             </div>
         </header>
     {% endif %}
-
+    {{ block("block_notifs", "base.notifs.html.twig") }}
     {%if blocks is defined and blocks|length > 0%}
         {% for block in blocks %}
             <section>

@@ -144,7 +144,7 @@ class MessagesController extends AbstractController {
 		$createForm = $isStaff ?
 			//admin message sending option allowing to send to everyone and select specific users.
 			$this->createFormBuilder()
-			->add('everyone', CheckboxType::class, array('mapped' => false, 'label' => 'Send this message to everyone.'))
+			->add('everyone', CheckboxType::class, array('required' => false,'mapped' => false, 'label' => 'Send this message to everyone.'))
 			->add('user', ChoiceType::class, array('choices' => $em->getRepository(User::class)->findAll(), 'label' => 'All Users', 'choice_label' => function($user, $key, $value) {
 				return $user->getFirstName() . " " . $user->getLastName();
 			}, 'choice_value' => function(User $user = null) {
@@ -182,8 +182,7 @@ class MessagesController extends AbstractController {
 					$atchm->upload();
 					$em->persist($atchm);
 				}
-				$sendToAll = $createForm->has("everyone") and $createForm->get('everyone')->getData();;
-				if($sendToAll && $isStaff) {
+				if($createForm->has("everyone") && $createForm->get('everyone')->getData() && $isStaff) {
 					//sending to all (staff only).
 					$inboxes = $em->getRepository(Inbox::class)->findAll();
 					foreach($inboxes as $i) {
@@ -206,8 +205,8 @@ class MessagesController extends AbstractController {
 					}
 				}
 				
-				$request->getSession()->getFlashBag()->add('notice', 'Message sent.');
 				$em->flush();
+				$this->addFlash('success', 'Message successfully sent.');
 				return $this->redirectToRoute('messages_inbox');
 			}
 		}

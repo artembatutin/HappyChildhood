@@ -50,6 +50,7 @@ class MainController extends AbstractController {
 					->setBody($this->renderView('emails/contact.html.twig', ['email' => $email, 'msg' => $message]), 'text/html')
 					->addPart("Contact form filled by " . $email . " with message: " . $message, 'text/plain');
 				$mailer->send($message);
+				$this->addFlash('success', "Thank you for your message.");
 			}
 		}
 		

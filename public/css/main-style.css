@@ -1,15 +1,8 @@
 body {
   font-family: 'Lato';
   display: flex;
-  flex-direction: column;
   min-height: 100vh;
-
-  /*background: -webkit-gradient(linear, left bottom, left top, from(#82c2a8), to(#cae3f2));
-  background: linear-gradient(0deg, #82c2a8 0%, #cae3f2, 100%);
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-attachment: scroll;
-  background-size: cover;*/ // blue - green
+  flex-direction: column;
 
   background: -webkit-gradient(linear, left bottom, left top, from(#1E8ECD), to(#A9DDF3));
   background: linear-gradient(0deg, #1E8ECD 0%, #A9DDF3 100%);
@@ -289,8 +282,6 @@ header.masthead .bg-circle-4 {
 
 .title {
   color: white;
-  margin-left: -15px;
-  margin-bottom: 15px;
 }
 
 table {

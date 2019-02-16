@@ -153,7 +153,7 @@ class AdminController extends AbstractController {
 		}
 		$em->remove($group);
 		$em->flush();
-		
+		$this->addFlash("success", "Group deleted");
 		return $this->redirectToRoute("admin_group", array('message' => "Group" . $group->getName() . " can't be removed because it contains children."));
 		
 	}
@@ -184,6 +184,7 @@ class AdminController extends AbstractController {
 				$this->send_registration_email($mailer, $enrollment->getEmail(), $enrollment->getEnrollmentHash());
 				$em->persist($enrollment);
 				$em->flush();
+				$this->addFlash("success", "Created enrollment");
 			}
 		}
 		
