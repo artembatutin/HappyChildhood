@@ -18,10 +18,10 @@ class Enrollment {
 	private $id;
 	
 	/**
-	 * @ORM\ManyToOne(targetEntity="App\Entity\Group")
+	 * @ORM\ManyToOne(targetEntity="App\Entity\Group", inversedBy="enrollments")
 	 * @ORM\JoinColumn(nullable=true)
 	 */
-	private $group_id;
+	private $group;
 	
 	/**
 	 * @ORM\Column(type="string", length=255, unique=true)
@@ -53,11 +53,11 @@ class Enrollment {
          	}
 	
 	public function getGroup(): ?Group {
-         		return $this->group_id;
+         		return $this->group;
          	}
 	
-	public function setGroup(?Group $group_id): self {
-         		$this->group_id = $group_id;
+	public function setGroup(?Group $group): self {
+         		$this->group = $group;
          		
          		return $this;
          	}

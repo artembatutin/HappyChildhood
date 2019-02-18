@@ -22,7 +22,7 @@ class AnnouncementViewers {
 	private $announcement;
 	
 	/**
-	 * @ORM\ManyToOne(targetEntity="App\Entity\Group")
+	 * @ORM\ManyToOne(targetEntity="App\Entity\Group", inversedBy="announcementViewers")
 	 * @ORM\JoinColumn(nullable=false)
 	 */
 	private $child_group;
