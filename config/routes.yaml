@@ -50,7 +50,9 @@ admin_block_delete:
 admin_group:
     path: /admin/group
     controller: App\Controller\AdminController::group
-    defaults:   { message: null }
+admin_group_edit:
+    path: /admin/group_edit/{group_id}
+    controller: App\Controller\AdminController::group
 admin_group_delete:
     path: /admin/group_delete/{group_id}
     controller: App\Controller\AdminController::group_delete

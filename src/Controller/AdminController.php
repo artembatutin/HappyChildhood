@@ -121,12 +121,20 @@ class AdminController extends AbstractController {
 		
 	}
 	
-	public function group(Request $request) {
+	public function group(Request $request, $group_id = -1) {
 		$this->denyAccessUnlessGranted('ROLE_ADMIN');
 		$em = $this->getDoctrine()->getManager();
 		
 		//creating the new group.
 		$group = new Group();
+		
+		$mode = "Create";
+		//edit mode.
+		if($group_id != -1) {
+			$group = $em->getRepository(Group::class)->find($group_id);
+			$mode = "Edit";
+		}
+		
 		$form = $this->createForm(GroupForm::class, $group);
 		$form->handleRequest($request);
 		if($form->isSubmitted() && $form->isValid()) {
@@ -137,7 +145,7 @@ class AdminController extends AbstractController {
 		
 		$groups = $em->getRepository(Group::class)->findAll();
 		
-		return $this->render('admin/group.html.twig', ['groups' => $groups, 'form' => $form->createView()]);
+		return $this->render('admin/group.html.twig', ['groups' => $groups, 'form' => $form->createView(), 'mode' => $mode]);
 	}
 	
 	public function group_delete($group_id) {

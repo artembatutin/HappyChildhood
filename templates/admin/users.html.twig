@@ -30,7 +30,7 @@
 							<div class="row">
 								<div class="col-md-12">
 									{% if mode == 'Edit' %}
-										<a href="{{path('admin_user_edit', {'user_id': -1})}}"><button class="btn btn-secondary">Add New</button></a>
+										<a href="{{path('admin_users')}}"><button class="btn btn-secondary">Add New</button></a>
 									{% endif %}
 									<h5>{{mode}} User</h5>
 									{{form_start(form)}}
