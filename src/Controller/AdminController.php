@@ -12,6 +12,7 @@ use App\Entity\User;
 use App\Form\EnrollmentForm;
 use App\Form\GroupForm;
 use App\Form\UserCreate;
+use phpDocumentor\Reflection\Types\String_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -215,24 +216,36 @@ class AdminController extends AbstractController {
 	/**
 	 * @param Request $request
 	 * @param UserPasswordEncoderInterface $passwordEncoder
+	 * @param int $user_id
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public function users(Request $request, UserPasswordEncoderInterface $passwordEncoder) {
+	public function users(Request $request, UserPasswordEncoderInterface $passwordEncoder, $user_id = -1) {
 		$this->denyAccessUnlessGranted('ROLE_ADMIN');
 		
 		$em = $this->getDoctrine()->getManager();
 		
 		$user = new User();
-		$form = $this->createForm(UserCreate::class, $user);
+		
+		$mode = "Create";
+		//edit mode.
+		if($user_id != -1) {
+			$user = $em->getRepository(User::class)->find($user_id);
+			$mode = "Edit";
+		}
+		
+		$form = $this->createForm(UserCreate::class, $user, [
+			'mode' => $mode
+		]);
 		
 		//will only happen on POST.
 		$form->handleRequest($request);
 		if($form->isSubmitted() && $form->isValid()) {
 			
-			//password encoding.
-			$password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
-			$user->setPassword($password);
-			$user->setDisabled(false);
+			if((!empty($user->getPlainPassword()) && $mode == "Edit") || $mode == "Create") {
+				//password encoding.
+				$password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
+				$user->setPassword($password);
+			}
 			
 			//saving the user.
 			$em->persist($user);
@@ -244,7 +257,7 @@ class AdminController extends AbstractController {
 		
 		$current_user = $this->getUser();
 		
-		return $this->render('admin/users.html.twig', ['form' => $form->createView(), 'users' => $users, 'current_user' => $current_user]);
+		return $this->render('admin/users.html.twig', ['form' => $form->createView(), 'users' => $users, 'current_user' => $current_user, 'mode' => $mode]);
 	}
 	
 	public function user_disable($user_id) {

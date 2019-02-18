@@ -60,6 +60,9 @@ admin_enrollments:
 admin_users:
     path: /admin/users
     controller: App\Controller\AdminController::users
+admin_user_edit:
+    path: /admin/user/{user_id}
+    controller: App\Controller\AdminController::users
 admin_user_disable:
     path: /admin/user_disable/{user_id}
     controller: App\Controller\AdminController::user_disable
