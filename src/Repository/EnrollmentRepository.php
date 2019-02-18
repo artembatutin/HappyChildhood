@@ -25,11 +25,12 @@ class EnrollmentRepository extends ServiceEntityRepository {
 					->getResult();
 	}
 	
-	public function getNonExpired($email) {
+	public function getUsable($email) {
 		$qb = $this->createQueryBuilder('enrl');
 		return $qb  ->select()
 					->where('enrl.email = ?1')
 					->andWhere('enrl.expired = 0')
+					->andWhere('enrl.canAddChild = 1')
 					->setParameter(1, $email)
 					->getQuery()
 					->getResult();

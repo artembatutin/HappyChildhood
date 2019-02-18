@@ -231,6 +231,23 @@ class AdminController extends AbstractController {
 		return $this->redirectToRoute('admin_enrollments');
 	}
 	
+	public function enrollments_delete_expired() {
+		$this->denyAccessUnlessGranted('ROLE_ADMIN');
+		$em = $this->getDoctrine()->getManager();
+		$enrollments = $em->getRepository(Enrollment::class)->findBy(['expired' => true]);
+		
+		if(!$enrollments) {
+			return $this->redirectToRoute('admin_enrollments');
+		}
+		
+		foreach($enrollments as $enrollment) {
+			$em->remove($enrollment);
+		}
+		$em->flush();
+		
+		return $this->redirectToRoute('admin_enrollments');
+	}
+	
 	/**
 	 * @param \Swift_Mailer $mailer
 	 * @param $email

@@ -65,6 +65,9 @@ admin_enrollment_edit:
 admin_enrollment_delete:
     path: /admin/enrollment_delete/{enrollment_id}
     controller: App\Controller\AdminController::enrollment_delete
+admin_enrollments_delete_expired:
+    path: /admin/enrollments/delete-expired
+    controller: App\Controller\AdminController::enrollments_delete_expired
 admin_users:
     path: /admin/users
     controller: App\Controller\AdminController::users
