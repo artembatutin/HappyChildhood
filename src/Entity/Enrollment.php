@@ -7,7 +7,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\EnrollmentRepository")
- * @UniqueEntity("$enrollment_hash")
+ * @UniqueEntity("enrollment_hash")
  */
 class Enrollment {
 	/**
@@ -26,7 +26,7 @@ class Enrollment {
 	/**
 	 * @ORM\Column(type="string", length=255, unique=true)
 	 */
-	private $enrollment_hash = null;
+	private $enrollment_hash;
 	
 	/**
 	 * @ORM\Column(type="string", length=180)

@@ -168,42 +168,52 @@ class AdminController extends AbstractController {
 		
 	}
 	
-	public function enrollments(Request $request, \Swift_Mailer $mailer) {
+	public function enrollments(Request $request, \Swift_Mailer $mailer, $enrollment_id = -1) {
 		$this->denyAccessUnlessGranted('ROLE_ADMIN');
 		$em = $this->getDoctrine()->getManager();
 		$groups = $em->getRepository(Group::class)->findAll();
 		
 		$enrollment = new Enrollment();
+		
+		$mode = "Create";
+		//edit mode.
+		if($enrollment_id != -1) {
+			$enrollment = $em->getRepository(Enrollment::class)->find($enrollment_id);
+			$mode = "Edit";
+		}
+		
 		$form = $this->createForm(EnrollmentForm::class, $enrollment, array(
-			'data_class' => null,
-			'data' => $groups
+			'groups' => $groups,
+			'mode' => $mode
 		));
-		if($request->isMethod('POST')) {
-			$form->handleRequest($request);
-			
-			if($form->isValid()) {
-				$enrollment->setCanAddChild($form->get('canAddChild')->getData());
-				if($enrollment->getCanAddChild()) {
-					$enrollment->setGroup($em->getRepository(Group::class)->find($form->get('group')->getData()));
-				}
-				$enrollment->setEmail($form->get('email')->getData());
-				try {
-					$enrollment->setCreationDate(new \DateTime("now"));
-				} catch(\Exception $e) {
-					$e->getMessage();
-				}
+		$form->handleRequest($request);
+		if($form->isSubmitted() && $form->isValid()) {
+			$enrollment = $form->getData();
+			//$enrollment->setCanAddChild($form->get('canAddChild')->getData());
+			if($enrollment->getCanAddChild()) {
+				$enrollment->setGroup($em->getRepository(Group::class)->find($form->get('group')->getData()));
+			} else {
+				$enrollment->setGroup(null);
+			}
+			//$enrollment->setEmail($form->get('email')->getData());
+			try {
+				$enrollment->setCreationDate(new \DateTime("now"));
+			} catch(\Exception $e) {
+				$e->getMessage();
+			}
+			if($mode == "Create") {
 				$enrollment->setExpired(false);
 				$enrollment->generate_enrollment_hash();
 				$this->send_registration_email($mailer, $enrollment->getEmail(), $enrollment->getEnrollmentHash(), $request->getHost());
-				$em->persist($enrollment);
-				$em->flush();
-				$this->addFlash("success", "Created enrollment");
 			}
+			$em->persist($enrollment);
+			$em->flush();
+			$this->addFlash("success", "Created enrollment");
 		}
 		
 		$enrollments = $em->getRepository(Enrollment::class)->getAllOrderedByDateDesc();
 		
-		return $this->render('admin/enrollments.html.twig', ['enrollments' => $enrollments, 'form' => $form->createView()]);
+		return $this->render('admin/enrollments.html.twig', ['enrollments' => $enrollments, 'form' => $form->createView(), 'mode' => $mode]);
 	}
 	
 	/**

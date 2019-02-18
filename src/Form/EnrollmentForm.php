@@ -20,10 +20,15 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class EnrollmentForm extends AbstractType {
 	public function buildForm(FormBuilderInterface $builder, array $options) {
+		if($options['mode'] == "Create") {
+			$builder
+				->add('firstName', TextType::class, ['mapped' => false])
+				->add('lastName', TextType::class, ['mapped' => false]);
+		} else {
+			$builder->add('expired', CheckboxType::class, ['required' => false]);
+		}
 		$builder
-			->add('firstName', TextType::class, ['mapped' => false])
-			->add('lastName', TextType::class, ['mapped' => false])
-			->add('group', ChoiceType::class, array('choices' => $options['data'], 'choice_label' =>
+			->add('group', ChoiceType::class, array('choices' => $options['groups'], 'choice_label' =>
 				function(Group $grp, $key, $value) {
 					return $grp->getName();
 				})
@@ -33,6 +38,8 @@ class EnrollmentForm extends AbstractType {
 	}
 	
 	public function configureOptions(OptionsResolver $resolver) {
-		$resolver->setDefaults(array('data_class' => Enrollment::class,));
+		$resolver->setDefaults(array('data_class' => Enrollment::class,
+			'groups' => null,
+			'mode' => null));
 	}
 }
