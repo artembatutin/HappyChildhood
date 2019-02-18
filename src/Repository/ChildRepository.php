@@ -18,6 +18,16 @@ class ChildRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Child::class);
     }
+    
+    public function getAllWithAllergiesOrMedication() {
+    	return $this->getEntityManager()->createQueryBuilder()
+		    ->select('c')
+		    ->from(Child::class, 'c')
+		    ->where('c.allergies IS NOT NULL')
+		    ->orWhere('c.medication IS NOT NULL')
+		    ->getQuery()
+		    ->getResult();
+    }
 
     // /**
     //  * @return Child[] Returns an array of Child objects

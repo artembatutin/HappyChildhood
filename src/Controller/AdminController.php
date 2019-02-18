@@ -357,20 +357,25 @@ class AdminController extends AbstractController {
 	}
 	
 	/**
+	 * @param bool $allergies_flag
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public function children() {
+	public function children($allergies_flag = false) {
 		$this->denyAccessUnlessGranted('ROLE_ADMIN');
 		
 		$em = $this->getDoctrine()->getManager();
 		
-		$children = $em->getRepository(Child::class)->findAll();
+		if($allergies_flag) {
+			$children = $em->getRepository(Child::class)->getAllWithAllergiesOrMedication();
+		} else {
+			$children = $em->getRepository(Child::class)->findAll();
+		}
 		$caretakers = [];
 		foreach($children as $index=>$child) {
 			array_push($caretakers, $em->getRepository(User::class)->getCaretakersOf($child));
 		}
 		
-		return $this->render('admin/children.html.twig', ['children' => $children, 'caretakers' => $caretakers]);
+		return $this->render('admin/children.html.twig', ['children' => $children, 'caretakers' => $caretakers, 'allergies_flag' => $allergies_flag]);
 	}
 	
 	/**

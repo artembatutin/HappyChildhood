@@ -86,6 +86,9 @@ admin_user_delete:
 admin_children:
     path: /admin/children
     controller: App\Controller\AdminController::children
+admin_children_allergies:
+    path: /admin/children/allergies_flag={allergies_flag}
+    controller: App\Controller\AdminController::children
 
 
 

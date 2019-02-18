@@ -29,6 +29,11 @@
 							</div>
 							<div class="row">
 								<div class="col-md-12">
+									{%if allergies_flag%}
+										<a class="btn btn-secondary" href="{{path('admin_children')}}">Show All</a>
+									{%else%}
+										<a class="btn btn-secondary" href="{{path('admin_children_allergies', {'allergies_flag': true})}}">Show Only With Allergies or Medications</a>
+									{%endif%}
 									<table
 											id="table"
 											data-toggle="table"
