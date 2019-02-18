@@ -84,7 +84,7 @@ class AccountController extends AbstractController {
 		return $this->render('account/register.html.twig', array('form' => $form->createView()));
 	}
 	
-	public function profile(Request $request) {
+	public function profile(Request $request, UserPasswordEncoderInterface $passwordEncoder) {
 		if(!$this->isGranted("IS_AUTHENTICATED_FULLY")) {
 			return $this->redirectToRoute('index');
 		}
@@ -95,7 +95,13 @@ class AccountController extends AbstractController {
 		$profileForm->handleRequest($request);
 		if($profileForm->isSubmitted() && $profileForm->isValid()) {
 			
+			$rawPassword = $profileForm->get('plainPassword')->getData();
+			
 			$user = $profileForm->getData();
+			if(!empty($rawPassword)) {
+				$password = $passwordEncoder->encodePassword($user, $rawPassword);
+				$user->setPassword($password);
+			}
 			
 			//saving the user.
 			$em = $this->getDoctrine()->getManager();

@@ -75,7 +75,7 @@ class User implements UserInterface {
 	private $address;
 	
 	/**
-	 * @ORM\Column(type="string", length=6, nullable=true)
+	 * @ORM\Column(type="string", length=7, nullable=true)
 	 * @Assert\Regex(pattern="/^([a-zA-Z]\d[a-zA-Z])\ {0,1}(\d[a-zA-Z]\d)$/", message="Enter Canadian postal code.")
 	 */
 	private $postal_code;

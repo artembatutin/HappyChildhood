@@ -3,15 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Announcement;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Constraints\Email;
 
 class MainController extends AbstractController {
-	public function index(LoggerInterface $logger) {
+	public function index() {
 		$blocks = null;
 		$em = $this->getDoctrine()->getManager();
 		if($this->isGranted("IS_AUTHENTICATED_FULLY")) {
