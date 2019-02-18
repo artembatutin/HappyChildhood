@@ -110,219 +110,256 @@ class User implements UserInterface {
 	 * @ORM\OneToOne(targetEntity="App\Entity\Inbox", mappedBy="user", cascade={"remove"})
 	 */
 	private $inbox;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Family", mappedBy="familyAdmin")
+     */
+    private $families;
 	
 	/**
 	 * User constructor.
 	 */
 	public function __construct() {
-		$this->roles = array('ROLE_USER');
-		$this->inbox = new Inbox();
-		$this->setInbox($this->inbox);
-		$this->parentFamilyLinks = new ArrayCollection();
-		$this->announcements = new ArrayCollection();
-		$this->comments = new ArrayCollection();
-	}
+               		$this->roles = array('ROLE_USER');
+               		$this->inbox = new Inbox();
+               		$this->setInbox($this->inbox);
+               		$this->parentFamilyLinks = new ArrayCollection();
+               		$this->announcements = new ArrayCollection();
+               		$this->comments = new ArrayCollection();
+                 $this->families = new ArrayCollection();
+               	}
 	
 	public function getId(): ?int {
-		return $this->id;
-	}
+               		return $this->id;
+               	}
 	
 	public function getEmail(): ?string {
-		return $this->email;
-	}
+               		return $this->email;
+               	}
 	
 	public function setEmail(string $email): self {
-		$this->email = $email;
-		return $this;
-	}
+               		$this->email = $email;
+               		return $this;
+               	}
 	
 	public function getFirstName() {
-		return $this->firstName;
-	}
+               		return $this->firstName;
+               	}
 	
 	public function setFirstName($firstName): void {
-		$this->firstName = $firstName;
-	}
+               		$this->firstName = $firstName;
+               	}
 	
 	public function getLastName() {
-		return $this->lastName;
-	}
+               		return $this->lastName;
+               	}
 	
 	public function setLastName($lastName): void {
-		$this->lastName = $lastName;
-	}
+               		$this->lastName = $lastName;
+               	}
 	
 	public function getUsername(): string {
-		return (string)$this->email;
-	}
+               		return (string)$this->email;
+               	}
 	
 	public function getRoles(): array {
-		return $this->roles;
-	}
+               		return $this->roles;
+               	}
 	
 	public function setRoles(array $roles): self {
-		$this->roles = $roles;
-		return $this;
-	}
+               		$this->roles = $roles;
+               		return $this;
+               	}
 	
 	public function getPassword() {
-		return $this->password;
-	}
+               		return $this->password;
+               	}
 	
 	public function getPlainPassword() {
-		return $this->plainPassword;
-	}
+               		return $this->plainPassword;
+               	}
 	
 	public function setPlainPassword($password) {
-		$this->plainPassword = $password;
-	}
+               		$this->plainPassword = $password;
+               	}
 	
 	public function getSalt() {
-		// The bcrypt and argon2i algorithms don't require a separate salt.
-		// You *may* need a real salt if you choose a different encoder.
-		return null;
-	}
+               		// The bcrypt and argon2i algorithms don't require a separate salt.
+               		// You *may* need a real salt if you choose a different encoder.
+               		return null;
+               	}
 	
 	public function eraseCredentials() {
-		// If you store any temporary, sensitive data on the user, clear it here
-		// $this->plainPassword = null;
-	}
+               		// If you store any temporary, sensitive data on the user, clear it here
+               		// $this->plainPassword = null;
+               	}
 	
 	public function setPassword($password) {
-		$this->password = $password;
-		return $this;
-	}
+               		$this->password = $password;
+               		return $this;
+               	}
 	
 	public function isDisabled() {
-		return $this->disabled;
-	}
+               		return $this->disabled;
+               	}
 	
 	public function setDisabled($disabled): void {
-		$this->disabled = $disabled;
-	}
+               		$this->disabled = $disabled;
+               	}
 	
 	public function getAddress() {
-		return $this->address;
-	}
+               		return $this->address;
+               	}
 	
 	public function setAddress($address): void {
-		$this->address = $address;
-	}
+               		$this->address = $address;
+               	}
 	
 	public function getPostalCode() {
-		return $this->postal_code;
-	}
+               		return $this->postal_code;
+               	}
 	
 	public function setPostalCode($postal_code): void {
-		$this->postal_code = $postal_code;
-	}
+               		$this->postal_code = $postal_code;
+               	}
 	
 	public function getPhone() {
-		return $this->phone;
-	}
+               		return $this->phone;
+               	}
 	
 	public function setPhone($phone): void {
-		$this->phone = $phone;
-	}
+               		$this->phone = $phone;
+               	}
 	
 	/**
 	 * @return Collection|ParentFamilyLink[]
 	 */
 	public function getParentFamilyLinks(): Collection {
-		return $this->parentFamilyLinks;
-	}
+               		return $this->parentFamilyLinks;
+               	}
 	
 	public function addParentFamilyLink(ParentFamilyLink $parentFamilyLink): self {
-		if(!$this->parentFamilyLinks->contains($parentFamilyLink)) {
-			$this->parentFamilyLinks[] = $parentFamilyLink;
-			$parentFamilyLink->setParentId($this);
-		}
-		
-		return $this;
-	}
+               		if(!$this->parentFamilyLinks->contains($parentFamilyLink)) {
+               			$this->parentFamilyLinks[] = $parentFamilyLink;
+               			$parentFamilyLink->setParentId($this);
+               		}
+               		
+               		return $this;
+               	}
 	
 	public function removeParentFamilyLink(ParentFamilyLink $parentFamilyLink): self {
-		if($this->parentFamilyLinks->contains($parentFamilyLink)) {
-			$this->parentFamilyLinks->removeElement($parentFamilyLink);
-			// set the owning side to null (unless already changed)
-			if($parentFamilyLink->getParentId() === $this) {
-				$parentFamilyLink->setParentId(null);
-			}
-		}
-		
-		return $this;
-	}
+               		if($this->parentFamilyLinks->contains($parentFamilyLink)) {
+               			$this->parentFamilyLinks->removeElement($parentFamilyLink);
+               			// set the owning side to null (unless already changed)
+               			if($parentFamilyLink->getParentId() === $this) {
+               				$parentFamilyLink->setParentId(null);
+               			}
+               		}
+               		
+               		return $this;
+               	}
 	
 	/**
 	 * @return Collection|Announcement[]
 	 */
 	public function getAnnouncements(): Collection {
-		return $this->announcements;
-	}
+               		return $this->announcements;
+               	}
 	
 	public function addAnnouncement(Announcement $announcement): self {
-		if(!$this->announcements->contains($announcement)) {
-			$this->announcements[] = $announcement;
-			$announcement->setUser($this);
-		}
-		
-		return $this;
-	}
+               		if(!$this->announcements->contains($announcement)) {
+               			$this->announcements[] = $announcement;
+               			$announcement->setUser($this);
+               		}
+               		
+               		return $this;
+               	}
 	
 	public function removeAnnouncement(Announcement $announcement): self {
-		if($this->announcements->contains($announcement)) {
-			$this->announcements->removeElement($announcement);
-			// set the owning side to null (unless already changed)
-			if($announcement->getUser() === $this) {
-				$announcement->setUser(null);
-			}
-		}
-		
-		return $this;
-	}
+               		if($this->announcements->contains($announcement)) {
+               			$this->announcements->removeElement($announcement);
+               			// set the owning side to null (unless already changed)
+               			if($announcement->getUser() === $this) {
+               				$announcement->setUser(null);
+               			}
+               		}
+               		
+               		return $this;
+               	}
 	
 	/**
 	 * @return Collection|Comment[]
 	 */
 	public function getComments(): Collection {
-		return $this->comments;
-	}
+               		return $this->comments;
+               	}
 	
 	public function addComment(Comment $comment): self {
-		if(!$this->comments->contains($comment)) {
-			$this->comments[] = $comment;
-			$comment->setUser($this);
-		}
-		
-		return $this;
-	}
+               		if(!$this->comments->contains($comment)) {
+               			$this->comments[] = $comment;
+               			$comment->setUser($this);
+               		}
+               		
+               		return $this;
+               	}
 	
 	public function removeComment(Comment $comment): self {
-		if($this->comments->contains($comment)) {
-			$this->comments->removeElement($comment);
-			// set the owning side to null (unless already changed)
-			if($comment->getUser() === $this) {
-				$comment->setUser(null);
-			}
-		}
-		
-		return $this;
-	}
+               		if($this->comments->contains($comment)) {
+               			$this->comments->removeElement($comment);
+               			// set the owning side to null (unless already changed)
+               			if($comment->getUser() === $this) {
+               				$comment->setUser(null);
+               			}
+               		}
+               		
+               		return $this;
+               	}
 	
 	public function getInbox(): ?Inbox {
-		return $this->inbox;
-	}
+               		return $this->inbox;
+               	}
 	
 	public function setInbox(?Inbox $inbox): self {
-		$this->inbox = $inbox;
-		
-		// set (or unset) the owning side of the relation if necessary
-		$newUser = $inbox === null ? null : $this;
-		if($newUser !== $inbox->getUser()) {
-			$inbox->setUser($newUser);
-		}
-		
-		return $this;
-	}
+               		$this->inbox = $inbox;
+               		
+               		// set (or unset) the owning side of the relation if necessary
+               		$newUser = $inbox === null ? null : $this;
+               		if($newUser !== $inbox->getUser()) {
+               			$inbox->setUser($newUser);
+               		}
+               		
+               		return $this;
+               	}
+
+    /**
+     * @return Collection|Family[]
+     */
+    public function getFamilies(): Collection
+    {
+        return $this->families;
+    }
+
+    public function addFamily(Family $family): self
+    {
+        if (!$this->families->contains($family)) {
+            $this->families[] = $family;
+            $family->setFamilyAdmin($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFamily(Family $family): self
+    {
+        if ($this->families->contains($family)) {
+            $this->families->removeElement($family);
+            // set the owning side to null (unless already changed)
+            if ($family->getFamilyAdmin() === $this) {
+                $family->setFamilyAdmin(null);
+            }
+        }
+
+        return $this;
+    }
 	
 }

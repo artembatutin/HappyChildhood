@@ -3,7 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Family;
+use App\Entity\ParentFamilyLink;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -15,6 +18,18 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 class FamilyRepository extends ServiceEntityRepository {
 	public function __construct(RegistryInterface $registry) {
 		parent::__construct($registry, Family::class);
+	}
+	
+	public function getCaretakersOf(Family $family) {
+		$qb = $this->getEntityManager()->createQueryBuilder();
+		return $qb->select('u')
+			->from(User::class, 'u')
+			->innerJoin(ParentFamilyLink::class, 'pfl', Join::WITH, 'u.id = pfl.parent_id')
+			->innerJoin(Family::class, 'f', Join::WITH, 'pfl.family_id = f.id')
+			->andWhere('f.id = ?1')
+			->setParameter(1, $family->getId())
+			->getQuery()
+			->getResult();
 	}
 	
 	// /**

@@ -32,12 +32,12 @@ class Child
     private $birthDate;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $allergies;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $medication;
 
@@ -99,7 +99,7 @@ class Child
         return $this->allergies;
     }
 
-    public function setAllergies(string $allergies): self
+    public function setAllergies(?string $allergies): self
     {
         $this->allergies = $allergies;
 
@@ -111,7 +111,7 @@ class Child
         return $this->medication;
     }
 
-    public function setMedication(string $medication): self
+    public function setMedication(?string $medication): self
     {
         $this->medication = $medication;
 

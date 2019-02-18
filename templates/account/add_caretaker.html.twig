@@ -20,30 +20,17 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h4 style="display: inline-block;">Family</h4>
-                                    {%if canAddChild%}
-                                    <a style="float: right" class="btn btn-secondary" href="{{ path("profile_add_child") }}">Add Child</a>
-                                    {%endif%}
+                                    <h4>Add Caretaker to {{family.alias}}</h4>
                                     <hr>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    {%for f in families%}
-                                        <div id="family_{{f.id}}">
-                                            <h6 style="display: inline-block;">{{f.alias}}</h6>
-                                            {%if user.id == f.familyAdmin.id%}
-                                                <a style="float: right" class="btn btn-secondary" href="{{ path("profile_add_caretaker", {'family_id': f.id}) }}">Add Caretaker</a>
-                                            {%endif%}
-                                            {%set children = f.children%}
-                                            {%for c in children%}
-                                                <div id="child_c.id">
-                                                    <span>{{c.firstName}}</span><br>
-                                                    <span>{{c.lastName}}</span>
-                                                </div>
-                                            {%endfor%}
-                                        </div>
-                                    {%endfor%}
+                                    {{form_start(form)}}
+                                        {{form_row(form.email)}}
+                                        <br>
+                                        <button class="btn btn-secondary" type="submit">Add Caretaker</button>
+                                    {{form_end(form)}}
                                 </div>
                             </div>
                         </div>
@@ -53,3 +40,4 @@
         </div>
     </header>
 {% endblock %}
+{% form_theme form 'form/fields.html.twig' %}

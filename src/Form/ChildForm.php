@@ -38,8 +38,8 @@ class ChildForm extends AbstractType {
 						'years' => range($current_year, $last_year_in_list),
 						'format' => 'yyyy-MM-dd'
 					])
-					->add('allergies', TextareaType::class)
-					->add('medication', TextareaType::class);
+					->add('allergies', TextareaType::class, ['required' => false])
+					->add('medication', TextareaType::class, ['required' => false]);
 		
 		if($options['data']['families'] == null) {
 			$builder->add('family', TextType::class, [

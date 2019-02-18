@@ -31,53 +31,59 @@ class Family {
      * @ORM\OneToMany(targetEntity="App\Entity\Child", mappedBy="family")
      */
     private $children;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="families")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $familyAdmin;
 	
 	public function __construct() {
-               		$this->parentFamilyLinks = new ArrayCollection();
-                 $this->children = new ArrayCollection();
-               	}
+                        		$this->parentFamilyLinks = new ArrayCollection();
+                          $this->children = new ArrayCollection();
+                        	}
 	
 	public function getId(): ?int {
-               		return $this->id;
-               	}
+                        		return $this->id;
+                        	}
 	
 	public function getAlias(): ?string {
-               		return $this->alias;
-               	}
+                        		return $this->alias;
+                        	}
 	
 	public function setAlias(string $alias): self {
-               		$this->alias = $alias;
-               		
-               		return $this;
-               	}
+                        		$this->alias = $alias;
+                        		
+                        		return $this;
+                        	}
 	
 	/**
 	 * @return Collection|ParentFamilyLink[]
 	 */
 	public function getParentFamilyLinks(): Collection {
-               		return $this->parentFamilyLinks;
-               	}
+                        		return $this->parentFamilyLinks;
+                        	}
 	
 	public function addParentFamilyLink(ParentFamilyLink $parentFamilyLink): self {
-               		if(!$this->parentFamilyLinks->contains($parentFamilyLink)) {
-               			$this->parentFamilyLinks[] = $parentFamilyLink;
-               			$parentFamilyLink->setFamilyId($this);
-               		}
-               		
-               		return $this;
-               	}
+                        		if(!$this->parentFamilyLinks->contains($parentFamilyLink)) {
+                        			$this->parentFamilyLinks[] = $parentFamilyLink;
+                        			$parentFamilyLink->setFamilyId($this);
+                        		}
+                        		
+                        		return $this;
+                        	}
 	
 	public function removeParentFamilyLink(ParentFamilyLink $parentFamilyLink): self {
-               		if($this->parentFamilyLinks->contains($parentFamilyLink)) {
-               			$this->parentFamilyLinks->removeElement($parentFamilyLink);
-               			// set the owning side to null (unless already changed)
-               			if($parentFamilyLink->getFamilyId() === $this) {
-               				$parentFamilyLink->setFamilyId(null);
-               			}
-               		}
-               		
-               		return $this;
-               	}
+                        		if($this->parentFamilyLinks->contains($parentFamilyLink)) {
+                        			$this->parentFamilyLinks->removeElement($parentFamilyLink);
+                        			// set the owning side to null (unless already changed)
+                        			if($parentFamilyLink->getFamilyId() === $this) {
+                        				$parentFamilyLink->setFamilyId(null);
+                        			}
+                        		}
+                        		
+                        		return $this;
+                        	}
 
     /**
      * @return Collection|Child[]
@@ -106,6 +112,18 @@ class Family {
                 $child->setFamily(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFamilyAdmin(): ?User
+    {
+        return $this->familyAdmin;
+    }
+
+    public function setFamilyAdmin(?User $familyAdmin): self
+    {
+        $this->familyAdmin = $familyAdmin;
 
         return $this;
     }

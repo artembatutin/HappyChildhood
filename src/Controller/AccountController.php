@@ -8,6 +8,7 @@ use App\Entity\Family;
 use App\Entity\Group;
 use App\Entity\ParentFamilyLink;
 use App\Entity\User;
+use App\Form\AddCaretakerForm;
 use App\Form\ChildForm;
 use App\Form\UserProfile;
 use App\Form\UserRegister;
@@ -122,14 +123,14 @@ class AccountController extends AbstractController {
 		$em = $this->getDoctrine()->getManager();
 		$enrollments = $em->getRepository(Enrollment::class)->getNonExpired($user->getEmail());
 		
-		$families = $em->getRepository(ParentFamilyLink::class)->getAllFamiliesOfUser($user->getId());
+		$families = $em->getRepository(User::class)->getAllFamiliesOfUser($user);
 		
 		$canAddChild = false;
 		if(sizeof($enrollments) > 0) {
 			$canAddChild = true;
 		}
 		
-		return $this->render('account/family.html.twig', array('canAddChild' => $canAddChild, 'families' => $families));
+		return $this->render('account/family.html.twig', array('canAddChild' => $canAddChild, 'families' => $families, 'user' => $user));
 	}
 	
 	public function add_child(Request $request, LoggerInterface $logger) {
@@ -147,7 +148,7 @@ class AccountController extends AbstractController {
 		
 		$group = [$enrollments[0]->getGroup()];
 		
-		$families = $em->getRepository(ParentFamilyLink::class)->getAllFamiliesOfUser($user->getId());
+		$families = $em->getRepository(User::class)->getAllFamiliesOfUser($user);
 		if(sizeof($families) < 1) {
 			$families = null;
 		}
@@ -170,6 +171,7 @@ class AccountController extends AbstractController {
 			if($families == null) {
 				$family = new Family();
 				$family->setAlias($form->get('family')->getData());
+				$family->setFamilyAdmin($user);
 				$em->persist($family);
 				$parent_family_link = new ParentFamilyLink();
 				$parent_family_link->setFamilyId($family);
@@ -180,6 +182,7 @@ class AccountController extends AbstractController {
 				if(!empty(trim($form->get('new_family')->getData()))) {
 					$family = new Family();
 					$family->setAlias($form->get('new_family')->getData());
+					$family->setFamilyAdmin($user);
 					$em->persist($family);
 					$parent_family_link = new ParentFamilyLink();
 					$parent_family_link->setFamilyId($family);
@@ -205,5 +208,44 @@ class AccountController extends AbstractController {
 		}
 		
 		return $this->render('account/add_child.html.twig', ['form' => $form->createView(), 'families' => $families]);
+	}
+	
+	public function add_caretaker(Request $request, $family_id) {
+		if(!$this->isGranted("IS_AUTHENTICATED_FULLY")) {
+			return $this->redirectToRoute('index');
+		}
+		$user = $this->getUser();
+		
+		$em = $this->getDoctrine()->getManager();
+		
+		$family = $em->getRepository(Family::class)->find($family_id);
+		if(!$family) {
+			$this->addFlash('error', "Family does not exist!");
+			return $this->redirectToRoute('profile_family');
+		}
+		
+		if($user->getId() != $family->getFamilyAdmin()->getId()) {
+			$this->addFlash('error', "You do not have permission for this action!");
+			return $this->redirectToRoute('profile_family');
+		}
+		
+		$form = $this->createForm(AddCaretakerForm::class);
+		
+		$form->handleRequest($request);
+		if($form->isSubmitted() && $form->isValid()) {
+			$new_caretaker = $em->getRepository(User::class)->findOneBy(['email' => $form->get('email')->getData()]);
+			if(!$new_caretaker) {
+				$this->addFlash('error', "No user with this email!");
+				return $this->redirectToRoute('profile_family');
+			}
+			$pfl = new ParentFamilyLink();
+			$pfl->setFamilyId($family);
+			$pfl->setParentId($new_caretaker);
+			$em->persist($pfl);
+			$em->flush();
+			$this->addFlash('success', "Caretaker added successfully!");
+		}
+		
+		return $this->render('account/add_caretaker.html.twig', ['form' => $form->createView(), 'family' => $family]);
 	}
 }

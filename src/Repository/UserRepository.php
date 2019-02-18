@@ -66,4 +66,17 @@ class UserRepository extends ServiceEntityRepository {
 			->getQuery()
 			->getResult();
 	}
+	
+	public function getAllFamiliesOfUser(User $user) {
+		$qb = $this->getEntityManager()->createQueryBuilder();
+		return $qb  ->select('f')
+			->from(Family::class, 'f')
+			->innerJoin(ParentFamilyLink::class, 'pfl', Join::WITH, 'f.id = pfl.family_id')
+			->innerJoin(User::class, 'u', Join::WITH, 'pfl.parent_id = u.id')
+			->where('u.id = ?1')
+			->groupBy('f')
+			->setParameter(1, $user->getId())
+			->getQuery()
+			->getResult();
+	}
 }
