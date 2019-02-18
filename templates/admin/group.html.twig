@@ -37,16 +37,31 @@
 											</button>
 										</div>
 									{%endif%}
-									<table class="table table-bordered">
+									<h5>Create Group</h5>
+									{{form_start(form)}}
+									{{form_row(form.name)}}
+									{{form_row(form.max_capacity)}}
+									<button class="btn btn-secondary" type="submit">Create</button>
+									{{form_end(form)}}
+									<hr>
+									<table
+											class="table table-bordered"
+											data-toggle="table"
+											data-search="true"
+											data-strict-search="true"
+											data-height="460"
+											data-show-columns="true"
+											data-sortable="true"
+									>
 										<thead>
 										<tr>
-											<th>Name</th>
-											<th>Capacity</th>
-											<th>Registered</th>
-											<th>Actions</th>
+											<th data-field="name" data-sortable="true">Name</th>
+											<th data-field="capacity" data-sortable="true">Capacity</th>
+											<th data-field="registered" data-sortable="true">Registered</th>
+											<th data-field="actions" data-sortable="true">Actions</th>
 										</tr>
 										</thead>
-										
+										<tbody>
 										{%for grp in groups%}
 											<tr>
 												<td>{{grp.name}}</td>
@@ -60,15 +75,8 @@
 												</td>
 											</tr>
 										{%endfor%}
-									
+										</tbody>
 									</table>
-									<hr>
-									<h5>Create Group</h5>
-									{{form_start(form)}}
-									{{form_row(form.name)}}
-									{{form_row(form.max_capacity)}}
-									<button class="btn btn-secondary" type="submit">Create</button>
-									{{form_end(form)}}
 								</div>
 							</div>
 						</div>

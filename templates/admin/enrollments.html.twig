@@ -29,7 +29,25 @@
 							</div>
 							<div class="row">
 								<div class="col-md-12">
-									<table class="table table-bordered" data-toggle="table" data-sort-name="enrollments" data-sort-order="desc" data-sortable="true">
+									<h5>Create Enrollments</h5>
+									{{form_start(form)}}
+									{{form_row(form.firstName)}}
+									{{form_row(form.lastName)}}
+									{{form_row(form.email)}}
+									{{form_row(form.canAddChild)}}
+									{{form_row(form.group)}}
+									<button class="btn btn-secondary" type="submit">Create</button>
+									{{form_end(form)}}
+									<hr>
+									<table
+											class="table table-bordered"
+											data-toggle="table"
+											data-search="true"
+											data-strict-search="true"
+											data-height="460"
+											data-show-columns="true"
+											data-sortable="true"
+									>
 										<thead>
 										<tr>
 											<th data-field="email" data-sortable="true">Email</th>
@@ -73,16 +91,6 @@
 										{%endfor%}
 										</tbody>
 									</table>
-									<hr>
-									<h5>Create Enrollments</h5>
-									{{form_start(form)}}
-									{{form_row(form.firstName)}}
-									{{form_row(form.lastName)}}
-									{{form_row(form.email)}}
-									{{form_row(form.canAddChild)}}
-									{{form_row(form.group)}}
-									<button class="btn btn-secondary" type="submit">Create</button>
-									{{form_end(form)}}
 								</div>
 							</div>
 						</div>

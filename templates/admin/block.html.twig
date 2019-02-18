@@ -37,15 +37,40 @@
 											</button>
 										</div>
 									{%endif%}
-									<table class="table table-bordered">
+									{% if mode == 'Edit' %}
+										<a href="{{path('admin_block_edit', {'block_id': -1})}}"><button class="btn btn-secondary">Add New</button></a>
+									{% endif %}
+									<h5>{{ mode }} Announcement</h5>
+									{{form_start(form)}}
+									{{form_row(form.title)}}
+									{{form_row(form.groups)}}
+									{{form_row(form.message)}}
+									{{form_row(form.pictures)}}
+									
+									{{form_row(form.public)}}
+									{{form_row(form.hidden)}}
+									{{form_row(form.commenting)}}
+									<button class="btn btn-secondary" type="submit">{{ mode }}</button>
+									{{form_end(form)}}
+									<hr>
+									<table
+											class="table table-bordered"
+											data-toggle="table"
+											data-search="true"
+											data-strict-search="true"
+											data-height="460"
+											data-show-columns="true"
+											data-sortable="true"
+									>
 										<thead>
 										<tr>
-											<th>Title</th>
-											<th>Public</th>
-											<th>Hidden</th>
-											<th>Actions</th>
+											<th data-field="title" data-sortable="true">Title</th>
+											<th data-field="public" data-sortable="true">Public</th>
+											<th data-field="hidden" data-sortable="true">Hidden</th>
+											<th data-field="actions" data-sortable="true">Actions</th>
 										</tr>
 										</thead>
+										<tbody>
 										{%for block in blocks%}
 											<tr>
 												<td>{{block.title}}</td>
@@ -67,23 +92,8 @@
 												</td>
 											</tr>
 										{%endfor%}
+										</tbody>
 									</table>
-									{% if mode == 'Edit' %}
-										<a href="{{path('admin_block_edit', {'block_id': -1})}}"><button class="btn btn-secondary">Add New</button></a>
-									{% endif %}
-									<hr>
-									<h5>{{ mode }} Announcement</h5>
-									{{form_start(form)}}
-									{{form_row(form.title)}}
-									{{form_row(form.groups)}}
-									{{form_row(form.message)}}
-									{{form_row(form.pictures)}}
-
-									{{form_row(form.public)}}
-									{{form_row(form.hidden)}}
-									{{form_row(form.commenting)}}
-									<button class="btn btn-secondary" type="submit">{{ mode }}</button>
-									{{form_end(form)}}
 								</div>
 							</div>
 						</div>
