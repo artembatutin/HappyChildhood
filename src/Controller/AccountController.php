@@ -50,6 +50,10 @@ class AccountController extends AbstractController {
 			return $this->redirectToRoute('index');
 		}
 		
+		if($enrollment->getExpired()) {
+			return $this->redirectToRoute('index');
+		}
+		
 		if($this->isGranted("IS_AUTHENTICATED_FULLY")) {
 			return $this->redirectToRoute('index');
 		}

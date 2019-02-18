@@ -112,7 +112,7 @@ class User implements UserInterface {
 	private $inbox;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Family", mappedBy="familyAdmin")
+     * @ORM\OneToMany(targetEntity="App\Entity\Family", mappedBy="familyAdmin", cascade={"remove"})
      */
     private $families;
 	

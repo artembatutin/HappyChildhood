@@ -28,7 +28,7 @@ class Family {
 	private $parentFamilyLinks;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Child", mappedBy="family")
+     * @ORM\OneToMany(targetEntity="App\Entity\Child", mappedBy="family", cascade={"remove"})
      */
     private $children;
 
