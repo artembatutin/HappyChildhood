@@ -18,18 +18,18 @@ class Inbox {
 	private $id;
 	
 	/**
-	 * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="inbox", cascade={"persist", "remove"})
+	 * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="inbox", cascade={"remove"})
 	 */
 	private $user;
 	
 	/**
-	 * @ORM\OneToMany(targetEntity="App\Entity\Message", mappedBy="sender_inbox")
+	 * @ORM\OneToMany(targetEntity="App\Entity\Message", mappedBy="sender_inbox", cascade={"remove"})
 	 * @ORM\OrderBy({"date_sent" = "DESC"})
 	 */
 	private $sent_messages;
 	
 	/**
-	 * @ORM\OneToMany(targetEntity="App\Entity\MessageReceiver", mappedBy="receiver_inbox")
+	 * @ORM\OneToMany(targetEntity="App\Entity\MessageReceiver", mappedBy="receiver_inbox", cascade={"remove"})
 	 */
 	private $received_messages;
 	

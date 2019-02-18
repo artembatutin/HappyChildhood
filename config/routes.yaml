@@ -42,17 +42,17 @@ admin_block:
     path: /admin/block
     controller: App\Controller\AdminController::content
 admin_block_edit:
-    path: /admin/block{block_id}
+    path: /admin/block/{block_id}
     controller: App\Controller\AdminController::content
 admin_block_delete:
-    path: /admin/block_delete{block_id}
+    path: /admin/block_delete/{block_id}
     controller: App\Controller\AdminController::block_delete
 admin_group:
     path: /admin/group
     controller: App\Controller\AdminController::group
     defaults:   { message: null }
 admin_group_delete:
-    path: /admin/group_delete{group_id}
+    path: /admin/group_delete/{group_id}
     controller: App\Controller\AdminController::group_delete
 admin_enrollments:
     path: /admin/enrollments
@@ -60,6 +60,15 @@ admin_enrollments:
 admin_users:
     path: /admin/users
     controller: App\Controller\AdminController::users
+admin_user_disable:
+    path: /admin/user_disable/{user_id}
+    controller: App\Controller\AdminController::user_disable
+admin_user_enable:
+    path: /admin/user_enable/{user_id}
+    controller: App\Controller\AdminController::user_enable
+admin_user_delete:
+    path: /admin/user_delete/{user_id}
+    controller: App\Controller\AdminController::user_delete
 admin_children:
     path: /admin/children
     controller: App\Controller\AdminController::children

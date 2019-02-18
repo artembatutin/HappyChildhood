@@ -43,7 +43,7 @@ class Child
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Group", inversedBy="children")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $assignedGroup;
 

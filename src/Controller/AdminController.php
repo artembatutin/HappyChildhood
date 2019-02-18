@@ -7,6 +7,7 @@ use App\Entity\AnnouncementViewers;
 use App\Entity\Child;
 use App\Entity\Enrollment;
 use App\Entity\Group;
+use App\Entity\Inbox;
 use App\Entity\User;
 use App\Form\EnrollmentForm;
 use App\Form\GroupForm;
@@ -238,7 +239,55 @@ class AdminController extends AbstractController {
 		
 		$users = $em->getRepository(User::class)->findAll();
 		
-		return $this->render('admin/users.html.twig', ['form' => $form->createView(), 'users' => $users]);
+		$current_user = $this->getUser();
+		
+		return $this->render('admin/users.html.twig', ['form' => $form->createView(), 'users' => $users, 'current_user' => $current_user]);
+	}
+	
+	public function user_disable($user_id) {
+		$this->denyAccessUnlessGranted('ROLE_ADMIN');
+		
+		$em = $this->getDoctrine()->getManager();
+		
+		$user = $em->getRepository(User::class)->find($user_id);
+		
+		if(!$user) {
+			throw $this->createNotFoundException('No user found with id ' . $user_id);
+		}
+		$user->setDisabled(true);
+		$em->persist($user);
+		$em->flush();
+		return $this->redirectToRoute("admin_users");
+	}
+	
+	public function user_enable($user_id) {
+		$this->denyAccessUnlessGranted('ROLE_ADMIN');
+		
+		$em = $this->getDoctrine()->getManager();
+		
+		$user = $em->getRepository(User::class)->find($user_id);
+		
+		if(!$user) {
+			throw $this->createNotFoundException('No user found with id ' . $user_id);
+		}
+		$user->setDisabled(false);
+		$em->persist($user);
+		$em->flush();
+		return $this->redirectToRoute("admin_users");
+	}
+	
+	public function user_delete($user_id) {
+		$this->denyAccessUnlessGranted('ROLE_ADMIN');
+		
+		$em = $this->getDoctrine()->getManager();
+		
+		$user = $em->getRepository(User::class)->find($user_id);
+		if(!$user) {
+			throw $this->createNotFoundException('No user found with id ' . $user_id);
+		}
+		$em->remove($user);
+		$em->flush();
+		return $this->redirectToRoute("admin_users");
 	}
 	
 	/**

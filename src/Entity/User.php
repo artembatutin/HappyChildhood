@@ -92,12 +92,12 @@ class User implements UserInterface {
 	private $phone;
 	
 	/**
-	 * @ORM\OneToMany(targetEntity="App\Entity\ParentFamilyLink", mappedBy="parent_id")
+	 * @ORM\OneToMany(targetEntity="App\Entity\ParentFamilyLink", mappedBy="parent_id", cascade={"remove"})
 	 */
 	private $parentFamilyLinks;
 	
 	/**
-	 * @ORM\OneToMany(targetEntity="App\Entity\Announcement", mappedBy="user")
+	 * @ORM\OneToMany(targetEntity="App\Entity\Announcement", mappedBy="user", cascade={"remove"})
 	 */
 	private $announcements;
 	
@@ -107,7 +107,7 @@ class User implements UserInterface {
 	private $comments;
 	
 	/**
-	 * @ORM\OneToOne(targetEntity="App\Entity\Inbox", mappedBy="user", cascade={"persist", "remove"})
+	 * @ORM\OneToOne(targetEntity="App\Entity\Inbox", mappedBy="user", cascade={"remove"})
 	 */
 	private $inbox;
 	
