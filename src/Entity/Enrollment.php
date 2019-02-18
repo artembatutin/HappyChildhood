@@ -19,7 +19,7 @@ class Enrollment {
 	
 	/**
 	 * @ORM\ManyToOne(targetEntity="App\Entity\Group")
-	 * @ORM\JoinColumn(nullable=false)
+	 * @ORM\JoinColumn(nullable=true)
 	 */
 	private $group_id;
 	
@@ -42,70 +42,87 @@ class Enrollment {
 	 * @ORM\Column(type="boolean")
 	 */
 	private $expired = false;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $canAddChild;
 	
 	public function getId(): ?int {
-		return $this->id;
-	}
+         		return $this->id;
+         	}
 	
 	public function getGroup(): ?Group {
-		return $this->group_id;
-	}
+         		return $this->group_id;
+         	}
 	
 	public function setGroup(?Group $group_id): self {
-		$this->group_id = $group_id;
-		
-		return $this;
-	}
+         		$this->group_id = $group_id;
+         		
+         		return $this;
+         	}
 	
 	public function getEnrollmentHash(): ?string {
-		return $this->enrollment_hash;
-	}
+         		return $this->enrollment_hash;
+         	}
 	
 	public function setEnrollmentHash(string $enrollment_hash): self {
-		$this->enrollment_hash = $enrollment_hash;
-		
-		return $this;
-	}
+         		$this->enrollment_hash = $enrollment_hash;
+         		
+         		return $this;
+         	}
 	
 	public function getEmail(): ?string {
-		return $this->email;
-	}
+         		return $this->email;
+         	}
 	
 	public function setEmail(string $email): self {
-		$this->email = $email;
-		
-		return $this;
-	}
+         		$this->email = $email;
+         		
+         		return $this;
+         	}
 	
 	public function getCreationDate(): ?\DateTimeInterface {
-		return $this->creation_date;
-	}
+         		return $this->creation_date;
+         	}
 	
 	public function setCreationDate(\DateTimeInterface $creation_date): self {
-		$this->creation_date = $creation_date;
-		
-		return $this;
-	}
+         		$this->creation_date = $creation_date;
+         		
+         		return $this;
+         	}
 	
 	public function getExpired(): ?bool {
-		return $this->expired;
-	}
+         		return $this->expired;
+         	}
 	
 	public function setExpired(bool $expired): self {
-		$this->expired = $expired;
-		
-		return $this;
-	}
+         		$this->expired = $expired;
+         		
+         		return $this;
+         	}
 	
 	public function generate_enrollment_hash() {
-		if($this->enrollment_hash == null) {
-			$salt = 'yp2k,.P(&,pAGC!R]%t+gq&mp';
-			$plain_text = $this->getEmail().$salt.($this->getCreationDate())->format('Y-m-d H:i:s');
-			$cypher_text = hash('sha256', $plain_text);
-			$this->setEnrollmentHash($cypher_text);
-			return $cypher_text;
-		} else {
-			return null;
-		}
-	}
+         		if($this->enrollment_hash == null) {
+         			$salt = 'yp2k,.P(&,pAGC!R]%t+gq&mp';
+         			$plain_text = $this->getEmail().$salt.($this->getCreationDate())->format('Y-m-d H:i:s');
+         			$cypher_text = hash('sha256', $plain_text);
+         			$this->setEnrollmentHash($cypher_text);
+         			return $cypher_text;
+         		} else {
+         			return null;
+         		}
+         	}
+
+    public function getCanAddChild(): ?bool
+    {
+        return $this->canAddChild;
+    }
+
+    public function setCanAddChild(bool $canAddChild): self
+    {
+        $this->canAddChild = $canAddChild;
+
+        return $this;
+    }
 }

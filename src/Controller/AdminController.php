@@ -173,7 +173,10 @@ class AdminController extends AbstractController {
 			$form->handleRequest($request);
 			
 			if($form->isValid()) {
-				$enrollment->setGroup($em->getRepository(Group::class)->find($form->get('group')->getData()));
+				$enrollment->setCanAddChild($form->get('canAddChild')->getData());
+				if($enrollment->getCanAddChild()) {
+					$enrollment->setGroup($em->getRepository(Group::class)->find($form->get('group')->getData()));
+				}
 				$enrollment->setEmail($form->get('email')->getData());
 				try {
 					$enrollment->setCreationDate(new \DateTime("now"));

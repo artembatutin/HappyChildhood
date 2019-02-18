@@ -80,8 +80,13 @@ class AccountController extends AbstractController {
 			$entityManager = $this->getDoctrine()->getManager();
 			$entityManager->persist($user);
 			$entityManager->persist($user->getInbox());
-			$entityManager->flush();
 			
+			if(!$enrollment->getCanAddChild()) {
+				$enrollment->setExpired(true);
+				$entityManager->persist($enrollment);
+			}
+			
+			$entityManager->flush();
 			
 			return $guardHandler->authenticateUserAndHandleSuccess($user, $request, $authenticator, 'main');
 		}

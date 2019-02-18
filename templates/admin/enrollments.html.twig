@@ -33,6 +33,7 @@
 										<thead>
 										<tr>
 											<th data-field="email" data-sortable="true">Email</th>
+											<th data-field="canAddChild" data-sortable="true">Can add child</th>
 											<th data-field="group" data-sortable="true">Group</th>
 											<th data-field="enrollment_hash" data-sortable="true">Enrollment Code</th>
 											<th data-field="date" data-sortable="true">Creation Date</th>
@@ -44,7 +45,18 @@
 										{%for enrl in enrollments%}
 											<tr>
 												<td>{{enrl.email}}</td>
-												<td>{{enrl.group.name}}</td>
+												<td>
+													{%if enrl.canAddChild%}
+														Yes
+													{%else%}
+														No
+													{%endif%}
+												</td>
+												<td>
+													{%if enrl.canAddChild%}
+														{{enrl.group.name}}
+													{%endif%}
+												</td>
 												<td class="ellipsis">
 													<i class="clipboard_btn fa fa-clipboard" data-toggle="tooltip"></i>
 													<a id="enrl{{enrl.id}}" class="enrl_code" href="{{path('register', {'enrollment_hash': enrl.enrollmenthash})}}">localhost:8000{{path('register', {'enrollment_hash': enrl.enrollmenthash})}}</a>
@@ -64,8 +76,11 @@
 									<hr>
 									<h5>Create Enrollments</h5>
 									{{form_start(form)}}
-									{{form_row(form.group)}}
+									{{form_row(form.firstName)}}
+									{{form_row(form.lastName)}}
 									{{form_row(form.email)}}
+									{{form_row(form.canAddChild)}}
+									{{form_row(form.group)}}
 									<button class="btn btn-secondary" type="submit">Create</button>
 									{{form_end(form)}}
 								</div>
