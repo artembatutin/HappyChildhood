@@ -101,6 +101,7 @@
 												</td>
 												<td>
 													<a class="edit" href="{{path('admin_enrollment_edit', {'enrollment_id': enrl.id})}}" title="Edit" data-toggle="tooltip"><i class="fas fa-pen-square"></i></a>
+													<a class="delete" href="{{path('admin_enrollment_delete', {'enrollment_id': enrl.id})}}" title="Delete" data-toggle="tooltip"><i class="fas fa-minus-square"></i></a>
 												</td>
 											</tr>
 										{%endfor%}

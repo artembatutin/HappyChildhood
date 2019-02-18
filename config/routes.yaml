@@ -62,6 +62,9 @@ admin_enrollments:
 admin_enrollment_edit:
     path: /admin/enrollment_edit/{enrollment_id}
     controller: App\Controller\AdminController::enrollments
+admin_enrollment_delete:
+    path: /admin/enrollment_delete/{enrollment_id}
+    controller: App\Controller\AdminController::enrollment_delete
 admin_users:
     path: /admin/users
     controller: App\Controller\AdminController::users

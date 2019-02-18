@@ -216,6 +216,21 @@ class AdminController extends AbstractController {
 		return $this->render('admin/enrollments.html.twig', ['enrollments' => $enrollments, 'form' => $form->createView(), 'mode' => $mode]);
 	}
 	
+	public function enrollment_delete($enrollment_id) {
+		$this->denyAccessUnlessGranted('ROLE_ADMIN');
+		$em = $this->getDoctrine()->getManager();
+		$enrollment = $em->getRepository(Enrollment::class)->find($enrollment_id);
+		
+		if(!$enrollment) {
+			return $this->redirectToRoute('admin_enrollments');
+		}
+		
+		$em->remove($enrollment);
+		$em->flush();
+		
+		return $this->redirectToRoute('admin_enrollments');
+	}
+	
 	/**
 	 * @param \Swift_Mailer $mailer
 	 * @param $email
