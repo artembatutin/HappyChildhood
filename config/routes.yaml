@@ -60,6 +60,9 @@ admin_enrollments:
 admin_users:
     path: /admin/users
     controller: App\Controller\AdminController::users
+admin_children:
+    path: /admin/children
+    controller: App\Controller\AdminController::children
 
 
 

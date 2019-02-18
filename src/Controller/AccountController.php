@@ -183,10 +183,10 @@ class AccountController extends AbstractController {
 				} else {
 					$family = $form->get('family')->getData();
 					$em->persist($family);
-					$parent_family_link = new ParentFamilyLink();
-					$parent_family_link->setFamilyId($family);
-					$parent_family_link->setParentId($user);
-					$em->persist($parent_family_link);
+					//$parent_family_link = new ParentFamilyLink();
+					//$parent_family_link->setFamilyId($family);
+					//$parent_family_link->setParentId($user);
+					//$em->persist($parent_family_link);
 					$child->setFamily($family);
 				}
 			}

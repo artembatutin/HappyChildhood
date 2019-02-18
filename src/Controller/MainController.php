@@ -3,8 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Announcement;
-use App\Entity\AnnouncementViewers;
-use App\Entity\Group;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;

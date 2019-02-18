@@ -32,6 +32,9 @@
                         {%endif%}
                         <div class="col-6 card rounded-circle {%if loop.index is divisible by(2) %}even-align{%endif%}">
                             <div class="p-content">
+                                {%if block.hidden%}
+                                    <em>This announcement is hidden</em>
+                                {%endif%}
                                 <h2 class="display-5">{{ block.getTitle }}</h2>
                                 <p>{{ block.getMessage }}</p>
                             </div>

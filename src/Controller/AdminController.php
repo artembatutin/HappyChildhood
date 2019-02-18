@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Announcement;
 use App\Entity\AnnouncementViewers;
+use App\Entity\Child;
 use App\Entity\Enrollment;
 use App\Entity\Group;
 use App\Entity\User;
@@ -20,7 +21,6 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Psr\Log\LoggerInterface;
 
 class AdminController extends AbstractController {
 	
@@ -93,7 +93,7 @@ class AdminController extends AbstractController {
 		$this->denyAccessUnlessGranted('ROLE_ADMIN');
 		$em = $this->getDoctrine()->getManager();
 		
-		$repository = $this->getDoctrine()->getRepository(Announcement::class);
+		$repository = $em->getRepository(Announcement::class);
 		$block = $repository->find($block_id);
 		if(!$block) {
 			throw $this->createNotFoundException('No announcement found with id ' . $block_id);
@@ -119,7 +119,7 @@ class AdminController extends AbstractController {
 		
 	}
 	
-	public function group(Request $request, $message) {
+	public function group(Request $request) {
 		$this->denyAccessUnlessGranted('ROLE_ADMIN');
 		$em = $this->getDoctrine()->getManager();
 		
@@ -181,7 +181,7 @@ class AdminController extends AbstractController {
 				}
 				$enrollment->setExpired(false);
 				$enrollment->generate_enrollment_hash();
-				$this->send_registration_email($mailer, $enrollment->getEmail(), $enrollment->getEnrollmentHash());
+				$this->send_registration_email($mailer, $enrollment->getEmail(), $enrollment->getEnrollmentHash(), $request->getHost());
 				$em->persist($enrollment);
 				$em->flush();
 				$this->addFlash("success", "Created enrollment");
@@ -193,8 +193,13 @@ class AdminController extends AbstractController {
 		return $this->render('admin/enrollments.html.twig', ['enrollments' => $enrollments, 'form' => $form->createView()]);
 	}
 	
-	private function send_registration_email(\Swift_Mailer $mailer, $email, $enrl_hash) {
-		$registration_link = 'localhost:8000/parent-register/'.$enrl_hash;
+	/**
+	 * @param \Swift_Mailer $mailer
+	 * @param $email
+	 * @param $enrl_hash
+	 */
+	private function send_registration_email(\Swift_Mailer $mailer, $email, $enrl_hash, $domain_name) {
+		$registration_link = $domain_name.'/'.$enrl_hash;
 		$message = (new \Swift_Message('Registration Email'))
 			->setFrom('dorin.artem.test@gmail.com')
 			->setTo($email)
@@ -203,7 +208,12 @@ class AdminController extends AbstractController {
 		$mailer->send($message);
 	}
 	
-	public function users(Request $request, UserPasswordEncoderInterface $passwordEncoder, LoggerInterface $logger) {
+	/**
+	 * @param Request $request
+	 * @param UserPasswordEncoderInterface $passwordEncoder
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function users(Request $request, UserPasswordEncoderInterface $passwordEncoder) {
 		$this->denyAccessUnlessGranted('ROLE_ADMIN');
 		
 		$em = $this->getDoctrine()->getManager();
@@ -229,6 +239,23 @@ class AdminController extends AbstractController {
 		$users = $em->getRepository(User::class)->findAll();
 		
 		return $this->render('admin/users.html.twig', ['form' => $form->createView(), 'users' => $users]);
+	}
+	
+	/**
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function children() {
+		$this->denyAccessUnlessGranted('ROLE_ADMIN');
+		
+		$em = $this->getDoctrine()->getManager();
+		
+		$children = $em->getRepository(Child::class)->findAll();
+		$caretakers = [];
+		foreach($children as $index=>$child) {
+			array_push($caretakers, $em->getRepository(User::class)->getCaretakersOf($child));
+		}
+		
+		return $this->render('admin/children.html.twig', ['children' => $children, 'caretakers' => $caretakers]);
 	}
 	
 	/**
