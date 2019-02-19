@@ -9,6 +9,7 @@ use App\Entity\Enrollment;
 use App\Entity\Group;
 use App\Entity\Inbox;
 use App\Entity\User;
+use App\Form\ChildEditAdminForm;
 use App\Form\EnrollmentForm;
 use App\Form\GroupForm;
 use App\Form\UserCreate;
@@ -358,12 +359,32 @@ class AdminController extends AbstractController {
 	
 	/**
 	 * @param bool $allergies_flag
+	 * @param int $child_id
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public function children($allergies_flag = false) {
+	public function children(Request $request, $allergies_flag = false, $child_id = -1) {
 		$this->denyAccessUnlessGranted('ROLE_ADMIN');
 		
 		$em = $this->getDoctrine()->getManager();
+		
+		$mode = "Create";
+		$form = null;
+		//edit mode.
+		if($child_id != -1) {
+			$mode = "Edit";
+			$child = $em->getRepository(Child::class)->find($child_id);
+			$groups = $em->getRepository(Group::class)->findAll();
+			$form = $this->createForm(ChildEditAdminForm::class, $child, [
+				'groups' => $groups
+			]);
+			
+			$form->handleRequest($request);
+			if($form->isSubmitted() && $form->isValid()) {
+				$child = $form->getData();
+				$em->persist($child);
+				$em->flush();
+			}
+		}
 		
 		if($allergies_flag) {
 			$children = $em->getRepository(Child::class)->getAllWithAllergiesOrMedication();
@@ -375,7 +396,29 @@ class AdminController extends AbstractController {
 			array_push($caretakers, $em->getRepository(User::class)->getCaretakersOf($child));
 		}
 		
-		return $this->render('admin/children.html.twig', ['children' => $children, 'caretakers' => $caretakers, 'allergies_flag' => $allergies_flag]);
+		return $this->render('admin/children.html.twig',
+			[
+				'children' => $children,
+				'caretakers' => $caretakers,
+				'allergies_flag' => $allergies_flag,
+				'mode' => $mode,
+				'form' => $form!=null?$form->createView():null
+			]);
+	}
+	
+	public function child_delete($child_id) {
+		$this->denyAccessUnlessGranted('ROLE_ADMIN');
+		$em = $this->getDoctrine()->getManager();
+		$child = $em->getRepository(Child::class)->find($child_id);
+		
+		if(!$child) {
+			return $this->redirectToRoute('admin_children');
+		}
+		
+		$em->remove($child);
+		$em->flush();
+		
+		return $this->redirectToRoute('admin_children');
 	}
 	
 	/**
