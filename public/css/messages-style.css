@@ -17,13 +17,6 @@ a.attachment_link {
     color: black;
 }
 
-.ellipsis {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    -o-text-overflow: ellipsis;
-}
-
 div.ms_container {
     flex-wrap: nowrap;
     margin: 0;

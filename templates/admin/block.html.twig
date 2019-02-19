@@ -37,9 +37,6 @@
 											</button>
 										</div>
 									{%endif%}
-									{% if mode == 'Edit' %}
-										<a href="{{path('admin_block_edit', {'block_id': -1})}}"><button class="btn btn-secondary">Add New</button></a>
-									{% endif %}
 									<h5>{{ mode }} Announcement</h5>
 									{{form_start(form)}}
 									{{form_row(form.title)}}
@@ -53,6 +50,9 @@
 									<button class="btn btn-secondary" type="submit">{{ mode }}</button>
 									{{form_end(form)}}
 									<hr>
+									{% if mode == 'Edit' %}
+										<a href="{{path('admin_block_edit', {'block_id': -1})}}"><button class="btn btn-secondary">Add New</button></a>
+									{% endif %}
 									<table
 											class="table table-bordered"
 											data-toggle="table"

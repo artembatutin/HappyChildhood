@@ -26,6 +26,23 @@ class MainController extends AbstractController {
 		return $this->render('index.html.twig', ['blocks' => $blocks]);
 	}
 	
+	public function block($block_id) {
+		$block = null;
+		$em = $this->getDoctrine()->getManager();
+		if($this->isGranted("IS_AUTHENTICATED_FULLY")) {
+			$user = $this->getUser();
+			if($this->isGranted("ROLE_MOD") || $this->isGranted("ROLE_ADMIN")) {
+				$block = $em->getRepository(Announcement::class)->findAll(['id' => $block_id]);
+			} else {
+				$block = $em->getRepository(Announcement::class)->findUserBlock($user, $block_id);
+			}
+		} else {
+			$block = $em->getRepository(Announcement::class)->findBy(['id' => $block_id, 'public' => true, 'hidden' => false]);
+		}
+		
+		return $this->render('block.html.twig', ['block' => $block[0]]);
+	}
+	
 	public function contact(Request $request, \Swift_Mailer $mailer) {
 		//contact us form
 		$form = $this->createFormBuilder()

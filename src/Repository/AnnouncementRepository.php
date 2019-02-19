@@ -57,4 +57,29 @@ class AnnouncementRepository extends ServiceEntityRepository {
 		
 		return $qb->getQuery()->getResult();
 	}
+	
+	/**
+	 * @param User $user
+	 * @param $block_id block id.
+	 * @return array
+	 */
+	public function findUserBlock(User $user, $block_id): array
+	{
+		$groups = $this->getEntityManager()->getRepository(Group::class)->getUserGroups($user);
+		
+		$qb = $this->createQueryBuilder('a');
+		$qb ->join(AnnouncementViewers::class, 'av');
+		$qb ->where('a.public = 1');
+		
+		if(sizeof($groups) > 0) {
+			foreach($groups as $index=>$group) {
+				$qb ->orWhere('av.child_group = ?'.$index)
+				    ->setParameter($index, $group->getId());
+			}
+		}
+		$qb ->andWhere('a.hidden = 0')
+			->andWhere('a.id = ' . $block_id);
+		
+		return $qb->getQuery()->getResult();
+	}
 }

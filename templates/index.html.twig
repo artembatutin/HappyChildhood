@@ -28,19 +28,31 @@
                     <div class="row row-eq-height">
 
                         {%if loop.index is divisible by(2) %}
+                        <div class="col-6 block-img">
                             {{ block("block_image", "index_images.html.twig") }}
+                        </div>
                         {%endif%}
                         <div class="col-6 card rounded-circle {%if loop.index is divisible by(2) %}even-align{%endif%}">
                             <div class="p-content">
-                                {%if block.hidden%}
-                                    <em>This announcement is hidden</em>
-                                {%endif%}
-                                <h2 class="display-5">{{ block.getTitle }}</h2>
-                                <p>{{ block.getMessage }}</p>
+                                <a href="{{ path('block', {'block_id' : block.id})}}"><h2 class="display-5">{{ block.getTitle }}</h2></a>
+                                <label>{{ block.getCreationDate|date("D d M, Y") }}</label>
+                                {% if block.isCommenting %}
+                                    <i class="fas fa-comment"></i>
+                                    {{ block.comments|length }}
+                                {% else %}
+                                    <i class="fas fa-comment-slash"></i>
+                                {% endif%}
+                                <hr>
+                                <p class="">
+                                    {{ block.getMessage }}
+                                </p>
+                                </p>
                             </div>
                         </div>
                         {%if loop.index is not divisible by(2)%}
+                        <div class="col-6 block-img">
                             {{ block("block_image", "index_images.html.twig") }}
+                        </div>
                         {%endif%}
                     </div>
                 </div>

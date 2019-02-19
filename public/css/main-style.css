@@ -149,7 +149,7 @@ h6 {
 }
 
 .dropdown-item:focus, .dropdown-item:hover {
-  background-color: #e9e9e9;
+  background-color: #bfd5dd;
 
 }
 
@@ -354,6 +354,20 @@ table.table td a.delete {
   text-shadow: 2px 2px rgba(0, 0, 0, 0.4);
 }
 
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+}
+
+.fill-lines {
+}
+
+label {
+
+}
+
 footer {
   background-color: #00000030;
   margin-top: 3em;
@@ -368,7 +382,6 @@ footer {
   .block-img  { order: 2; }
   .row-eq-height {
     -ms-flex-align: center!important;
-    align-items: center!important;
   }
   .col-6 {
     -ms-flex: 0 0 50%;
@@ -396,7 +409,7 @@ footer {
     text-align: center;
   }
   .p-content {
-    margin: 2em 3em 0em 3em;
+    margin: 2em 1.5em 0em 1.5em;
   }
   .even-align {
     text-align: right;
@@ -415,7 +428,6 @@ footer {
     padding: 0;
     width: 100%;
     /*box-shadow: 0 0px 8px 0 rgba(0,0,0,0.7) !important;*/
-    border-bottom: 5px solid #abe3ff;
   }
   .rounded-circle {
     border-radius: 0px !important;

@@ -1,0 +1,42 @@
+{% extends "base.html.twig" %}
+{% block title %}Index{% endblock %}
+{% block body %}
+    <header class="head">
+        <div class="masthead-content">
+            <div class="container">
+                <h1 class="title" style="text-align: center">{{ block.getTitle }}</h1>
+            </div>
+        </div>
+    </header>
+    {{ block("block_notifs", "base.notifs.html.twig") }}
+    {%if block is defined %}
+        <section>
+            <div class="container block-post">
+                <div class="row row-eq-height">
+                    <div class="col-md-10 mb-md-4 block-img centered">
+                    {{ block("block_image", "index_images.html.twig") }}
+                    </div>
+                    <br><br>
+                    <div class="col-md-12 card rounded-circle">
+                        <div class="p-content">
+                            <label>{{ block.getCreationDate|date("D d M, Y") }}</label>
+                            <p>{{ block.getMessage }}</p>
+                            <p>
+                                {% if block.isCommenting %}
+                                    <i class="fas fa-comment"></i>
+                                    {{ block.comments|length }}
+                                {% else %}
+                                    <i class="fas fa-comment-slash"></i>
+                                {% endif%}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% else %}
+        <div class="container">
+            <h2 class="title">There is no announcements for you at this moment.</h2>
+        </div>
+    {% endif %}
+{% endblock %}
