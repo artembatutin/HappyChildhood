@@ -20,15 +20,33 @@
                     <div class="col-md-12 card rounded-circle">
                         <div class="p-content">
                             <label>{{ block.getCreationDate|date("D d M, Y") }}</label>
-                            <p>{{ block.getMessage }}</p>
-                            <p>
-                                {% if block.isCommenting %}
-                                    <i class="fas fa-comment"></i>
-                                    {{ block.comments|length }}
-                                {% else %}
-                                    <i class="fas fa-comment-slash"></i>
-                                {% endif%}
-                            </p>
+                            {% if block.isCommenting %}
+                                <i class="fas fa-comment"></i>
+                                {{ block.comments|length }}
+                            {% else %}
+                                <i class="fas fa-comment-slash"></i>
+                            {% endif%}
+                            <p>{{ block.getMessage }}</p><hr>
+                            {% if block.isCommenting %}
+                                {% for comment in block.comments %}
+                                    <label><strong>{{ comment.user.firstName }} {{ comment.user.lastName}}</strong></label>
+                                    <a>{{comment.getCreationDate|date("D d M, Y") }}</a>
+                                    <br>
+                                    <a>{{ comment.getText }}</a>
+                                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MOD') %}
+                                        <br>
+                                        <a href="{{ path('comment_delete', {'comment_id': comment.id })}}"><i class="fas fa-trash-alt"></i> Delete</a>
+                                    {% endif %}
+                                    <hr>
+                                {% endfor %}
+                            {% endif %}
+                            {% if block.isCommenting and form is defined %}
+                                <h4>Add Reply</h4>
+                                {{ form_start(form)}}
+                                {{form_row(form.message)}}
+                                <button class="btn btn-secondary" type="submit">Reply</button>
+                                {{form_end(form)}}
+                            {% endif%}
                         </div>
                     </div>
                 </div>
@@ -40,3 +58,4 @@
         </div>
     {% endif %}
 {% endblock %}
+{% form_theme form 'form/fields.html.twig' %}

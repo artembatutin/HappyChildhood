@@ -4,6 +4,9 @@ index:
 block:
     path: /block/{block_id}
     controller: App\Controller\MainController::block
+comment_delete:
+    path: /block_cmt_del/{comment_id}
+    controller: App\Controller\MainController::comment_delete
 contact:
     path: /contact/
     controller: App\Controller\MainController::contact

@@ -42,6 +42,10 @@ class Comment {
 	 */
 	private $text;
 	
+	public function __construct() {
+		$text = "";
+	}
+	
 	public function getId(): ?int {
 		return $this->id;
 	}

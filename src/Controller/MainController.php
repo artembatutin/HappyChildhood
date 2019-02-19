@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Announcement;
+use App\Entity\Comment;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -26,24 +27,65 @@ class MainController extends AbstractController {
 		return $this->render('index.html.twig', ['blocks' => $blocks]);
 	}
 	
-	public function block($block_id) {
+	public function block(Request $request, $block_id) {
 		$block = null;
+		$addComment = null;
 		$em = $this->getDoctrine()->getManager();
 		if($this->isGranted("IS_AUTHENTICATED_FULLY")) {
+			$addComment = $this->createFormBuilder()->add('message', TextareaType::class, ['mapped' => false, 'required' => true])->getForm();
 			$user = $this->getUser();
 			if($this->isGranted("ROLE_MOD") || $this->isGranted("ROLE_ADMIN")) {
 				$block = $em->getRepository(Announcement::class)->findBy(['id' => $block_id]);
 			} else {
 				$block = $em->getRepository(Announcement::class)->findUserBlock($user, $block_id);
 			}
+			if($request->isMethod('POST')) {
+				$addComment->handleRequest($request);
+				if($addComment->isSubmitted() && $addComment->isValid()) {
+					$message = $addComment->get('message')->getData();
+					$comment = new Comment();
+					$comment->setText($message);
+					$comment->setUser($user);
+					$comment->setAnnouncement($block[0]);
+					$comment->setBlocked(false);
+					try {
+						$comment->setCreationDate(new \DateTime());
+					} catch(\Exception $e) {
+						throw $e;
+					}
+					$block[0]->addComment($comment);
+					$em->persist($comment);
+					$em->persist($block[0]);
+					$em->flush();
+					$this->addFlash('success', "Reply added.");
+				}
+			}
 		} else {
 			$block = $em->getRepository(Announcement::class)->findBy(['id' => $block_id, 'public' => true, 'hidden' => false]);
 		}
 		if($block == null) {
-			$this->addFlash('danger', "No announcement found");
+			$this->addFlash('danger', "No announcement found.");
 			return $this->redirectToRoute('index');
 		}
-		return $this->render('block.html.twig', ['block' => $block[0]]);
+		return $this->render('block.html.twig', ['block' => $block[0], 'form' => $addComment->createView()]);
+	}
+	
+	public function comment_delete($comment_id) {
+		$em = $this->getDoctrine()->getManager();
+		$comment = $em->getRepository(Comment::class)->find($comment_id);
+		if($comment == null) {
+			$this->addFlash('danger', "No comment found.");
+			return $this->redirectToRoute('index');
+		}
+		$block = $comment->getAnnouncement();
+		if($block == null) {
+			$this->addFlash('danger', "No announcement found.");
+			return $this->redirectToRoute('index');
+		}
+		$em->remove($comment);
+		$em->flush();
+		$this->addFlash('success', "Comment removed.");
+		return $this->redirectToRoute('block', ['block_id' => $block->getId()]);
 	}
 	
 	public function contact(Request $request, \Swift_Mailer $mailer) {
