@@ -130,7 +130,7 @@ class AccountController extends AbstractController {
 		$user = $this->getUser();
 		
 		$em = $this->getDoctrine()->getManager();
-		$enrollments = $em->getRepository(Enrollment::class)->getNonExpired($user->getEmail());
+		$enrollments = $em->getRepository(Enrollment::class)->getUsable($user->getEmail());
 		
 		$families = $em->getRepository(User::class)->getAllFamiliesOfUser($user);
 		
@@ -149,7 +149,7 @@ class AccountController extends AbstractController {
 		$user = $this->getUser();
 		
 		$em = $this->getDoctrine()->getManager();
-		$enrollments = $em->getRepository(Enrollment::class)->getNonExpired($user->getEmail());
+		$enrollments = $em->getRepository(Enrollment::class)->getUsable($user->getEmail());
 		
 		if(sizeof($enrollments) < 1) {
 			return $this->redirectToRoute('index');

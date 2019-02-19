@@ -30,7 +30,7 @@ class Announcement {
 	private $title;
 	
 	/**
-	 * @ORM\Column(type="string", length=1000)
+	 * @ORM\Column(type="string", length=100000)
 	 */
 	private $message;
 	

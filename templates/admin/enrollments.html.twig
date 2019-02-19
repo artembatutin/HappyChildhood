@@ -29,24 +29,36 @@
 							</div>
 							<div class="row">
 								<div class="col-md-12">
-									<h5>Create Enrollments</h5>
+									{% if mode == 'Edit' %}
+										<a href="{{path('admin_enrollments')}}"><button class="btn btn-secondary">Add New</button></a>
+									{% endif %}
+									<h5>{{mode}} Enrollments</h5>
 									{{form_start(form)}}
-									{{form_row(form.firstName)}}
-									{{form_row(form.lastName)}}
+									{% if mode == 'Create' %}
+										{{form_row(form.firstName)}}
+										{{form_row(form.lastName)}}
+									{% endif %}
 									{{form_row(form.email)}}
 									{{form_row(form.canAddChild)}}
+									{% if mode == 'Edit' %}
+										{{form_row(form.expired)}}
+									{%endif%}
 									{{form_row(form.group)}}
-									<button class="btn btn-secondary" type="submit">Create</button>
+									<button class="btn btn-secondary" type="submit">{{mode}}</button>
 									{{form_end(form)}}
 									<hr>
+									<a class="btn btn-secondary" href="{{path('admin_enrollments_delete_expired')}}">Delete Expired Enrollments</a>
 									<table
-											class="table table-bordered"
+											id="table"
 											data-toggle="table"
 											data-search="true"
-											data-strict-search="true"
 											data-height="460"
 											data-show-columns="true"
 											data-sortable="true"
+											data-pagination="true"
+											data-page-size="10"
+											data-advanced-search="true"
+											data-id-table="advancedTable"
 									>
 										<thead>
 										<tr>
@@ -56,6 +68,7 @@
 											<th data-field="enrollment_hash" data-sortable="true">Enrollment Code</th>
 											<th data-field="date" data-sortable="true">Creation Date</th>
 											<th data-field="expired" data-sortable="true">Expired</th>
+											<th data-field="actions" data-sortable="true">Actions</th>
 										</tr>
 										</thead>
 										
@@ -86,6 +99,10 @@
 													{%else%}
 														No
 													{%endif%}
+												</td>
+												<td>
+													<a class="edit" href="{{path('admin_enrollment_edit', {'enrollment_id': enrl.id})}}" title="Edit" data-toggle="tooltip"><i class="fas fa-pen-square"></i></a>
+													<a class="delete" href="{{path('admin_enrollment_delete', {'enrollment_id': enrl.id})}}" title="Delete" data-toggle="tooltip"><i class="fas fa-minus-square"></i></a>
 												</td>
 											</tr>
 										{%endfor%}

@@ -9,9 +9,11 @@ use App\Entity\Enrollment;
 use App\Entity\Group;
 use App\Entity\Inbox;
 use App\Entity\User;
+use App\Form\ChildEditAdminForm;
 use App\Form\EnrollmentForm;
 use App\Form\GroupForm;
 use App\Form\UserCreate;
+use phpDocumentor\Reflection\Types\String_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -120,12 +122,20 @@ class AdminController extends AbstractController {
 		
 	}
 	
-	public function group(Request $request) {
+	public function group(Request $request, $group_id = -1) {
 		$this->denyAccessUnlessGranted('ROLE_ADMIN');
 		$em = $this->getDoctrine()->getManager();
 		
 		//creating the new group.
 		$group = new Group();
+		
+		$mode = "Create";
+		//edit mode.
+		if($group_id != -1) {
+			$group = $em->getRepository(Group::class)->find($group_id);
+			$mode = "Edit";
+		}
+		
 		$form = $this->createForm(GroupForm::class, $group);
 		$form->handleRequest($request);
 		if($form->isSubmitted() && $form->isValid()) {
@@ -136,7 +146,7 @@ class AdminController extends AbstractController {
 		
 		$groups = $em->getRepository(Group::class)->findAll();
 		
-		return $this->render('admin/group.html.twig', ['groups' => $groups, 'form' => $form->createView()]);
+		return $this->render('admin/group.html.twig', ['groups' => $groups, 'form' => $form->createView(), 'mode' => $mode]);
 	}
 	
 	public function group_delete($group_id) {
@@ -159,42 +169,84 @@ class AdminController extends AbstractController {
 		
 	}
 	
-	public function enrollments(Request $request, \Swift_Mailer $mailer) {
+	public function enrollments(Request $request, \Swift_Mailer $mailer, $enrollment_id = -1) {
 		$this->denyAccessUnlessGranted('ROLE_ADMIN');
 		$em = $this->getDoctrine()->getManager();
 		$groups = $em->getRepository(Group::class)->findAll();
 		
 		$enrollment = new Enrollment();
+		
+		$mode = "Create";
+		//edit mode.
+		if($enrollment_id != -1) {
+			$enrollment = $em->getRepository(Enrollment::class)->find($enrollment_id);
+			$mode = "Edit";
+		}
+		
 		$form = $this->createForm(EnrollmentForm::class, $enrollment, array(
-			'data_class' => null,
-			'data' => $groups
+			'groups' => $groups,
+			'mode' => $mode
 		));
-		if($request->isMethod('POST')) {
-			$form->handleRequest($request);
-			
-			if($form->isValid()) {
-				$enrollment->setCanAddChild($form->get('canAddChild')->getData());
-				if($enrollment->getCanAddChild()) {
-					$enrollment->setGroup($em->getRepository(Group::class)->find($form->get('group')->getData()));
-				}
-				$enrollment->setEmail($form->get('email')->getData());
-				try {
-					$enrollment->setCreationDate(new \DateTime("now"));
-				} catch(\Exception $e) {
-					$e->getMessage();
-				}
+		$form->handleRequest($request);
+		if($form->isSubmitted() && $form->isValid()) {
+			$enrollment = $form->getData();
+			//$enrollment->setCanAddChild($form->get('canAddChild')->getData());
+			if($enrollment->getCanAddChild()) {
+				$enrollment->setGroup($em->getRepository(Group::class)->find($form->get('group')->getData()));
+			} else {
+				$enrollment->setGroup(null);
+			}
+			//$enrollment->setEmail($form->get('email')->getData());
+			try {
+				$enrollment->setCreationDate(new \DateTime("now"));
+			} catch(\Exception $e) {
+				$e->getMessage();
+			}
+			if($mode == "Create") {
 				$enrollment->setExpired(false);
 				$enrollment->generate_enrollment_hash();
 				$this->send_registration_email($mailer, $enrollment->getEmail(), $enrollment->getEnrollmentHash(), $request->getHost());
-				$em->persist($enrollment);
-				$em->flush();
-				$this->addFlash("success", "Created enrollment");
 			}
+			$em->persist($enrollment);
+			$em->flush();
+			$this->addFlash("success", "Created enrollment");
 		}
 		
 		$enrollments = $em->getRepository(Enrollment::class)->getAllOrderedByDateDesc();
 		
-		return $this->render('admin/enrollments.html.twig', ['enrollments' => $enrollments, 'form' => $form->createView()]);
+		return $this->render('admin/enrollments.html.twig', ['enrollments' => $enrollments, 'form' => $form->createView(), 'mode' => $mode]);
+	}
+	
+	public function enrollment_delete($enrollment_id) {
+		$this->denyAccessUnlessGranted('ROLE_ADMIN');
+		$em = $this->getDoctrine()->getManager();
+		$enrollment = $em->getRepository(Enrollment::class)->find($enrollment_id);
+		
+		if(!$enrollment) {
+			return $this->redirectToRoute('admin_enrollments');
+		}
+		
+		$em->remove($enrollment);
+		$em->flush();
+		
+		return $this->redirectToRoute('admin_enrollments');
+	}
+	
+	public function enrollments_delete_expired() {
+		$this->denyAccessUnlessGranted('ROLE_ADMIN');
+		$em = $this->getDoctrine()->getManager();
+		$enrollments = $em->getRepository(Enrollment::class)->findBy(['expired' => true]);
+		
+		if(!$enrollments) {
+			return $this->redirectToRoute('admin_enrollments');
+		}
+		
+		foreach($enrollments as $enrollment) {
+			$em->remove($enrollment);
+		}
+		$em->flush();
+		
+		return $this->redirectToRoute('admin_enrollments');
 	}
 	
 	/**
@@ -215,24 +267,36 @@ class AdminController extends AbstractController {
 	/**
 	 * @param Request $request
 	 * @param UserPasswordEncoderInterface $passwordEncoder
+	 * @param int $user_id
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public function users(Request $request, UserPasswordEncoderInterface $passwordEncoder) {
+	public function users(Request $request, UserPasswordEncoderInterface $passwordEncoder, $user_id = -1) {
 		$this->denyAccessUnlessGranted('ROLE_ADMIN');
 		
 		$em = $this->getDoctrine()->getManager();
 		
 		$user = new User();
-		$form = $this->createForm(UserCreate::class, $user);
+		
+		$mode = "Create";
+		//edit mode.
+		if($user_id != -1) {
+			$user = $em->getRepository(User::class)->find($user_id);
+			$mode = "Edit";
+		}
+		
+		$form = $this->createForm(UserCreate::class, $user, [
+			'mode' => $mode
+		]);
 		
 		//will only happen on POST.
 		$form->handleRequest($request);
 		if($form->isSubmitted() && $form->isValid()) {
 			
-			//password encoding.
-			$password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
-			$user->setPassword($password);
-			$user->setDisabled(false);
+			if((!empty($user->getPlainPassword()) && $mode == "Edit") || $mode == "Create") {
+				//password encoding.
+				$password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
+				$user->setPassword($password);
+			}
 			
 			//saving the user.
 			$em->persist($user);
@@ -244,7 +308,7 @@ class AdminController extends AbstractController {
 		
 		$current_user = $this->getUser();
 		
-		return $this->render('admin/users.html.twig', ['form' => $form->createView(), 'users' => $users, 'current_user' => $current_user]);
+		return $this->render('admin/users.html.twig', ['form' => $form->createView(), 'users' => $users, 'current_user' => $current_user, 'mode' => $mode]);
 	}
 	
 	public function user_disable($user_id) {
@@ -294,20 +358,67 @@ class AdminController extends AbstractController {
 	}
 	
 	/**
+	 * @param bool $allergies_flag
+	 * @param int $child_id
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public function children() {
+	public function children(Request $request, $allergies_flag = false, $child_id = -1) {
 		$this->denyAccessUnlessGranted('ROLE_ADMIN');
 		
 		$em = $this->getDoctrine()->getManager();
 		
-		$children = $em->getRepository(Child::class)->findAll();
+		$mode = "Create";
+		$form = null;
+		//edit mode.
+		if($child_id != -1) {
+			$mode = "Edit";
+			$child = $em->getRepository(Child::class)->find($child_id);
+			$groups = $em->getRepository(Group::class)->findAll();
+			$form = $this->createForm(ChildEditAdminForm::class, $child, [
+				'groups' => $groups
+			]);
+			
+			$form->handleRequest($request);
+			if($form->isSubmitted() && $form->isValid()) {
+				$child = $form->getData();
+				$em->persist($child);
+				$em->flush();
+			}
+		}
+		
+		if($allergies_flag) {
+			$children = $em->getRepository(Child::class)->getAllWithAllergiesOrMedication();
+		} else {
+			$children = $em->getRepository(Child::class)->findAll();
+		}
 		$caretakers = [];
 		foreach($children as $index=>$child) {
 			array_push($caretakers, $em->getRepository(User::class)->getCaretakersOf($child));
 		}
 		
-		return $this->render('admin/children.html.twig', ['children' => $children, 'caretakers' => $caretakers]);
+		return $this->render('admin/children.html.twig',
+			[
+				'children' => $children,
+				'caretakers' => $caretakers,
+				'allergies_flag' => $allergies_flag,
+				'mode' => $mode,
+				'form' => $form!=null?$form->createView():null
+			]);
+	}
+	
+	public function child_delete($child_id) {
+		$this->denyAccessUnlessGranted('ROLE_ADMIN');
+		$em = $this->getDoctrine()->getManager();
+		$child = $em->getRepository(Child::class)->find($child_id);
+		
+		if(!$child) {
+			return $this->redirectToRoute('admin_children');
+		}
+		
+		$em->remove($child);
+		$em->flush();
+		
+		return $this->redirectToRoute('admin_children');
 	}
 	
 	/**

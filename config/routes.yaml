@@ -41,6 +41,7 @@ block_img:
 admin:
     path: /admin/
     controller: App\Controller\AdminController::content
+
 admin_block:
     path: /admin/block
     controller: App\Controller\AdminController::content
@@ -50,18 +51,38 @@ admin_block_edit:
 admin_block_delete:
     path: /admin/block_delete/{block_id}
     controller: App\Controller\AdminController::block_delete
+
+
 admin_group:
     path: /admin/group
     controller: App\Controller\AdminController::group
-    defaults:   { message: null }
+admin_group_edit:
+    path: /admin/group_edit/{group_id}
+    controller: App\Controller\AdminController::group
 admin_group_delete:
     path: /admin/group_delete/{group_id}
     controller: App\Controller\AdminController::group_delete
+
+
 admin_enrollments:
     path: /admin/enrollments
     controller: App\Controller\AdminController::enrollments
+admin_enrollment_edit:
+    path: /admin/enrollment_edit/{enrollment_id}
+    controller: App\Controller\AdminController::enrollments
+admin_enrollment_delete:
+    path: /admin/enrollment_delete/{enrollment_id}
+    controller: App\Controller\AdminController::enrollment_delete
+admin_enrollments_delete_expired:
+    path: /admin/enrollments/delete-expired
+    controller: App\Controller\AdminController::enrollments_delete_expired
+
+
 admin_users:
     path: /admin/users
+    controller: App\Controller\AdminController::users
+admin_user_edit:
+    path: /admin/user/{user_id}
     controller: App\Controller\AdminController::users
 admin_user_disable:
     path: /admin/user_disable/{user_id}
@@ -72,8 +93,19 @@ admin_user_enable:
 admin_user_delete:
     path: /admin/user_delete/{user_id}
     controller: App\Controller\AdminController::user_delete
+
+
 admin_children:
     path: /admin/children
+    controller: App\Controller\AdminController::children
+admin_child_edit:
+    path: /admin/child_edit/{child_id}
+    controller: App\Controller\AdminController::children
+admin_child_delete:
+    path: /admin/child_delete/{child_id}
+    controller: App\Controller\AdminController::child_delete
+admin_children_allergies:
+    path: /admin/children/allergies_flag={allergies_flag}
     controller: App\Controller\AdminController::children
 
 

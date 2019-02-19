@@ -29,7 +29,36 @@
 							</div>
 							<div class="row">
 								<div class="col-md-12">
-									<table class="table table-bordered" data-toggle="table" data-sort-name="children" data-sortable="true">
+									{%if allergies_flag%}
+										<a class="btn btn-secondary" href="{{path('admin_children')}}">Show All</a>
+									{%else%}
+										<a class="btn btn-secondary" href="{{path('admin_children_allergies', {'allergies_flag': true})}}">Show Only With Allergies or Medications</a>
+									{%endif%}
+									{%if mode == 'Edit'%}
+										<h5>Edit Child</h5>
+										<a href="{{path('admin_children')}}"><button class="btn btn-secondary">Close Edit Form</button></a>
+										{{form_start(form)}}
+											{{form_row(form.first_name)}}
+											{{form_row(form.last_name)}}
+											{{form_row(form.assignedGroup)}}
+											{{form_row(form.allergies)}}
+											{{form_row(form.medication)}}
+											<button class="btn btn-secondary" type="submit">Edit</button>
+										{{form_end(form)}}
+										<hr>
+									{%endif%}
+									<table
+											id="table"
+											data-toggle="table"
+											data-search="true"
+											data-height="460"
+											data-show-columns="true"
+											data-sortable="true"
+											data-pagination="true"
+											data-page-size="10"
+											data-advanced-search="true"
+											data-id-table="advancedTable"
+									>
 										<thead>
 										<tr>
 											<th data-field="firstName" data-sortable="true">First Name</th>
@@ -39,6 +68,7 @@
 											<th data-field="caretakers" data-sortable="true">Caretakers</th>
 											<th data-field="allergies" data-sortable="true">Allergies</th>
 											<th data-field="medications" data-sortable="true">Medications</th>
+											<th data-field="actions" data-sortable="true">Actions</th>
 										</tr>
 										</thead>
 										
@@ -48,7 +78,11 @@
 												<td>{{child.firstName}}</td>
 												<td>{{child.lastName}}</td>
 												<td>{{child.birthDate|date("Y-m-d")}}</td>
-												<td>{{child.assignedGroup.name}}</td>
+												<td>
+													{%if child.assignedGroup is not null%}
+														{{child.assignedGroup.name}}
+													{%endif%}
+												</td>
 												<td>
 													{% set caretakrs = caretakers[loop.index0] %}
 													{%for c in caretakrs%}
@@ -57,6 +91,10 @@
 												</td>
 												<td>{{child.allergies}}</td>
 												<td>{{child.medication}}</td>
+												<td>
+													<a class="edit" href="{{path('admin_child_edit', {'child_id': child.id})}}" title="Edit" data-toggle="tooltip"><i class="fas fa-pen-square"></i></a>
+													<a class="delete" href="{{path('admin_child_delete', {'child_id': child.id})}}" title="Delete" data-toggle="tooltip"><i class="fas fa-minus-square"></i></a>
+												</td>
 											</tr>
 										{%endfor%}
 										</tbody>
@@ -70,4 +108,6 @@
 		</div>
 	</header>
 {%endblock%}
-{#{% form_theme form 'form/fields.html.twig' %}#}
+{%if mode == 'Edit'%}
+	{% form_theme form 'form/fields.html.twig' %}
+{%endif%}

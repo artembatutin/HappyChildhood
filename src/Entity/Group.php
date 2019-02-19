@@ -33,9 +33,21 @@ class Group {
      */
     private $children;
 	
+	/**
+	 * @ORM\OneToMany(targetEntity="App\Entity\Enrollment", mappedBy="group", cascade={"remove"})
+	 */
+	private $enrollments;
+	
+	/**
+	 * @ORM\OneToMany(targetEntity="App\Entity\AnnouncementViewers", mappedBy="child_group", cascade={"remove"})
+	 */
+	private $announcementViewers;
+	
 	public function __construct()
              {
                  $this->children = new ArrayCollection();
+                 $this->enrollments = new ArrayCollection();
+                 $this->announcementViewers = new ArrayCollection();
              }
 	
 	public function getId(): ?int {
@@ -91,5 +103,67 @@ class Group {
         }
 
         return $this;
+    }
+	
+	/**
+	 * @return Collection|Enrollment[]
+	 */
+    public function getEnrollments(): Collection
+    {
+    	return $this->enrollments;
+    }
+    
+    public function addEnrollment(Enrollment $enrollment): self
+    {
+    	if(!$this->enrollments->contains($enrollment)){
+    		$this->enrollments[] = $enrollment;
+    		$enrollment->setGroup($this);
+	    }
+    	
+    	return $this;
+    }
+    
+    public function removeEnrollment(Enrollment $enrollment): self
+    {
+    	if($this->enrollments->contains($enrollment)) {
+    		$this->enrollments->removeElement($enrollment);
+		    // set the owning side to null (unless already changed)
+		    if($enrollment->getGroup() === $this) {
+		    	$enrollment->setGroup(null);
+		    }
+	    }
+    	
+    	return $this;
+    }
+	
+	/**
+	 * @return Collection|AnnouncementViewers[]
+	 */
+    public function getAnnouncementViewers(): Collection
+    {
+    	return $this->announcementViewers;
+    }
+    
+    public function addAnnouncementViewer(AnnouncementViewers $announcementViewer):self
+    {
+	    if(!$this->announcementViewers->contains($announcementViewer)){
+		    $this->announcementViewers[] = $announcementViewer;
+		    $announcementViewer->setChildGroup($this);
+	    }
+	
+	    return $this;
+    }
+    
+    public function removeAnnouncementViewers(AnnouncementViewers $announcementViewer): self
+    {
+	    if($this->announcementViewers->contains($announcementViewer)) {
+		    $this->announcementViewers->removeElement($announcementViewer);
+		    // set the owning side to null (unless already changed)
+		    if($announcementViewer->getChildGroup() === $this) {
+			    $announcementViewer->setChildGroup(null);
+		    }
+	    }
+	
+	    return $this;
     }
 }
