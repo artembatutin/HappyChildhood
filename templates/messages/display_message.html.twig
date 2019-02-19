@@ -65,8 +65,25 @@
                                 </div>
                                 <hr>
                                 <div id="ms_{{ message.id }}_preview" class="ms_display">
-                                    {{ message.message_file }}
+                                    {{ message.messageFile }}
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                {% if not reply_flag %}
+                                    <a class="btn btn-secondary" href="{{path('message_reply', {'message_id': message.id, 'reply_flag': true })}}">
+                                        Reply
+                                    </a>
+                                {% endif %}
+                                {% if reply_flag %}
+                                    <h5>Reply</h5>
+                                    {{form_start(form)}}
+                                    {{form_row(form.attachments)}}
+                                    {{form_row(form.message_file)}}
+                                    <button class="btn btn-secondary" type="submit">Send</button>
+                                    {{form_end(form)}}
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -76,3 +93,6 @@
     </div>
 </header>
 {% endblock %}
+{%if reply_flag %}
+    {% form_theme form 'form/fields.html.twig' %}
+{%endif%}

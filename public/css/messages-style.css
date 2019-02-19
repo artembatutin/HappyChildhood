@@ -148,17 +148,17 @@ span.ms_display_attachment {
 span.ms_display_attachment:hover {
     background-color:white;
 }
-
+/*
 input#form_attachments,
 input#form_pictures{
     display: none;
 }
-
+*/
 img.upload_icon {
     width: 10%;
     height: 10%;
 }
-
+/*
 .custom-file-upload {
     background-color:#FECD57;
     border:3px solid #FECD57;
@@ -177,7 +177,7 @@ img.upload_icon {
 .custom-file-upload:hover {
     background-color:white;
 }
-
+*/
 /* End of Styling for Custom Upload Button */
 
 /* Start of Table Styling */

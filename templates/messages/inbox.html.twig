@@ -44,7 +44,7 @@
                                                 {{ mr.message.title }}
                                             </div>
                                             <div id="ms_{{ mr.message.id }}_preview" class="ms_preview ellipsis">
-                                                {%set preview = mr.message.message_file%}
+                                                {%set preview = mr.message.messageFile%}
                                                 {% if preview|length > 250%}
                                                     {{preview|slice(0, 250)}}
                                                 {%else%}

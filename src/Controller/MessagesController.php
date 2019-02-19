@@ -13,6 +13,7 @@ use App\Entity\Message;
 use App\Entity\MessageAttachment;
 use App\Entity\MessageReceiver;
 use App\Entity\User;
+use App\Form\MessageReplyForm;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -52,16 +53,18 @@ class MessagesController extends AbstractController {
 		}
 		$user = $this->getUser();
 		$inbox = $user->getInbox();
-		$messages_in = $this->getInboxOrdered($inbox->getId());
+		$messages_in = $this->getInboxMessages($inbox->getId());
 		
 		return $this->render('messages/inbox.html.twig', array('user' => $user, 'inbox' => $inbox, 'messages_in' => $messages_in));
 	}
 	
 	/**
+	 * @param Request $request
 	 * @param $message_id
+	 * @param bool $reply_flag
 	 * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
 	 */
-	public function display_message($message_id) {
+	public function display_message(Request $request, $message_id, $reply_flag = false) {
 		if(!$this->isGranted("IS_AUTHENTICATED_FULLY")) {
 			return $this->redirectToRoute('index');
 		}
@@ -83,8 +86,52 @@ class MessagesController extends AbstractController {
 			}
 		}
 		$attachments = $message->getAttachments();
+		
+		$form = null;
+		if($reply_flag) {
+			$reply_message = new Message();
+			$reply_message->setSenderInbox($inbox);
+			$reply_message->setTitle('Re: ' . $message->getTitle());
+			try {
+				$reply_message->setDateSent(new \DateTime("now"));
+			} catch(\Exception $e) {
+			}
+			$form = $this->createForm(MessageReplyForm::class, $reply_message);
+			
+			$form->handleRequest($request);
+			if($form->isSubmitted() && $form->isValid()) {
+				$em->persist($reply_message);
+				$attachments = $form->get('attachments')->getData();
+				foreach($attachments as $attachment) {
+					$atchm = new MessageAttachment();
+					$atchm->setFileName($attachment->getClientOriginalName());
+					$atchm->setData($attachment);
+					$atchm->setMessage($reply_message);
+					$atchm->upload();
+					$em->persist($atchm);
+				}
+				$reply_message_receiver = new MessageReceiver();
+				$reply_message_receiver->setReceiverInbox($message->getSender_Inbox());
+				$reply_message_receiver->setMessage($reply_message);
+				$reply_message_receiver->setReadFlag(false);
+				$em->persist($reply_message_receiver);
+				$em->flush();
+				
+				$this->addFlash('success', 'Reply successfully sent.');
+				return $this->redirectToRoute('messages_inbox');
+			}
+		}
+		
 		if($allow) {
-			return $this->render('messages/display_message.html.twig', array('user' => $user, 'inbox' => $inbox, 'message' => $message, 'msr' => $message_receivers, 'attachments' => $attachments));
+			return $this->render('messages/display_message.html.twig', array(
+				'user' => $user,
+				'inbox' => $inbox,
+				'message' => $message,
+				'msr' => $message_receivers,
+				'attachments' => $attachments,
+				'reply_flag' => $reply_flag,
+				'form' => $form!=null?$form->createView():null
+			));
 		} else
 			return $this->redirectToRoute('index');
 	}
@@ -242,7 +289,7 @@ class MessagesController extends AbstractController {
 	 * @param $receiver_inbox_id
 	 * @return mixed
 	 */
-	public function getInboxOrdered($receiver_inbox_id) {
+	public function getInboxMessages($receiver_inbox_id) {
 		return $this->getDoctrine()->getRepository(MessageReceiver::class)->getOrdered($receiver_inbox_id);
 	}
 }

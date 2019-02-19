@@ -31,7 +31,7 @@ class Message {
 	/**
 	 * @ORM\Column(type="blob")
 	 */
-	private $message_file;
+	private $messageFile;
 	
 	/**
 	 * @ORM\Column(type="datetime")
@@ -48,6 +48,21 @@ class Message {
 	 */
 	private $attachments;
 	
+	/*
+	/**
+	 * @ORM\OneToOne(targetEntity="App\Entity\Message", inversedBy="parentMessage")
+	 * @ORM\JoinColumn(name="child_message_id", referencedColumnName="id")
+	 */
+	/*
+	private $childMessage;
+	
+	/**
+	 * @ORM\OneToOne(targetEntity="App\Entity\Message", inversedBy="childMessage")
+	 * @ORM\JoinColumn(name="parent_message_id", referencedColumnName="id")
+	 */
+	/*
+	private $parentMessage;
+	*/
 	public function __construct() {
 		$this->messageReceivers = new ArrayCollection();
 		$this->attachments = new ArrayCollection();
@@ -77,14 +92,14 @@ class Message {
 		return $this;
 	}
 	
-	public function getMessage_File() {
-		if($this->message_file != '')
-			return stream_get_contents($this->message_file);
-		return $this->message_file;
+	public function getMessageFile() {
+		if($this->messageFile != '')
+			return stream_get_contents($this->messageFile);
+		return $this->messageFile;
 	}
 	
-	public function setMessageFile($message_file): self {
-		$this->message_file = $message_file;
+	public function setMessageFile($messageFile): self {
+		$this->messageFile = $messageFile;
 		
 		return $this;
 	}
@@ -154,4 +169,25 @@ class Message {
 		
 		return $this;
 	}
+	/*
+	public function setChildMessage(?Message $message): self {
+		$this->childMessage = $message;
+		
+		return $this;
+	}
+	
+	public function getChildMessage(): ?Message {
+		return $this->childMessage;
+	}
+	
+	public function setParentMessage(?Message $message): self {
+		$this->parentMessage = $message;
+		
+		return $this;
+	}
+	
+	public function getParentMessage(): ?Message {
+		return $this->parentMessage;
+	}
+	*/
 }
