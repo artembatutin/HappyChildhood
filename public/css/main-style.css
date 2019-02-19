@@ -388,6 +388,9 @@ footer {
     flex: 0 0 100%;
     min-width: 100%;
   }
+  .even-align {
+    text-align: left;
+  }
 }
 @media (max-width: 991px) {
   .col-6 {
@@ -411,9 +414,6 @@ footer {
   .p-content {
     margin: 2em 1.5em 0em 1.5em;
   }
-  .even-align {
-    text-align: right;
-  }
   .block-content {
     display: flex;
     flex-direction: column;
@@ -436,6 +436,9 @@ footer {
 
 }
 @media (min-width: 992px) {
+  .even-align {
+    text-align: right;
+  }
   .row-eq-height {
     -ms-flex-align: center!important;
     align-items: center!important;

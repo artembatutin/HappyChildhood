@@ -87,7 +87,6 @@ class AccountController extends AbstractController {
 			}
 			
 			$entityManager->flush();
-			
 			return $guardHandler->authenticateUserAndHandleSuccess($user, $request, $authenticator, 'main');
 		}
 		
@@ -212,7 +211,7 @@ class AccountController extends AbstractController {
 			$enrollments[0]->setExpired(true);
 			$em->persist($enrollments[0]);
 			$em->flush();
-			
+			$this->addFlash("success", "Child registered");
 			return $this->redirectToRoute('profile');
 		}
 		
@@ -229,12 +228,12 @@ class AccountController extends AbstractController {
 		
 		$family = $em->getRepository(Family::class)->find($family_id);
 		if(!$family) {
-			$this->addFlash('error', "Family does not exist!");
+			$this->addFlash('danger', "Family does not exist!");
 			return $this->redirectToRoute('profile_family');
 		}
 		
 		if($user->getId() != $family->getFamilyAdmin()->getId()) {
-			$this->addFlash('error', "You do not have permission for this action!");
+			$this->addFlash('danger', "You do not have permission for this action!");
 			return $this->redirectToRoute('profile_family');
 		}
 		
@@ -244,7 +243,7 @@ class AccountController extends AbstractController {
 		if($form->isSubmitted() && $form->isValid()) {
 			$new_caretaker = $em->getRepository(User::class)->findOneBy(['email' => $form->get('email')->getData()]);
 			if(!$new_caretaker) {
-				$this->addFlash('error', "No user with this email!");
+				$this->addFlash('danger', "No user with this email!");
 				return $this->redirectToRoute('profile_family');
 			}
 			$pfl = new ParentFamilyLink();

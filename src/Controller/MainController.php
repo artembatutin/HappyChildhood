@@ -32,14 +32,17 @@ class MainController extends AbstractController {
 		if($this->isGranted("IS_AUTHENTICATED_FULLY")) {
 			$user = $this->getUser();
 			if($this->isGranted("ROLE_MOD") || $this->isGranted("ROLE_ADMIN")) {
-				$block = $em->getRepository(Announcement::class)->findAll(['id' => $block_id]);
+				$block = $em->getRepository(Announcement::class)->findBy(['id' => $block_id]);
 			} else {
 				$block = $em->getRepository(Announcement::class)->findUserBlock($user, $block_id);
 			}
 		} else {
 			$block = $em->getRepository(Announcement::class)->findBy(['id' => $block_id, 'public' => true, 'hidden' => false]);
 		}
-		
+		if($block == null) {
+			$this->addFlash('danger', "No announcement found");
+			return $this->redirectToRoute('index');
+		}
 		return $this->render('block.html.twig', ['block' => $block[0]]);
 	}
 	

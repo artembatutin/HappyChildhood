@@ -205,7 +205,7 @@ class AdminController extends AbstractController {
 			if($mode == "Create") {
 				$enrollment->setExpired(false);
 				$enrollment->generate_enrollment_hash();
-				$this->send_registration_email($mailer, $enrollment->getEmail(), $enrollment->getEnrollmentHash(), $request->getHost());
+				$this->send_registration_email($mailer, $enrollment->getEmail(), $enrollment->getEnrollmentHash(), $request->getHost(), $form->get('firstName')->getData(), $form->get('lastName')->getData());
 			}
 			$em->persist($enrollment);
 			$em->flush();
@@ -228,7 +228,7 @@ class AdminController extends AbstractController {
 		
 		$em->remove($enrollment);
 		$em->flush();
-		
+		$this->addFlash('success', "Enrollment deleted.");
 		return $this->redirectToRoute('admin_enrollments');
 	}
 	
@@ -254,12 +254,12 @@ class AdminController extends AbstractController {
 	 * @param $email
 	 * @param $enrl_hash
 	 */
-	private function send_registration_email(\Swift_Mailer $mailer, $email, $enrl_hash, $domain_name) {
+	private function send_registration_email(\Swift_Mailer $mailer, $email, $enrl_hash, $domain_name, $firstName, $lastName) {
 		$registration_link = $domain_name.'/'.$enrl_hash;
 		$message = (new \Swift_Message('Registration Email'))
 			->setFrom('dorin.artem.test@gmail.com')
 			->setTo($email)
-			->setBody($this->renderView('emails/invitation.html.twig', ['link' => $registration_link]), 'text/html')
+			->setBody($this->renderView('emails/invitation.html.twig', ['name' => $firstName . " " . $lastName, 'link' => $registration_link]), 'text/html')
 			->addPart("Your registration link for Happy Childhood: " . $registration_link, 'text/plain');
 		$mailer->send($message);
 	}
