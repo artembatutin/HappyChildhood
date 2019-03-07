@@ -29,10 +29,9 @@ class MainController extends AbstractController {
 	
 	public function block(Request $request, $block_id) {
 		$block = null;
-		$addComment = null;
+		$addComment = $this->createFormBuilder()->add('message', TextareaType::class, ['mapped' => false, 'required' => true])->getForm();
 		$em = $this->getDoctrine()->getManager();
 		if($this->isGranted("IS_AUTHENTICATED_FULLY")) {
-			$addComment = $this->createFormBuilder()->add('message', TextareaType::class, ['mapped' => false, 'required' => true])->getForm();
 			$user = $this->getUser();
 			if($this->isGranted("ROLE_MOD") || $this->isGranted("ROLE_ADMIN")) {
 				$block = $em->getRepository(Announcement::class)->findBy(['id' => $block_id]);

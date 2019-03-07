@@ -40,7 +40,7 @@
                                     <hr>
                                 {% endfor %}
                             {% endif %}
-                            {% if block.isCommenting and form is defined %}
+                            {% if block.isCommenting and form is defined and is_granted('IS_AUTHENTICATED_FULLY') %}
                                 <h4>Add Reply</h4>
                                 {{ form_start(form)}}
                                 {{form_row(form.message)}}
